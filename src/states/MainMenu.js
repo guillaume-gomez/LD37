@@ -1,4 +1,4 @@
-import { LD, Wall, SpritePlayer, SpriteEnemy } from "SpriteConstants";
+import { LD, Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
 import { CameraVelocity, Bounds, FlashColor, FlashDuration } from "Constants";
 
 import Player from "objects/Character";
@@ -32,7 +32,7 @@ class MainMenu extends Phaser.State {
 
   update() {
     this.game.physics.arcade.collide(this.hero, this.room);
-    this.game.physics.arcade.overlap(this.hero, this.enemy, this.damage, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.enemy, /*this.damage*/null, null, this);
     if(!this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock)) {
     } // else if pushblocks function
     if(this.hero.body.position) this.enemy.follow(this.hero.body.position);
@@ -76,6 +76,7 @@ class MainMenu extends Phaser.State {
     this.game.load.image(Wall, "res/1.png");
     this.game.load.image(SpritePlayer, "res/player.png");
     this.game.load.image(SpriteEnemy, "res/enemy.png");
+    this.game.load.image(SpriteBullet, "res/bullet.png");
   }
 
   render() {
