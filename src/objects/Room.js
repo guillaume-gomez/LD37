@@ -7,6 +7,10 @@ class Room extends Phaser.Group {
     super(game, parent, name, false, false, Phaser.Physics.ARCADE);
   }
 
+  createLineByTile(x1, y1, nbTilesX, nbTilesY) {
+    this.createLine(x1, y1, nbTilesX * SpriteWidth + x1 , nbTilesY * SpriteHeight + y1);
+  }
+
   createLine(x1, y1, x2, y2) {
     const xBegin = Math.min(x1, x2);
     const xEnd = Math.max(x1, x2);
@@ -17,13 +21,25 @@ class Room extends Phaser.Group {
     const yStep = (y2-y1);
 
     if (xStep === 0) {
-      //x1 = x2
-      this.createVerticalLine(x1, yBegin, yEnd);
+      //x1 === x2
+      return this.createVerticalLine(x1, yBegin, yEnd);
     }
 
     if (yStep === 0) {
-      //y1 = y2
-      this.createHorizontalLine(xBegin, xEnd, y1);
+      //y1 === y2
+      return this.createHorizontalLine(xBegin, xEnd, y1);
+    }
+
+    let x = xBegin;
+    let y = yBegin;
+    while(x != xEnd || y != yEnd) {
+      if(x < xEnd) {
+        x += SpriteWidth;
+      }
+      if(y < yEnd) {
+        y += SpriteHeight;
+      }
+      this.createSprite(x,y);
     }
 
   }
