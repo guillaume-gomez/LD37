@@ -62,11 +62,12 @@ class Room extends Phaser.Group {
   //
   ///
   createSquare(x, y, nbTilesBySide) {
-    this.createLineByTile(x, y, nbTilesBySide, 0);
-    this.createLineByTile(x, y + (nbTilesBySide - 1) * SpriteHeight, nbTilesBySide, 0);
+    this.createLineByTile(x, y, nbTilesBySide, 1);
+    this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1);
 
-    this.createLineByTile(x, y + SpriteHeight, 0, nbTilesBySide - 2);
-    this.createLineByTile(x + (nbTilesBySide - 1) * SpriteWidth, y + SpriteHeight, 0, nbTilesBySide - 2);
+    //nbtiles - 2 because corner  was drawn  by vertical line
+    this.createLineByTile(x, y + SpriteHeight, 1, nbTilesBySide - 2);
+    this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2);
   }
 }
 
