@@ -5,8 +5,6 @@ class Room extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, false, Phaser.Physics.ARCADE);
-    let sprite = this.create(100, 30, Wall);
-    sprite.scale.setTo(SpriteRatioX, SpriteRatioY);
   }
 
   createLine(x1, y1, x2, y2) {
@@ -15,29 +13,36 @@ class Room extends Phaser.Group {
     const yBegin = Math.min(y1, y2);
     const yEnd = Math.max(y1, y2);
 
-    const xStep = Math.trunc((x2-x1) / SpriteWidth);
-    const yStep = Math.trunc((y2-y1) / SpriteHeight);
+    const xStep = (x2-x1);
+    const yStep = (y2-y1);
 
     if (xStep === 0) {
-      this.createVerticalLine(x, yBegin, yEnd, yStep);
+      //x1 = x2
+      this.createVerticalLine(x1, yBegin, yEnd);
     }
 
     if (yStep === 0) {
-      this.createHorizontalLine(xBegin, xEnd, y, xStep);
+      //y1 = y2
+      this.createHorizontalLine(xBegin, xEnd, y1);
     }
 
   }
 
-  createHorizontalLine(x, y1, y2, yStep) {
-    for(let y = y1; y < y2; y += yStep) {
-      this.create(x, y, Wall);
+  createVerticalLine(x, y1, y2) {
+    for(let y = y1; y < y2; y += SpriteHeight) {
+      this.createSprite(x, y);
     }
   }
 
-  createVerticalLine(x1, x2, y, xStep) {
-    for(let x = x1; x < x2; x += xStep) {
-      this.create(x, y, Wall);
+  createHorizontalLine(x1, x2, y) {
+    for(let x = x1; x < x2; x += SpriteWidth) {
+      this.createSprite(x, y);
     }
+  }
+
+  createSprite(x,y) {
+    let sprite = this.create(x, y, Wall);
+    sprite.scale.setTo(SpriteRatioX, SpriteRatioY);
   }
 
   createSquare() {
