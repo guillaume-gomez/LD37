@@ -11,3 +11,6 @@ export const CameraVelocity = 20;
 
 export const FlashColor = 0x555555;
 export const FlashDuration = 1000;
+
+export const CharacterWitdh = 57;
+export const CharacterHeight = 57;

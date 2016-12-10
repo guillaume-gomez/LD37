@@ -1,20 +1,30 @@
-import { SpritePlayer } from "../SpriteConstants";
+import { SpritePlayer, SpriteBullet } from "../SpriteConstants";
+import { CharacterWitdh, CharacterHeight } from "../Constants";
 
 const Damage = 10;
 const Velocity = 200;
+const MaxBullet = 10;
 
 class Character extends Phaser.Sprite {
 
   constructor(game, x, y, key, frame) {
     super(game, x, y, SpritePlayer, frame);
-    //Enable physics on the player
     game.physics.arcade.enable(this);
-    this.body.bounce.x = this.body.bounce.y = 0;
-    this.cursor = game.input.keyboard.createCursorKeys();
     //this.body.gravity.y = 500;
+    this.body.bounce.x = this.body.bounce.y = 0;
     this.body.mass = 1;
     this.direction = 1;
     this.life = 10000;
+
+    this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
+    this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+    this.weapon.bulletAngleOffset = 90;
+    this.weapon.bulletSpeed = 400;
+    this.weapon.fireRate = 60;
+
+    this.weapon.trackSprite(this, CharacterWitdh / 2, CharacterHeight / 2);
+    this.cursor = game.input.keyboard.createCursorKeys();
+    this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
   }
 
   update() {
@@ -33,6 +43,10 @@ class Character extends Phaser.Sprite {
       this.body.velocity.y = -Velocity;
     } else if (this.cursor.down.isDown) {
       this.body.velocity.y = Velocity;
+    }
+
+    if(this.fireButton.isDown) {
+      this.weapon.fire();
     }
 
   }
