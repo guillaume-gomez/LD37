@@ -1,16 +1,20 @@
+import { SpriteConstants } from "../SpriteConstants";
+
 class Character extends Phaser.Sprite {
 
   constructor(game, x, y, key, frame) {
-    super(game, x, y, key, frame);
+    super(game, x, y, SpriteConstants, frame);
     //Enable physics on the player
     game.physics.arcade.enable(this);
     this.body.bounce.x = this.body.bounce.y = 0;
     this.cursor = game.input.keyboard.createCursorKeys();
-    this.body.gravity.y = 500;
+    //this.body.gravity.y = 500;
     this.direction = 1;
   }
 
   update() {
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
     if (this.cursor.left.isDown) {
         this.body.velocity.x = -200;
         this.direction = -1;
