@@ -12,12 +12,7 @@ class MainMenu extends Phaser.State {
     this.cursors = this.game.input.keyboard.createCursorKeys();
     //this.room.createRandomLine(32, 128, 32 + 9 * 32, 128, 3);
     //this.room.createLine(20, 400, 400, 400);
-    this.room.createSquare(96,32,17);
-  }
-
-  preload() {
-    this.game.load.image(LD, "res/LD.png");
-    this.game.load.image(Wall, "res/1.png");
+    this.room.createRandomSquare(32,0,18,1, +2, 1 );
   }
 
   update() {
@@ -38,6 +33,11 @@ class MainMenu extends Phaser.State {
     {
       this.game.camera.x += CameraVelocity;
     }
+  }
+
+  preload() {
+    this.game.load.image(LD, "res/LD.png");
+    this.game.load.image(Wall, "res/1.png");
   }
 
 }
