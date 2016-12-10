@@ -32,7 +32,9 @@ class MainMenu extends Phaser.State {
 
   update() {
     this.game.physics.arcade.collide(this.hero, this.room);
-    this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock);
+    if(!this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock)) {
+    } // else if pushblocks function
+    if(this.hero.body.position) this.enemy.follow(this.hero.body.position);
   }
 
   //temp

@@ -1,5 +1,8 @@
 import { SpriteEnemy } from "../SpriteConstants";
 
+const VisionEnemy = 399;
+const Velocity = 50;
+
 class Enemy extends Phaser.Sprite {
 
   constructor(game, x, y, key, frame) {
@@ -11,10 +14,23 @@ class Enemy extends Phaser.Sprite {
     //this.body.gravity.y = 500;
     this.body.mass = 10;
     this.direction = 1;
-    this.body.velocity.x = 100
+    //this.body.velocity.x = 100;
   }
 
-  update(player) {
+  follow(playerPosition) {
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+    if(playerPosition.x > this.body.position.x) {
+      this.body.velocity.x = Velocity;
+    } else if (playerPosition.x < this.body.position.x){
+      this.body.velocity.x = -Velocity;
+    }
+
+    if(playerPosition.y > this.body.position.y) {
+      this.body.velocity.y = Velocity;
+    } else if (playerPosition.y < this.body.position.y) {
+      this.body.velocity.y = -Velocity;
+    }
   }
 
   isDeath() {
