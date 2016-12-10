@@ -3,6 +3,7 @@ import { CameraVelocity, Bounds } from "Constants";
 
 import Player from "objects/Character";
 import Room from "objects/Room";
+import Enemy from "objects/Enemy";
 
 const needCamera = false;
 
@@ -16,6 +17,10 @@ class MainMenu extends Phaser.State {
 
     this.hero = new Player(this.game,150,100);
     this.game.add.existing(this.hero);
+
+    this.enemy = new Enemy(this.game,200,100);
+    this.game.add.existing(this.enemy);
+
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
     }
@@ -27,6 +32,13 @@ class MainMenu extends Phaser.State {
 
   update() {
     this.game.physics.arcade.collide(this.hero, this.room);
+    this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock);
+  }
+
+  //temp
+  pushBlock(sprite1, sprite2) {
+    sprite2.body.position.x += 1;
+    sprite1.body.velocity.x = 100;
   }
 
   moveCamera() {
