@@ -7,8 +7,16 @@ class Room extends Phaser.Group {
     super(game, parent, name, false, false, Phaser.Physics.ARCADE);
   }
 
-  createRandomLine(x1, y1, x2, y2, division = 2) {
-
+  createRandomLine(x1, y1, x2, y2, division, varX = 0, varY = 0) {
+    const middleX = (x1 + x2) / 2 + (varX * SpriteWidth);
+    const middleY = (y1 + y2) / 2 + (varY * SpriteHeight);
+    if(division > 1) {
+      this.createRandomLine(x1, y1, middleX, middleY, division - 1);
+      this.createRandomLine(middleX, middleY, x2, y2, division - 1);
+    } else {
+      this.createLine(x1,y1, middleX, middleY);
+      this.createLine(middleX,middleY, x2, y2);
+    }
   }
 
   createLineByTile(x1, y1, nbTilesX, nbTilesY) {
@@ -69,6 +77,7 @@ class Room extends Phaser.Group {
     this.createLineByTile(x, y + SpriteHeight, 1, nbTilesBySide - 2);
     this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2);
   }
+
 }
 
 export default Room;
