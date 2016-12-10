@@ -1,4 +1,4 @@
-import { LD, Wall, SpriteConstants } from "SpriteConstants";
+import { LD, Wall, SpritePlayer, SpriteEnemy } from "SpriteConstants";
 import { CameraVelocity, Bounds } from "Constants";
 
 import Player from "objects/Character";
@@ -54,7 +54,8 @@ class MainMenu extends Phaser.State {
   preload() {
     this.game.load.image(LD, "res/LD.png");
     this.game.load.image(Wall, "res/1.png");
-    this.game.load.image(SpriteConstants, "res/player.png");
+    this.game.load.image(SpritePlayer, "res/player.png");
+    this.game.load.image(SpriteEnemy, "res/enemy.png");
   }
 
   render() {
