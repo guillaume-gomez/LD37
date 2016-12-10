@@ -1,4 +1,4 @@
-import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY } from "../Constants.js";
+import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY, Bounds } from "../Constants.js";
 import { Wall } from "../SpriteConstants";
 
 class Room extends Phaser.Group {
@@ -44,11 +44,10 @@ class Room extends Phaser.Group {
 
     let x = x1;
     let y = y1;
-
     while (true) {
       this.createSprite(x,y);
-      debugger
       if (x >= x2 && y >= y2) break;
+      if(x < 0 || y < 0 || x > Bounds || y > Bounds) break;
       let e2 = err;
       if (e2 > - dx) {
         err -= dy;
