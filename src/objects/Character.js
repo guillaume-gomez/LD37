@@ -1,6 +1,7 @@
 import { SpritePlayer } from "../SpriteConstants";
 
 const Damage = 10;
+const Velocity = 200;
 
 class Character extends Phaser.Sprite {
 
@@ -20,18 +21,18 @@ class Character extends Phaser.Sprite {
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     if (this.cursor.left.isDown) {
-        this.body.velocity.x = -200;
+        this.body.velocity.x = -Velocity;
         this.direction = -1;
     }
     else if (this.cursor.right.isDown) {
-        this.body.velocity.x = 200;
+        this.body.velocity.x = Velocity;
         this.direction = 1;
     }
 
     if (this.cursor.up.isDown) {
-      this.body.velocity.y = -200;
+      this.body.velocity.y = -Velocity;
     } else if (this.cursor.down.isDown) {
-      this.body.velocity.y = 200;
+      this.body.velocity.y = Velocity;
     }
 
   }
