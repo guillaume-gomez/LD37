@@ -7,26 +7,31 @@ class Room extends Phaser.Group {
     super(game, parent, name, false, false, Phaser.Physics.ARCADE);
   }
 
-  createRandomLine(x1, y1, x2, y2, division, varX = 0, varY = 0) {
+  createRandomLine(x1, y1, x2, y2, division = 1, varX = 0, varY = 0) {
     const middleX = (x1 + x2) / 2 + (varX * SpriteWidth);
     const middleY = (y1 + y2) / 2 + (varY * SpriteHeight);
+
+    const middleXBefore = middleX - (middleX % SpriteWidth);
+    const middleXAfter =  middleX + (middleX % SpriteWidth);
+    const middleYBefore = middleY - (middleY % SpriteHeight);
+    const middleYAfter = middleY + (middleY % SpriteHeight);
     if(division > 1) {
-      this.createRandomLine(x1, y1, middleX, middleY, division - 1);
-      this.createRandomLine(middleX, middleY, x2, y2, division - 1);
+      this.createRandomLine(x1, y1, middleXBefore, middleYBefore, division - 1, varX, varY);
+      this.createRandomLine(middleXAfter, middleYAfter, x2, y2, division - 1, varX, varY);
     } else {
-      this.createLine(x1,y1, middleX, middleY);
-      this.createLine(middleX,middleY, x2, y2);
+      this.createLine(x1,y1, middleXBefore, middleYBefore);
+      this.createLine(middleXAfter, middleYAfter, x2, y2);
     }
   }
 
-  createLineByTile(x1, y1, nbTilesX, nbTilesY) {
+  createLineByTile(x1, y1, nbTilesX, nbTilesY, division, varX = 0, varY = 0) {
     if(nbTilesX < 0 ) {
       throw `createLineByTile ${nbTilesX} is negative`;
     }
     if(nbTilesY < 0 ) {
       throw `createLineByTile ${nbTilesY} is negative`;
     }
-    this.createLine(x1, y1, (nbTilesX-1) * SpriteWidth + x1 , (nbTilesY-1) * SpriteHeight + y1);
+    this.createRandomLine(x1, y1, (nbTilesX-1) * SpriteWidth + x1 , (nbTilesY-1) * SpriteHeight + y1, division, varX, varY);
   }
 
   // //Brasenhem algorithm
@@ -70,14 +75,20 @@ class Room extends Phaser.Group {
   //
   ///
   createSquare(x, y, nbTilesBySide) {
-    this.createLineByTile(x, y, nbTilesBySide, 1);
-    this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1);
-
-    //nbtiles - 2 because corner  was drawn  by vertical line
-    this.createLineByTile(x, y + SpriteHeight, 1, nbTilesBySide - 2);
-    this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2);
+    this.createRandomSquare(x, y, nbTilesBySide, 1, 0, 0);
   }
 
+  // const division = 3;
+  // const varX = -1;
+  // const varY = 1;
+  createRandomSquare(x, y, nbTilesBySide, division, varX, varY) {
+    this.createLineByTile(x, y, nbTilesBySide, 1, division, varX, varY);
+    this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1, division, varX, varY);
+
+    //nbtiles - 2 because corner  was drawn  by vertical line
+    this.createLineByTile(x, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX, varY);
+    this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX, varY);
+  }
 }
 
 export default Room;
