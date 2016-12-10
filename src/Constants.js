@@ -8,3 +8,6 @@ export const ScreenHeight = 600;
 export const Bounds = 10000;
 
 export const CameraVelocity = 20;
+
+export const FlashColor = 0x555555;
+export const FlashDuration = 1000;

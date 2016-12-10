@@ -1,5 +1,5 @@
 import { LD, Wall, SpritePlayer, SpriteEnemy } from "SpriteConstants";
-import { CameraVelocity, Bounds } from "Constants";
+import { CameraVelocity, Bounds, FlashColor, FlashDuration } from "Constants";
 
 import Player from "objects/Character";
 import Room from "objects/Room";
@@ -26,15 +26,21 @@ class MainMenu extends Phaser.State {
     }
     //this.room.createRandomLine(32, 128, 32 + 9 * 32, 128, 3);
     //this.room.createLine(20, 400, 400, 400);
-    this.camera.follow(this.hero)
+    this.camera.follow(this.hero);
     this.room.createRandomSquare(32,0,18,1, +2, 1 );
   }
 
   update() {
     this.game.physics.arcade.collide(this.hero, this.room);
+    this.game.physics.arcade.overlap(this.hero, this.enemy, this.damage, null, this);
     if(!this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock)) {
     } // else if pushblocks function
     if(this.hero.body.position) this.enemy.follow(this.hero.body.position);
+  }
+
+  damage() {
+    //this.hero.damage(5);
+    this.camera.flash(FlashColor, FlashDuration);
   }
 
   //temp
