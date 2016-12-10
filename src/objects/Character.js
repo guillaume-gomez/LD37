@@ -21,7 +21,9 @@ class Character extends Phaser.Sprite {
     }
 
     if (this.cursor.up.isDown) {
-      this.body.velocity.y = -270;
+      this.body.velocity.y = -200;
+    } else if (this.cursor.down.isDown) {
+      this.body.velocity.y = 200;
     }
   }
 
