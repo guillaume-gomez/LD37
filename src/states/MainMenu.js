@@ -18,7 +18,7 @@ class MainMenu extends Phaser.State {
     this.hero = new Player(this.game,150,100);
     this.game.add.existing(this.hero);
 
-    this.enemy = new Enemy(this.game,200,100);
+    this.enemy = new Enemy(this.game,300,100);
     this.game.add.existing(this.enemy);
 
     if(needCamera) {
@@ -37,7 +37,7 @@ class MainMenu extends Phaser.State {
 
   //temp
   pushBlock(sprite1, sprite2) {
-    sprite2.body.position.x += 1;
+    sprite2.body.velocity.x += 1;
     sprite1.body.velocity.x = 100;
   }
 
