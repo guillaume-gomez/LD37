@@ -7,7 +7,7 @@ const MaxY = 0;
 class Room extends Phaser.Group {
 
   constructor(game, parent, name) {
-    super(game, parent, name, false, false, Phaser.Physics.ARCADE);
+    super(game, parent, name, false, true, Phaser.Physics.ARCADE);
   }
 
   createRandomLine(x1, y1, x2, y2, division = 1, varX = 0, varY = 0) {
@@ -66,6 +66,7 @@ class Room extends Phaser.Group {
   createSprite(x,y) {
     let sprite = this.create(x, y, Wall);
     sprite.scale.setTo(SpriteRatioX, SpriteRatioY);
+    sprite.body.immovable = true;
   }
 
   ////
