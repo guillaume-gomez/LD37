@@ -1,8 +1,6 @@
 import { LD, Wall } from "SpriteConstants";
-import { CameraVelocity } from "Constants";
+import { CameraVelocity, Bounds } from "Constants";
 import Room from "objects/Room";
-
-const Bounds = 10000;
 
 class MainMenu extends Phaser.State {
 
@@ -12,9 +10,9 @@ class MainMenu extends Phaser.State {
     this.room = new Room(this.game)
     this.game.add.existing(this.room);
     this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.room.createLineByTile(20, 30, 2 ,2);
-
-    this.room.createSquare(200,100, 30);
+    //this.room.createRandomLine(32, 128, 32 + 9 * 32, 128, 3);
+    //this.room.createLine(20, 400, 400, 400);
+    this.room.createSquare(96,32,17);
   }
 
   preload() {
