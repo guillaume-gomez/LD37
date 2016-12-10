@@ -1,6 +1,9 @@
 import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY, Bounds } from "../Constants.js";
 import { Wall } from "../SpriteConstants";
 
+const MaxX = 1;
+const MaxY = 0;
+
 class Room extends Phaser.Group {
 
   constructor(game, parent, name) {
@@ -24,7 +27,7 @@ class Room extends Phaser.Group {
     }
   }
 
-  createLineByTile(x1, y1, nbTilesX, nbTilesY, division, varX = 0, varY = 0) {
+  createLineByTile(x1, y1, nbTilesX, nbTilesY, division, varX, varY) {
     if(nbTilesX < 0 ) {
       throw `createLineByTile ${nbTilesX} is negative`;
     }
@@ -66,11 +69,11 @@ class Room extends Phaser.Group {
   }
 
   ////
-  //       ####
-  //       #  #
-  //       #  #
-  //       #  #
   // (x,y) ####
+  //       #  #
+  //       #  #
+  //       #  #
+  //       ####
   //
   ///
   createSquare(x, y, nbTilesBySide) {
@@ -80,7 +83,7 @@ class Room extends Phaser.Group {
   // const division = 3;
   // const varX = -1;
   // const varY = 1;
-  createRandomSquare(x, y, nbTilesBySide, division, varX, varY) {
+  createRandomSquare(x, y, nbTilesBySide, division = 3, varX = -1, varY = 1) {
     this.createLineByTile(x, y, nbTilesBySide, 1, division, varX, varY);
     this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1, division, varX, varY);
 
