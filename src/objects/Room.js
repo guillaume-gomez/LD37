@@ -61,7 +61,20 @@ class Room extends Phaser.Group {
     sprite.scale.setTo(SpriteRatioX, SpriteRatioY);
   }
 
-  createSquare() {
+  ////
+  //       ####
+  //       #  #
+  //       #  #
+  //       #  #
+  // (x,y) ####
+  //
+  ///
+  createSquare(x, y, nbTilesBySide) {
+    this.createLineByTile(x, y, nbTilesBySide, 0);
+    this.createLineByTile(x, y + (nbTilesBySide - 1) * SpriteHeight, nbTilesBySide, 0);
+
+    this.createLineByTile(x, y + SpriteHeight, 0, nbTilesBySide - 2);
+    this.createLineByTile(x + (nbTilesBySide - 1) * SpriteWidth, y + SpriteHeight, 0, nbTilesBySide - 2);
   }
 }
 
