@@ -11,6 +11,7 @@ class Enemy extends Phaser.Sprite {
     //this.body.gravity.y = 500;
     this.body.mass = 10;
     this.direction = 1;
+    this.body.velocity.x = 100
   }
 
   update(player) {
