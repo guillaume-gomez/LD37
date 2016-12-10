@@ -39,7 +39,7 @@ class MainMenu extends Phaser.State {
   }
 
   damage() {
-    //this.hero.damage(5);
+    this.hero.damage();
     this.camera.flash(FlashColor, FlashDuration);
   }
 

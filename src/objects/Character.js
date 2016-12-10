@@ -1,5 +1,7 @@
 import { SpritePlayer } from "../SpriteConstants";
 
+const Damage = 10;
+
 class Character extends Phaser.Sprite {
 
   constructor(game, x, y, key, frame) {
@@ -11,6 +13,7 @@ class Character extends Phaser.Sprite {
     //this.body.gravity.y = 500;
     this.body.mass = 1;
     this.direction = 1;
+    this.life = 10000;
   }
 
   update() {
@@ -30,10 +33,15 @@ class Character extends Phaser.Sprite {
     } else if (this.cursor.down.isDown) {
       this.body.velocity.y = 200;
     }
+
+  }
+
+  damage() {
+    this.life = this.life - Damage;
   }
 
   isDeath() {
-    if (!this.body) {
+    if (this.life > 0) {
       return false;
     }
   }
