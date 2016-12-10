@@ -1,15 +1,18 @@
+import { LD, Wall } from "SpriteConstants";
+import Room from "objects/Room";
+
 class MainMenu extends Phaser.State {
 
   create() {
-    this.game.add.sprite(50,100, "LD");
-    this.game.add.text(100, 230, "Press enter to start", { font: "bold 34px Arial", fill: "#fff" });
-    this.game.add.text(160, 350, "Thanks for playing ! :)", { font: "bold 19px Arial", fill: "#fff" })
-    this.game.add.text(10, 400, "Compo during LD36(a week later ok!) in August 2016", { font: "bold 19px Arial", fill: "#fff" });
-    this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    this.game.add.sprite(50,100, LD);
+    this.room = new Room(this.game)
+    this.game.add.existing(this.room);
+    this.room.createLine(20, 400, 300, 300);
   }
 
   preload() {
-    this.game.load.image("LD", "res/LD.png");
+    this.game.load.image(LD, "res/LD.png");
+    this.game.load.image(Wall, "res/1.png");
   }
 
   update() {
