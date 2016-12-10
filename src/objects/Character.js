@@ -9,6 +9,7 @@ class Character extends Phaser.Sprite {
     this.body.bounce.x = this.body.bounce.y = 0;
     this.cursor = game.input.keyboard.createCursorKeys();
     //this.body.gravity.y = 500;
+    this.body.mass = 1;
     this.direction = 1;
   }
 
