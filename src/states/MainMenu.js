@@ -1,5 +1,5 @@
 import { LD, Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
-import { CameraVelocity, Bounds, FlashColor, FlashDuration } from "Constants";
+import { CameraVelocity, Bounds, FlashColor, FlashDuration, SpriteWidth, SpriteHeight, EnemyWidth, EnemyHeight } from "Constants";
 
 import Player from "objects/Character";
 import Room from "objects/Room";
@@ -15,7 +15,7 @@ class MainMenu extends Phaser.State {
     this.room = new Room(this.game);
     this.game.add.existing(this.room);
 
-    this.hero = new Player(this.game,150,100);
+    this.hero = new Player(this.game,1000,100);
     this.game.add.existing(this.hero);
 
     this.enemy = new Enemy(this.game,300,100);
@@ -36,9 +36,10 @@ class MainMenu extends Phaser.State {
 
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
     this.game.physics.arcade.collide(this.hero, this.room);
-    if(!this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock)) {
-    } // else if pushblocks function
-    if(this.hero.body.position) this.enemy.follow(this.hero.body.position);
+    this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock);
+    if(this.hero.body.position) {
+      this.enemy.follow(this.hero.body.position);
+    }
   }
 
   kill(enemy, bullet) {
@@ -56,9 +57,25 @@ class MainMenu extends Phaser.State {
   }
 
   //temp
-  pushBlock(sprite1, sprite2) {
-    sprite2.body.velocity.x += 1;
-    sprite1.body.velocity.x = 100;
+  pushBlock(enemy, block) {
+    const overlapX = block.body.position.x - enemy.body.position.x;
+    const overlapY = block.body.position.y - enemy.body.position.y;
+    // debugger
+    // console.log(enemy.body.position.y)
+    // console.log(block.body.position.y)
+    // if(enemy.body.position.y <= block.body.position.y - SpriteHeight) {
+    //   block.body.position.y += 1;
+    // } else if (enemy.body.position.y - EnemyHeight >= block.body.position.y) {
+    //   block.body.position.y -= 1;
+    // } else if(enemy.body.position.x + EnemyWidth >= block.body.position.x) {
+    //   block.body.position.x += 1;
+    // } else if(enemy.body.position.x <= block.body.position.x + SpriteWidth) {
+    //   block.body.position.x -= 1;
+    // }
+
+
+    block.body.position.x += overlapX / Math.abs(overlapX);
+    //block.body.position.y += overlapY / Math.abs(overlapY);
   }
 
   preload() {
