@@ -32,7 +32,7 @@ const SizeMaze = Math.trunc(Math.random() * (MaxBorder - MinBorder) + MinBorder)
 const Bounds = 2 * Border + SizeMaze * SpriteWidth;
 
 
-class MainMenu extends Phaser.State {
+class Game extends Phaser.State {
 
   create() {
     this.game.world.setBounds(0, 0, Bounds, Bounds);
@@ -194,4 +194,4 @@ class MainMenu extends Phaser.State {
 
 }
 
-export default MainMenu;
+export default Game;
