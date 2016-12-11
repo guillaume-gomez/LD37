@@ -165,7 +165,7 @@ class MainMenu extends Phaser.State {
   }
 
   render() {
-    this.game.debug.text(Bounds, 2, 14, "#00ff00");
+    this.game.debug.text(Bounds, 2, 14, "#ff0000");
     //this.game.debug.spriteInfo(this.hero, 32, 32);
   }
 
