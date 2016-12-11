@@ -8,15 +8,15 @@ import {
   SpriteWidth,
   SpriteHeight,
   EnemyWidth,
-  EnemyHeight
+  EnemyHeight,
+  Border,
   } from "Constants";
 
 import Player from "objects/Character";
 import Room from "objects/Room";
 import Enemy from "objects/Enemy";
 
-const needCamera = false;
-const Border = 256;
+const needCamera = true;
 
 const MinDivision = 1;
 const MaxDivision = 5;

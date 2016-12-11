@@ -13,6 +13,8 @@ export const FlashDuration = 1000;
 export const ShakeIntensity = 0.002;
 export const ShakeDuration = 200;
 
+export const Border = 256;
+
 export const CharacterWitdh = 57;
 export const CharacterHeight = 57;
 export const EnemyWidth = 40;
