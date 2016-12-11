@@ -17,8 +17,15 @@ import Enemy from "objects/Enemy";
 
 const needCamera = false;
 const Border = 256;
+
+const MinDivision = 1;
+const MaxDivision = 5;
+
+const Division = Math.trunc(Math.random() * (MaxDivision - MinDivision) + MinDivision);
+
 const MaxBorder = 60;
 const MinBorder = 30;
+
 const SizeMaze = Math.trunc(Math.random() * (MaxBorder - MinBorder) + MinBorder);
 // assuming SpriteWidth = SpriteHeight
 const Bounds = 2 * Border + SizeMaze * SpriteWidth;
@@ -43,7 +50,7 @@ class MainMenu extends Phaser.State {
     }
 
     this.camera.follow(this.hero);
-    this.room.createRandomSquare(Border,Border,SizeMaze,1, +2, 1 );
+    this.room.createRandomSquare(Border,Border,SizeMaze, Division, false);
   }
 
   update() {
