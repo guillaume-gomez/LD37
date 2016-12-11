@@ -76,6 +76,10 @@ class EnemyGroup extends Phaser.Group {
     });
   }
 
+  hasEnemies() {
+    return this.total > 0;
+  }
+
 }
 
 export default EnemyGroup;

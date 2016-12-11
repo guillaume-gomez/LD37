@@ -17,7 +17,7 @@ import Room from "objects/Room";
 import EnemyGroup from "objects/EnemyGroup";
 
 
-const needCamera = true;
+const needCamera = false;
 
 const MinDivision = 1;
 const MaxDivision = 5;
@@ -57,19 +57,27 @@ class MainMenu extends Phaser.State {
   }
 
   update() {
-    this.game.physics.arcade.overlap(this.hero, this.enemies, /*this.damage*/null, null, this);
-    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill);
+    this.game.physics.arcade.overlap(this.hero, this.enemies, this.damage, null, this);
+    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill, null, this);
     this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
 
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
     this.game.physics.arcade.collide(this.hero, this.room);
     this.enemies.follow(this.hero.body.position);
+
+  // // if(this.hero.isDeath()) {
+
+  //    this.hero.kill();
+  //  }
+
+    // if(this.hero.isOutSideTheLevel(this.game)) {
+    // }
     //this.moveCamera()
   }
 
   kill(enemy, bullet) {
     bullet.kill();
-    enemy.kill();
+    this.enemies.remove(enemy);
   }
 
   killBullet(bullet) {
@@ -137,6 +145,14 @@ class MainMenu extends Phaser.State {
       block.body.position.y -= 1;
     }
 
+  }
+
+  lost() {
+    //render lost menu
+  }
+
+  win() {
+    //render win menu
   }
 
   preload() {
