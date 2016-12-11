@@ -2,9 +2,6 @@ import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY } from "../Consta
 import { Wall } from "../SpriteConstants";
 import { getRandomArbitrary } from "../utils";
 
-const MaxX = 1;
-const MaxY = 0;
-
 const Divisor = 15;
 
 class Room extends Phaser.Group {
