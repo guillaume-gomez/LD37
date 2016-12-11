@@ -1,3 +1,4 @@
+import { getRandomArbitrary } from "utils";
 import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -10,6 +11,8 @@ import {
   EnemyWidth,
   EnemyHeight,
   Border,
+  CharacterWitdh,
+  CharacterHeight
   } from "Constants";
 
 import Player from "objects/Character";
@@ -22,12 +25,12 @@ const needCamera = false;
 const MinDivision = 1;
 const MaxDivision = 5;
 
-const Division = Math.trunc(Math.random() * (MaxDivision - MinDivision) + MinDivision);
+const Division = getRandomArbitrary(MinDivision, MaxDivision);
 
 const MaxBorder = 60;
 const MinBorder = 30;
 
-const SizeMaze = Math.trunc(Math.random() * (MaxBorder - MinBorder) + MinBorder);
+const SizeMaze = getRandomArbitrary(MinBorder, MaxBorder);
 // assuming SpriteWidth = SpriteHeight
 const Bounds = 2 * Border + SizeMaze * SpriteWidth;
 
@@ -39,21 +42,32 @@ class Game extends Phaser.State {
     this.game.world.setBounds(0, 0, Bounds, Bounds);
     this.room = new Room(this.game);
     this.game.add.existing(this.room);
+    this.room.createRandomSquare(Border,Border,SizeMaze, Division);
 
-    this.hero = new Player(this.game,500,800);
+    this.hero = new Player(this.game, 100, 100);
     this.game.add.existing(this.hero);
+    this.getInitialPosition();
 
     this.enemies = new EnemyGroup(this.game);
     this.game.add.existing(this.enemies);
-    //this.enemy = new Enemy(this.game,300,100);
-    //this.game.add.existing(this.enemy);
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
     }
-
     this.camera.follow(this.hero);
-    this.room.createRandomSquare(Border,Border,SizeMaze, Division);
+  }
+
+  getInitialPosition() {
+    let maxAttempt = 0;
+    let hasBlock = false;
+    do {
+      const x = getRandomArbitrary(2 * Border, this.game.world.bounds.width - CharacterWitdh - 2 * Border);
+      const y = getRandomArbitrary(2 * Border, this.game.world.bounds.height - CharacterHeight - 2 * Border);
+      this.hero.position.setTo(x,y);
+      maxAttempt = maxAttempt + 1;
+      hasBlock = this.game.physics.arcade.collide(this.hero, this.room);
+      debugger
+    } while(maxAttempt < 10 && hasBlock);
   }
 
   update() {
@@ -166,6 +180,7 @@ class Game extends Phaser.State {
   }
 
   render() {
+    this.game.debug.spriteInfo(this.hero, 32, 32);
     //this.game.debug.text(Bounds, 2, 14, "#ff0000");
     //this.game.debug.spriteInfo(this.hero, 32, 32);
   }
