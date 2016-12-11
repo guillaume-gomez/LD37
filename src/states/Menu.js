@@ -15,6 +15,7 @@ class Menu extends Phaser.State {
 
   update() {
     if(this.enterButton.isDown) {
+      this.game.goToMainMenu();
     }
   }
 
