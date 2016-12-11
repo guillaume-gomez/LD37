@@ -3,7 +3,7 @@ import { CharacterWitdh, CharacterHeight } from "../Constants";
 
 const Damage = 10;
 const Velocity = 200;
-const MaxBullet = 10;
+const MaxBullet = 5;
 
 class Character extends Phaser.Sprite {
 
@@ -21,7 +21,7 @@ class Character extends Phaser.Sprite {
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
     this.weapon.bulletAngleOffset = 90;
     this.weapon.bulletSpeed = 400;
-    this.weapon.fireRate = 200;
+    this.weapon.fireRate = 1000;
 
     this.weapon.trackSprite(this, 0, 0, true);
     this.cursor = game.input.keyboard.createCursorKeys();
