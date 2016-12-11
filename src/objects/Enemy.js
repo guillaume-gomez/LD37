@@ -11,7 +11,7 @@ class Enemy extends Phaser.Sprite {
     //Enable physics on the player
     game.physics.arcade.enable(this);
     this.body.bounce.x = this.body.bounce.y = 0;
-    this.cursor = game.input.keyboard.createCursorKeys();
+    this.body.collideWorldBounds = true;
     this.body.mass = 10;
     this.direction = 1;
   }
@@ -35,12 +35,6 @@ class Enemy extends Phaser.Sprite {
       this.body.velocity.y = Velocity;
     } else if (playerPosition.y + centerPLayerY < this.body.position.y + centerEnemyY) {
       this.body.velocity.y = -Velocity;
-    }
-  }
-
-  isDeath() {
-    if (!this.body) {
-      return false;
     }
   }
 }
