@@ -35,6 +35,7 @@ const Bounds = 2 * Border + SizeMaze * SpriteWidth;
 class Game extends Phaser.State {
 
   create() {
+    this.game.stage.backgroundColor = 0x000000;
     this.game.world.setBounds(0, 0, Bounds, Bounds);
     this.room = new Room(this.game);
     this.game.add.existing(this.room);
