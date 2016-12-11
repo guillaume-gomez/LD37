@@ -1,5 +1,5 @@
 import { getRandomArbitrary } from "utils";
-import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
+import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet, Boomerang } from "SpriteConstants";
 import {
   CameraVelocity,
   FlashColor,
@@ -176,6 +176,7 @@ class Game extends Phaser.State {
     this.game.load.image(SpritePlayer, "res/player.png");
     this.game.load.image(SpriteEnemy, "res/enemy.png");
     this.game.load.image(SpriteBullet, "res/bullet.png");
+    this.game.load.image(Boomerang, "res/boomerang.png");
   }
 
   render() {
