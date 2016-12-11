@@ -46,7 +46,7 @@ class Game extends Phaser.State {
 
     this.hero = new Player(this.game, 100, 100);
     this.game.add.existing(this.hero);
-    this.getInitialPosition();
+    this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
     this.enemies = new EnemyGroup(this.game);
     this.game.add.existing(this.enemies);
@@ -57,16 +57,15 @@ class Game extends Phaser.State {
     this.camera.follow(this.hero);
   }
 
-  getInitialPosition() {
+  getInitialPosition(sprite, spriteWidth, spriteHeight) {
     let maxAttempt = 0;
     let hasBlock = false;
     do {
-      const x = getRandomArbitrary(2 * Border, this.game.world.bounds.width - CharacterWitdh - 2 * Border);
-      const y = getRandomArbitrary(2 * Border, this.game.world.bounds.height - CharacterHeight - 2 * Border);
-      this.hero.position.setTo(x,y);
+      const x = getRandomArbitrary(2 * Border, this.game.world.bounds.width - spriteWidth - 2 * Border);
+      const y = getRandomArbitrary(2 * Border, this.game.world.bounds.height - spriteHeight - 2 * Border);
+      sprite.position.setTo(x,y);
       maxAttempt = maxAttempt + 1;
-      hasBlock = this.game.physics.arcade.collide(this.hero, this.room);
-      debugger
+      hasBlock = this.game.physics.arcade.collide(sprite, this.room);
     } while(maxAttempt < 10 && hasBlock);
   }
 
