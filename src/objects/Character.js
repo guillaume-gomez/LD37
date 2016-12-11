@@ -48,8 +48,6 @@ class Character extends Phaser.Sprite {
     }
 
     if(this.fireButton.isDown) {
-      console.log('X:' + this.game.input.activePointer.x);
-      debugger
       this.weapon.fire();
     }
 
