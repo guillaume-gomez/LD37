@@ -33,13 +33,11 @@ class MainMenu extends Phaser.State {
   update() {
     this.game.physics.arcade.overlap(this.hero, this.enemy, /*this.damage*/null, null, this);
     this.game.physics.arcade.overlap(this.hero.bullets(), this.enemy, this.kill);
+    this.game.physics.arcade.overlap(this.enemy, this.room, this.pushBlock);
 
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
-    this.game.physics.arcade.collide(this.hero, this.room);
-    this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock);
-    if(this.hero.body.position) {
-      this.enemy.follow(this.hero.body.position);
-    }
+   // this.game.physics.arcade.collide(this.hero, this.room);
+    this.enemy.follow(this.hero.body.position);
   }
 
   kill(enemy, bullet) {
@@ -56,26 +54,60 @@ class MainMenu extends Phaser.State {
     this.camera.flash(FlashColor, FlashDuration);
   }
 
-  //temp
   pushBlock(enemy, block) {
-    const overlapX = block.body.position.x - enemy.body.position.x;
-    const overlapY = block.body.position.y - enemy.body.position.y;
-    // debugger
-    // console.log(enemy.body.position.y)
-    // console.log(block.body.position.y)
-    // if(enemy.body.position.y <= block.body.position.y - SpriteHeight) {
-    //   block.body.position.y += 1;
-    // } else if (enemy.body.position.y - EnemyHeight >= block.body.position.y) {
-    //   block.body.position.y -= 1;
-    // } else if(enemy.body.position.x + EnemyWidth >= block.body.position.x) {
-    //   block.body.position.x += 1;
-    // } else if(enemy.body.position.x <= block.body.position.x + SpriteWidth) {
-    //   block.body.position.x -= 1;
-    // }
+    const enemyLeft = enemy.body.position.x;
+    const enemyRight = enemy.body.position.x + EnemyWidth;
+    const enemyTop = enemy.body.position.y - EnemyHeight;
+    const enemyBottom = enemy.body.position.y;
 
+    const blockLeft = block.body.position.x;
+    const blockRight = block.body.position.x + SpriteWidth;
+    const blockTop = block.body.position.y - SpriteHeight;
+    const blockBottom = block.body.position.y;
 
-    block.body.position.x += overlapX / Math.abs(overlapX);
-    //block.body.position.y += overlapY / Math.abs(overlapY);
+    const bigValue = 1000;
+    let left = bigValue
+    let right = bigValue;
+    let up = bigValue;
+    let down = bigValue;
+
+    if( enemyLeft < blockLeft &&
+        blockLeft < enemyRight &&
+        enemyRight < blockRight
+      ) {
+      left = enemyRight - blockLeft;
+    }
+
+    if( blockLeft < enemyLeft &&
+        enemyLeft < blockRight &&
+        blockRight < enemyRight
+     ) {
+      right = blockRight - enemyLeft;
+    }
+
+    if( enemyTop < blockTop &&
+        blockTop < enemyBottom &&
+        enemyBottom < blockBottom
+      ) {
+      up = enemyBottom - blockTop;
+    }
+
+    if( blockTop < enemyTop &&
+        enemyTop < blockBottom &&
+        blockBottom < enemyBottom
+    ) {
+      down = blockBottom - enemyTop;
+    }
+
+    if(left < right && left < up  &&  left < down ) {
+       block.body.position.x += 1;
+    } else if( right < left && right < up  &&  right < down ) {
+      block.body.position.x -= 1;
+    } else if( up < down && up < left && up < right) {
+      block.body.position.y += 1;
+    } else if (down < up && down < left && down < right) {
+      block.body.position.y -= 1;
+    }
   }
 
   preload() {
