@@ -65,14 +65,13 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.enemies.follow(this.hero.body.position);
 
-  // // if(this.hero.isDeath()) {
+    if(this.hero.isDeath()) {
+      this.lost();
+    }
 
-  //    this.hero.kill();
-  //  }
-
-    // if(this.hero.isOutSideTheLevel(this.game)) {
-    // }
-    //this.moveCamera()
+     if(this.hero.isOutSideTheLevel(this.game) || !this.enemies.hasEnemies()) {
+        this.won();
+     }
   }
 
   kill(enemy, bullet) {
@@ -148,11 +147,14 @@ class Game extends Phaser.State {
   }
 
   lost() {
-    //render lost menu
+    this.hero.kill();
+    setTimeout(() => {
+      this.game.goToLose()
+    }, 500);
   }
 
-  win() {
-    //render win menu
+  won() {
+    this.game.goToWin();
   }
 
   preload() {
