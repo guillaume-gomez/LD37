@@ -16,21 +16,29 @@ class EnemyGroup extends Phaser.Group {
     // nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 20);
     // this.enemyLeft(game, nbEnemiesOnSide);
 
-    // nbEnemies -= nbEnemiesOnSide;
-    // nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 10);
-    // this.enemyBottom(game, nbEnemiesOnSide);
+     //nbEnemies -= nbEnemiesOnSide;
+     //nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 10);
+     //this.enemyBottom(game, nbEnemiesOnSide);
 
     // nbEnemies -= nbEnemiesOnSide;
     // this.enemyRight(game, nbEnemiesOnSide);
 
   }
 
-  enemyBottom(game,nbEnemies) {
+  getElapsedX(game, nbEnemies) {
+    return (game.world.bounds.width - 2 * Border) / nbEnemies;
+  }
 
+  enemyBottom(game,nbEnemies) {
+    const elapsedX = this.getElapsedX(game, nbEnemies);
+    for(let i = 0; i < nbEnemies; i++) {
+      const randomY = getRandomArbitrary(game.world.bounds.height - Border, game.world.bounds.height - EnemyHeight);
+      this.addEnemy(game, Border + elapsedX * i, randomY);
+    }
   }
 
   enemyTop(game, nbEnemies) {
-    const elapsedX = (game.world.bounds.width - 2 * Border) / nbEnemies;
+    const elapsedX = this.getElapsedX(game, nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
       const randomY = getRandomArbitrary(0, Border - EnemyHeight);
       this.addEnemy(game, Border + elapsedX * i, randomY);
@@ -48,6 +56,12 @@ class EnemyGroup extends Phaser.Group {
   addEnemy(game, x, y) {
     const enemy = new Enemy(game,x, y);
     this.add(enemy);
+  }
+
+  follow(playerPosition) {
+    this.children.forEach(enemy => {
+      enemy.follow(playerPosition);
+    });
   }
 
 }
