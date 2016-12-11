@@ -1,6 +1,7 @@
 import { ScreenWidth, ScreenHeight } from "./Constants.js";
 import Game from 'states/Game';
 import Menu from 'states/Menu';
+import WinState from 'states/WinState';
 
 class LD37 extends Phaser.Game {
 
@@ -8,6 +9,7 @@ class LD37 extends Phaser.Game {
     super(ScreenWidth, ScreenHeight, Phaser.AUTO, 'content', null);
     this.state.add('Game', Game, false);
     this.state.add('Menu', Menu, false);
+    this.state.add('Win', WinState, false);
     this.state.start('Menu');
   }
 
@@ -20,7 +22,7 @@ class LD37 extends Phaser.Game {
   }
 
   goToWin() {
-    this.state.start('Menu', Phaser.Plugin.StateTransition.Out.SlideRight, null, true, true);
+    this.state.start('Win', Phaser.Plugin.StateTransition.Out.SlideRight, null, true, true);
   }
 
 }
