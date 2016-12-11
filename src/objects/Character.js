@@ -14,20 +14,22 @@ class Character extends Phaser.Sprite {
     this.body.bounce.x = this.body.bounce.y = 0;
     this.body.mass = 1;
     this.direction = 1;
+    this.anchor.setTo(0.5, 0.5);
     this.life = 10000;
 
     this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
     this.weapon.bulletAngleOffset = 90;
     this.weapon.bulletSpeed = 400;
-    this.weapon.fireRate = 60;
+    this.weapon.fireRate = 200;
 
-    this.weapon.trackSprite(this, CharacterWitdh / 2, CharacterHeight / 2);
+    this.weapon.trackSprite(this, 0, 0, true);
     this.cursor = game.input.keyboard.createCursorKeys();
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
   }
 
   update() {
+    this.rotation = this.game.physics.arcade.angleToPointer(this);
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     if (this.cursor.left.isDown) {
@@ -46,6 +48,8 @@ class Character extends Phaser.Sprite {
     }
 
     if(this.fireButton.isDown) {
+      console.log('X:' + this.game.input.activePointer.x);
+      debugger
       this.weapon.fire();
     }
 
