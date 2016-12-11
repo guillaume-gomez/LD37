@@ -14,3 +14,5 @@ export const FlashDuration = 1000;
 
 export const CharacterWitdh = 57;
 export const CharacterHeight = 57;
+export const EnemyWidth = 40;
+export const EnemeyHeight = 40;

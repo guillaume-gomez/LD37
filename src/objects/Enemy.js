@@ -1,4 +1,5 @@
 import { SpriteEnemy } from "../SpriteConstants";
+import { CharacterWitdh, CharacterHeight, EnemyWidth, EnemeyHeight } from "../Constants";
 
 const VisionEnemy = 399;
 const Velocity = 50;
@@ -20,15 +21,21 @@ class Enemy extends Phaser.Sprite {
   follow(playerPosition) {
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
-    if(playerPosition.x > this.body.position.x) {
+
+    const centerPlayerX = CharacterWitdh / 2;
+    const centerPLayerY = CharacterHeight / 2;
+    const centerEnemyX  = EnemyWidth / 2;
+    const centerEnemyY  = EnemeyHeight / 2;
+
+    if(playerPosition.x + centerPlayerX > this.body.position.x + centerEnemyX) {
       this.body.velocity.x = Velocity;
-    } else if (playerPosition.x < this.body.position.x){
+    } else if (playerPosition.x + centerPlayerX < this.body.position.x + centerEnemyX){
       this.body.velocity.x = -Velocity;
     }
 
-    if(playerPosition.y > this.body.position.y) {
+    if(playerPosition.y + centerPLayerY > this.body.position.y + centerEnemyY) {
       this.body.velocity.y = Velocity;
-    } else if (playerPosition.y < this.body.position.y) {
+    } else if (playerPosition.y + centerPLayerY < this.body.position.y + centerEnemyY) {
       this.body.velocity.y = -Velocity;
     }
   }
