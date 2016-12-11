@@ -15,7 +15,7 @@ class Character extends Phaser.Sprite {
     this.body.mass = 1;
     this.direction = 1;
     this.anchor.setTo(0.5, 0.5);
-    this.life = 10000;
+    this.life = 1000;
 
     this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
@@ -58,9 +58,14 @@ class Character extends Phaser.Sprite {
   }
 
   isDeath() {
-    if (this.life > 0) {
-      return false;
-    }
+    return this.life < 0;
+  }
+
+  isOutSideTheLevel(game) {
+    return this.body.position.x + CharacterWitdh < 0 ||
+           this.body.position.x > game.world.bounds.width ||
+           this.body.position.y < 0 ||
+           this.body.position.y + CharacterHeight > game.world.bounds.height;
   }
 
   bullets() {
