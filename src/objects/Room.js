@@ -78,13 +78,18 @@ class Room extends Phaser.Group {
   //
   ///
   createSquare(x, y, nbTilesBySide) {
-    this.createRandomSquare(x, y, nbTilesBySide, 1, 0, 0);
+    this.createRandomSquare(x, y, nbTilesBySide, 1, false);
   }
 
   // const division = 3;
   // const varX = -1;
   // const varY = 1;
-  createRandomSquare(x, y, nbTilesBySide, division = 3, varX = -1, varY = 1) {
+  createRandomSquare(x, y, nbTilesBySide, division = 3, random = true) {
+    let varX = 0;
+    let varY = 0;
+    if(random) {
+
+    }
     this.createLineByTile(x, y, nbTilesBySide, 1, division, varX, varY);
     this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1, division, varX, varY);
 
