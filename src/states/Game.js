@@ -75,9 +75,9 @@ class Game extends Phaser.State {
      }
   }
 
-  kill(enemy, bullet) {
-    bullet.kill();
+  kill(bullet, enemy) {
     this.enemies.remove(enemy);
+    bullet.kill();
   }
 
   killBullet(bullet) {
