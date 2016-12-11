@@ -61,6 +61,7 @@ class MainMenu extends Phaser.State {
     this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill, null, this);
     this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
 
+    this.game.physics.arcade.collide(this.enemies);
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
     this.game.physics.arcade.collide(this.hero, this.room);
     this.enemies.follow(this.hero.body.position);
