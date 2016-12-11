@@ -1,4 +1,4 @@
-import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY, Bounds } from "../Constants.js";
+import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY } from "../Constants.js";
 import { Wall } from "../SpriteConstants";
 import { getRandomArbitrary } from "../utils";
 
@@ -11,6 +11,7 @@ class Room extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
+    this.Bounds = game.world.bounds;
   }
 
   createRandomLine(x1, y1, x2, y2, division = 1, varX = 0, varY = 0) {
@@ -53,7 +54,7 @@ class Room extends Phaser.Group {
     while (true) {
       this.createSprite(x,y);
       if (x >= x2 && y >= y2) break;
-      if(x < 0 || y < 0 || x > Bounds || y > Bounds) break;
+      if(x < 0 || y < 0 || x > this.Bounds.width || y > this.Bounds.height) break;
       let e2 = err;
       if (e2 > - dx) {
         err -= dy;
