@@ -1,8 +1,11 @@
 import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY, Bounds } from "../Constants.js";
 import { Wall } from "../SpriteConstants";
+import { getRandomArbitrary } from "../utils";
 
 const MaxX = 1;
 const MaxY = 0;
+
+const Divisor = 15;
 
 class Room extends Phaser.Group {
 
@@ -81,21 +84,28 @@ class Room extends Phaser.Group {
     this.createRandomSquare(x, y, nbTilesBySide, 1, false);
   }
 
-  // const division = 3;
-  // const varX = -1;
-  // const varY = 1;
   createRandomSquare(x, y, nbTilesBySide, division = 3, random = true) {
+    const updateVariation = () => {
+      const maxOffset = nbTilesBySide/ Divisor;
+      if(random) {
+        return [getRandomArbitrary(-maxOffset, maxOffset), getRandomArbitrary(-maxOffset, maxOffset), getRandomArbitrary(-maxOffset, maxOffset), getRandomArbitrary(-maxOffset, maxOffset)];
+      }
+      return [0, 0, 0, 0];
+    };
+
     let varX = 0;
     let varY = 0;
-    if(random) {
+    let varX2 = 0;
+    let varY2 = 0;
 
-    }
+    [varX, varY, varX2, varY2] = updateVariation();
     this.createLineByTile(x, y, nbTilesBySide, 1, division, varX, varY);
-    this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1, division, varX, varY);
+    this.createLineByTile(x, y + (nbTilesBySide-1) * SpriteHeight, nbTilesBySide, 1, division, varX2, varY2);
 
+    [varX, varY, varX2, varY2] = updateVariation();
     //nbtiles - 2 because corner  was drawn  by vertical line
     this.createLineByTile(x, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX, varY);
-    this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX, varY);
+    this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX2, varY2);
   }
 }
 
