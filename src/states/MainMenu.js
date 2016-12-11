@@ -14,7 +14,8 @@ import {
 
 import Player from "objects/Character";
 import Room from "objects/Room";
-import Enemy from "objects/Enemy";
+import EnemyGroup from "objects/EnemyGroup";
+
 
 const needCamera = true;
 
@@ -39,28 +40,31 @@ class MainMenu extends Phaser.State {
     this.room = new Room(this.game);
     this.game.add.existing(this.room);
 
-    this.hero = new Player(this.game,1000,100);
+    this.hero = new Player(this.game,500,800);
     this.game.add.existing(this.hero);
 
-    this.enemy = new Enemy(this.game,300,100);
-    this.game.add.existing(this.enemy);
+    this.enemies = new EnemyGroup(this.game);
+    this.game.add.existing(this.enemies);
+    //this.enemy = new Enemy(this.game,300,100);
+    //this.game.add.existing(this.enemy);
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
     }
 
     this.camera.follow(this.hero);
-    this.room.createRandomSquare(Border,Border,SizeMaze, Division, false);
+    this.room.createRandomSquare(Border,Border,SizeMaze, Division);
   }
 
   update() {
-    this.game.physics.arcade.overlap(this.hero, this.enemy, /*this.damage*/null, null, this);
-    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemy, this.kill);
-    this.game.physics.arcade.overlap(this.enemy, this.room, this.pushBlock, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.enemies, /*this.damage*/null, null, this);
+    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill);
+    this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
 
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
     this.game.physics.arcade.collide(this.hero, this.room);
-    this.enemy.follow(this.hero.body.position);
+    this.enemies.follow(this.hero.body.position);
+    //this.moveCamera()
   }
 
   kill(enemy, bullet) {
