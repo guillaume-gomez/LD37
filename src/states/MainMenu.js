@@ -1,11 +1,28 @@
 import { LD, Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
-import { CameraVelocity, Bounds, FlashColor, FlashDuration, SpriteWidth, SpriteHeight, EnemyWidth, EnemyHeight } from "Constants";
+import {
+  CameraVelocity,
+  FlashColor,
+  FlashDuration,
+  ShakeIntensity,
+  ShakeDuration,
+  SpriteWidth,
+  SpriteHeight,
+  EnemyWidth,
+  EnemyHeight
+  } from "Constants";
 
 import Player from "objects/Character";
 import Room from "objects/Room";
 import Enemy from "objects/Enemy";
 
 const needCamera = false;
+const Border = 256;
+const MaxBorder = 60;
+const MinBorder = 30;
+const SizeMaze = Math.trunc(Math.random() * (MaxBorder - MinBorder) + MinBorder);
+// assuming SpriteWidth = SpriteHeight
+const Bounds = 2 * Border + SizeMaze * SpriteWidth;
+
 
 class MainMenu extends Phaser.State {
 
@@ -24,19 +41,18 @@ class MainMenu extends Phaser.State {
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
     }
-    //this.room.createRandomLine(32, 128, 32 + 9 * 32, 128, 3);
-    //this.room.createLine(20, 400, 400, 400);
+
     this.camera.follow(this.hero);
-    this.room.createRandomSquare(32,0,18,1, +2, 1 );
+    this.room.createRandomSquare(Border,Border,SizeMaze,1, +2, 1 );
   }
 
   update() {
     this.game.physics.arcade.overlap(this.hero, this.enemy, /*this.damage*/null, null, this);
     this.game.physics.arcade.overlap(this.hero.bullets(), this.enemy, this.kill);
-    this.game.physics.arcade.overlap(this.enemy, this.room, this.pushBlock);
+    this.game.physics.arcade.overlap(this.enemy, this.room, this.pushBlock, null, this);
 
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
-   // this.game.physics.arcade.collide(this.hero, this.room);
+    this.game.physics.arcade.collide(this.hero, this.room);
     this.enemy.follow(this.hero.body.position);
   }
 
@@ -55,6 +71,7 @@ class MainMenu extends Phaser.State {
   }
 
   pushBlock(enemy, block) {
+    this.game.camera.shake(ShakeIntensity, ShakeDuration);
     const enemyLeft = enemy.body.position.x;
     const enemyRight = enemy.body.position.x + EnemyWidth;
     const enemyTop = enemy.body.position.y - EnemyHeight;
@@ -108,6 +125,7 @@ class MainMenu extends Phaser.State {
     } else if (down < up && down < left && down < right) {
       block.body.position.y -= 1;
     }
+
   }
 
   preload() {
@@ -119,7 +137,8 @@ class MainMenu extends Phaser.State {
   }
 
   render() {
-     //this.game.debug.spriteInfo(this.hero, 32, 32);
+    this.game.debug.text(Bounds, 2, 14, "#00ff00");
+    //this.game.debug.spriteInfo(this.hero, 32, 32);
   }
 
   moveCamera() {
