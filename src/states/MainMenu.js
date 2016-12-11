@@ -31,11 +31,18 @@ class MainMenu extends Phaser.State {
   }
 
   update() {
-    this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.overlap(this.hero, this.enemy, /*this.damage*/null, null, this);
+    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemy, this.kill);
+
+    this.game.physics.arcade.collide(this.hero, this.room);
     if(!this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock)) {
     } // else if pushblocks function
     if(this.hero.body.position) this.enemy.follow(this.hero.body.position);
+  }
+
+  kill(enemy, bullet) {
+    bullet.kill();
+    enemy.kill();
   }
 
   damage() {

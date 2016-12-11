@@ -60,6 +60,11 @@ class Character extends Phaser.Sprite {
       return false;
     }
   }
+
+  bullets() {
+    return this.weapon.bullets;
+  }
+
 }
 
 export default Character;
