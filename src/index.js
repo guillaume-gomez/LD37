@@ -2,7 +2,7 @@ import { ScreenWidth, ScreenHeight } from "./Constants.js";
 import Game from 'states/Game';
 import Menu from 'states/Menu';
 
-class Game extends Phaser.Game {
+class LD37 extends Phaser.Game {
 
   constructor() {
     super(ScreenWidth, ScreenHeight, Phaser.AUTO, 'content', null);
@@ -17,4 +17,4 @@ class Game extends Phaser.Game {
 
 }
 
-new Game();
+new LD37();
