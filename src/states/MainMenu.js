@@ -34,6 +34,7 @@ class MainMenu extends Phaser.State {
     this.game.physics.arcade.overlap(this.hero, this.enemy, /*this.damage*/null, null, this);
     this.game.physics.arcade.overlap(this.hero.bullets(), this.enemy, this.kill);
 
+    this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
     this.game.physics.arcade.collide(this.hero, this.room);
     if(!this.game.physics.arcade.collide(this.enemy, this.room, this.pushBlock)) {
     } // else if pushblocks function
@@ -45,6 +46,10 @@ class MainMenu extends Phaser.State {
     enemy.kill();
   }
 
+  killBullet(bullet) {
+    bullet.kill();
+  }
+
   damage() {
     this.hero.damage();
     this.camera.flash(FlashColor, FlashDuration);
@@ -54,6 +59,18 @@ class MainMenu extends Phaser.State {
   pushBlock(sprite1, sprite2) {
     sprite2.body.velocity.x += 1;
     sprite1.body.velocity.x = 100;
+  }
+
+  preload() {
+    this.game.load.image(LD, "res/LD.png");
+    this.game.load.image(Wall, "res/1.png");
+    this.game.load.image(SpritePlayer, "res/player.png");
+    this.game.load.image(SpriteEnemy, "res/enemy.png");
+    this.game.load.image(SpriteBullet, "res/bullet.png");
+  }
+
+  render() {
+     //this.game.debug.spriteInfo(this.hero, 32, 32);
   }
 
   moveCamera() {
@@ -78,17 +95,6 @@ class MainMenu extends Phaser.State {
     }
   }
 
-  preload() {
-    this.game.load.image(LD, "res/LD.png");
-    this.game.load.image(Wall, "res/1.png");
-    this.game.load.image(SpritePlayer, "res/player.png");
-    this.game.load.image(SpriteEnemy, "res/enemy.png");
-    this.game.load.image(SpriteBullet, "res/bullet.png");
-  }
-
-  render() {
-     //this.game.debug.spriteInfo(this.hero, 32, 32);
-  }
 
 }
 
