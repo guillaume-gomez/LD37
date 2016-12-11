@@ -1,4 +1,4 @@
-import { EnemyWidth, EnemyHeight, Border } from "../Constants.js";
+import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies } from "../Constants.js";
 import { getRandomArbitrary } from "../utils";
 
 import Enemy from "objects/Enemy";
@@ -7,7 +7,7 @@ class EnemyGroup extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
-    let nbEnemies = getRandomArbitrary(20,40);
+    let nbEnemies = getRandomArbitrary(MinEnemies, MaxEnemies);
 
     let nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 30);
     this.enemyTop(game,nbEnemiesOnSide);
