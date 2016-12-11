@@ -1,4 +1,4 @@
-import { LD, Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
+import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet } from "SpriteConstants";
 import {
   CameraVelocity,
   FlashColor,
@@ -36,7 +36,6 @@ class Game extends Phaser.State {
 
   create() {
     this.game.world.setBounds(0, 0, Bounds, Bounds);
-    this.game.add.sprite(50,100, LD);
     this.room = new Room(this.game);
     this.game.add.existing(this.room);
 
@@ -157,7 +156,6 @@ class Game extends Phaser.State {
   }
 
   preload() {
-    this.game.load.image(LD, "res/LD.png");
     this.game.load.image(Wall, "res/1.png");
     this.game.load.image(SpritePlayer, "res/player.png");
     this.game.load.image(SpriteEnemy, "res/enemy.png");

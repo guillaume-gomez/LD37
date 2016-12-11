@@ -15,6 +15,14 @@ class LD37 extends Phaser.Game {
     this.state.start('Game', Phaser.Plugin.StateTransition.Out.SlideBottom, null, true, true);
   }
 
+  goToLose() {
+    this.state.start('Menu', Phaser.Plugin.StateTransition.Out.SlideLeft, null, true, true);
+  }
+
+  goToWin() {
+    this.state.start('Menu', Phaser.Plugin.StateTransition.Out.SlideRight, null, true, true);
+  }
+
 }
 
 new LD37();
