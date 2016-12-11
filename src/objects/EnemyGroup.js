@@ -2,6 +2,8 @@ import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies } from "../Cons
 import { getRandomArbitrary } from "../utils";
 
 import Enemy from "objects/Enemy";
+const VelocityMin = 50;
+const VelocityMax = 100;
 
 class EnemyGroup extends Phaser.Group {
 
@@ -66,7 +68,8 @@ class EnemyGroup extends Phaser.Group {
   }
 
   addEnemy(game, x, y) {
-    const enemy = new Enemy(game,x, y);
+    const vel = getRandomArbitrary(VelocityMin, VelocityMax);
+    const enemy = new Enemy(game,x, y, vel);
     this.add(enemy);
   }
 

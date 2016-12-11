@@ -2,18 +2,18 @@ import { SpriteEnemy } from "../SpriteConstants";
 import { CharacterWitdh, CharacterHeight, EnemyWidth, EnemyHeight } from "../Constants";
 
 const VisionEnemy = 399;
-const Velocity = 50;
 
 class Enemy extends Phaser.Sprite {
 
-  constructor(game, x, y, key, frame) {
-    super(game, x, y, SpriteEnemy, frame);
+  constructor(game, x, y, vel) {
+    super(game, x, y, SpriteEnemy, 0);
     //Enable physics on the player
     game.physics.arcade.enable(this);
     this.body.bounce.x = this.body.bounce.y = 0;
     this.body.collideWorldBounds = true;
     this.body.mass = 10;
     this.direction = 1;
+    this.vel = vel;
   }
 
   follow(playerPosition) {
@@ -26,15 +26,15 @@ class Enemy extends Phaser.Sprite {
     const centerEnemyY  = EnemyHeight / 2;
 
     if(playerPosition.x + centerPlayerX > this.body.position.x + centerEnemyX) {
-      this.body.velocity.x = Velocity;
+      this.body.velocity.x = this.vel;
     } else if (playerPosition.x + centerPlayerX < this.body.position.x + centerEnemyX){
-      this.body.velocity.x = -Velocity;
+      this.body.velocity.x = -this.vel;
     }
 
     if(playerPosition.y + centerPLayerY > this.body.position.y + centerEnemyY) {
-      this.body.velocity.y = Velocity;
+      this.body.velocity.y = this.vel;
     } else if (playerPosition.y + centerPLayerY < this.body.position.y + centerEnemyY) {
-      this.body.velocity.y = -Velocity;
+      this.body.velocity.y = -this.vel;
     }
   }
 }
