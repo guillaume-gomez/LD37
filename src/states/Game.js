@@ -74,16 +74,17 @@ class Game extends Phaser.State {
   }
 
   update() {
-    // this.game.physics.arcade.overlap(this.hero, this.enemies, this.damage, null, this);
-    // this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill, null, this);
-    // this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.enemies, this.damage, null, this);
+    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill, null, this);
+    this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
 
-    // this.game.physics.arcade.collide(this.enemies);
-    // this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
-    // this.game.physics.arcade.collide(this.enemies, this.boomerang, this.killByBoomerang, null, this);
-    //this.game.physics.arcade.collide(this.hero, this.room);
+    this.game.physics.arcade.collide(this.enemies);
+    this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
+    this.game.physics.arcade.collide(this.enemies, this.boomerang, this.killByBoomerang, null, this);
+    this.game.physics.arcade.collide(this.hero, this.room);
+    this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    //this.enemies.follow(this.hero.body.position);
+    this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
       this.lost();
@@ -105,6 +106,11 @@ class Game extends Phaser.State {
 
   killByBoomerang(_, enemy) {
     this.enemies.remove(enemy);
+  }
+
+  killBoomerang(boomerang) {
+    boomerang.kill();
+    this.camera.follow(this.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
   }
 
   damage() {
