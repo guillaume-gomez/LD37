@@ -5,6 +5,7 @@ const Damage = 10;
 const Velocity = 200;
 const MaxBullet = 5;
 
+
 class Character extends Phaser.Sprite {
 
   constructor(game, x, y, key, frame) {
@@ -26,6 +27,7 @@ class Character extends Phaser.Sprite {
     this.weapon.trackSprite(this, 0, 0, true);
     this.cursor = game.input.keyboard.createCursorKeys();
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    this.fireClick = game.input.activePointer.leftButton;
   }
 
   update() {
@@ -47,7 +49,7 @@ class Character extends Phaser.Sprite {
       this.body.velocity.y = Velocity;
     }
 
-    if(this.fireButton.isDown) {
+    if(this.fireButton.isDown || this.fireClick.isDown) {
       this.weapon.fire();
     }
 
