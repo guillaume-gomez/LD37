@@ -1,5 +1,5 @@
 import { getRandomArbitrary } from "utils";
-import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet, Boomerang } from "SpriteConstants";
+import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet, BoomerangSprite } from "SpriteConstants";
 import {
   CameraVelocity,
   FlashColor,
@@ -16,6 +16,7 @@ import {
   } from "Constants";
 
 import Player from "objects/Character";
+import Boomerang from "objects/Boomerang";
 import Room from "objects/Room";
 import EnemyGroup from "objects/EnemyGroup";
 
@@ -48,8 +49,10 @@ class Game extends Phaser.State {
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
+    //this.boomerang = new Boomerang(this.game, this.hero.position.x, this.hero.position.y);
+    ///this.game.add.existing(this.boomerang);
+
     this.enemies = new EnemyGroup(this.game);
-    this.game.add.existing(this.enemies);
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -76,7 +79,9 @@ class Game extends Phaser.State {
 
     this.game.physics.arcade.collide(this.enemies);
     this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
+    //this.game.physics.arcade.collide(this.enemies, this.boomerang, this.killByBoomerang, null, this);
     this.game.physics.arcade.collide(this.hero, this.room);
+    //this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
     this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
@@ -95,6 +100,10 @@ class Game extends Phaser.State {
 
   killBullet(bullet) {
     bullet.kill();
+  }
+
+  killByBoomerang(_, enemy) {
+    this.enemies.remove(enemy);
   }
 
   damage() {
@@ -160,6 +169,15 @@ class Game extends Phaser.State {
 
   }
 
+  launchBoomerang() {
+    this.camera.follow(this.boomerang);
+    let tween = this.game.add.tween(this.boomerang).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true);
+    tween.onComplete.add((boomerang, tween) => {
+       this.camera.follow(this.hero);
+       this.boomerang.kill();
+    });
+  }
+
   lost() {
     this.hero.kill();
     setTimeout(() => {
@@ -176,7 +194,7 @@ class Game extends Phaser.State {
     this.game.load.image(SpritePlayer, "res/player.png");
     this.game.load.image(SpriteEnemy, "res/enemy.png");
     this.game.load.image(SpriteBullet, "res/bullet.png");
-    this.game.load.image(Boomerang, "res/boomerang.png");
+    this.game.load.image(BoomerangSprite, "res/boomerang.png");
   }
 
   render() {
