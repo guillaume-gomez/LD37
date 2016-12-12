@@ -49,8 +49,8 @@ class Game extends Phaser.State {
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
-    //this.boomerang = new Boomerang(this.game, this.hero.position.x, this.hero.position.y);
-    //this.game.add.existing(this.boomerang);
+    this.boomerang = new Boomerang(this.game, this.hero.position.x-100, this.hero.position.y);
+    this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
 
@@ -73,16 +73,16 @@ class Game extends Phaser.State {
   }
 
   update() {
-    this.game.physics.arcade.overlap(this.hero, this.enemies, this.damage, null, this);
-    this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill, null, this);
-    this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
+    // this.game.physics.arcade.overlap(this.hero, this.enemies, this.damage, null, this);
+    // this.game.physics.arcade.overlap(this.hero.bullets(), this.enemies, this.kill, null, this);
+    // this.game.physics.arcade.overlap(this.enemies, this.room, this.pushBlock, null, this);
 
-    this.game.physics.arcade.collide(this.enemies);
-    this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
-    //this.game.physics.arcade.collide(this.enemies, this.boomerang, this.killByBoomerang, null, this);
-    this.game.physics.arcade.collide(this.hero, this.room);
-    //this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    this.enemies.follow(this.hero.body.position);
+    // this.game.physics.arcade.collide(this.enemies);
+    // this.game.physics.arcade.collide(this.hero.bullets(), this.room, this.killBullet);
+    // this.game.physics.arcade.collide(this.enemies, this.boomerang, this.killByBoomerang, null, this);
+    //this.game.physics.arcade.collide(this.hero, this.room);
+    this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
+    //this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
       this.lost();
@@ -171,13 +171,14 @@ class Game extends Phaser.State {
 
   launchBoomerang() {
     this.camera.follow(this.boomerang);
-    const y = this.boomerang.position.y;
-    let tweenA = this.game.add.tween(this.boomerang).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true,0,0,true);
-    tweenA.onComplete.add((boomerang, tween) => {
-       this.boomerang.kill();
-       tweenA.stop()
+    // after the tween get back to the player
+    const onCompleteCallback = (boomerang, tween) => {
+       boomerang.kill();
+       tween.stop()
        this.camera.follow(this.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
-    });
+    };
+    // the first param is the direction
+    this.boomerang.launch(2, onCompleteCallback);
   }
 
   lost() {
