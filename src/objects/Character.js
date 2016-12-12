@@ -1,5 +1,5 @@
 import { SpritePlayer, SpriteBullet } from "../SpriteConstants";
-import { CharacterWitdh, CharacterHeight } from "../Constants";
+import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constants";
 
 const Damage = 10;
 const Velocity = 200;
@@ -28,6 +28,7 @@ class Character extends Phaser.Sprite {
     this.cursor = game.input.keyboard.createCursorKeys();
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
+    this.lastDirection = null;
   }
 
   update() {
@@ -37,22 +38,30 @@ class Character extends Phaser.Sprite {
     if (this.cursor.left.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
+        this.lastDirection = DirectionBoomerang.left;
     }
     else if (this.cursor.right.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
+        this.lastDirection = DirectionBoomerang.right;
     }
 
     if (this.cursor.up.isDown) {
       this.body.velocity.y = -Velocity;
+      this.lastDirection = DirectionBoomerang.up;
     } else if (this.cursor.down.isDown) {
       this.body.velocity.y = Velocity;
+      this.lastDirection = DirectionBoomerang.down;
     }
 
     if(this.fireButton.isDown || this.fireClick.isDown) {
       this.weapon.fire();
     }
 
+  }
+
+  directionChoosed() {
+    return this.lastDirection;
   }
 
   damage() {

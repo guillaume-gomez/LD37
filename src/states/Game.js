@@ -58,6 +58,7 @@ class Game extends Phaser.State {
       this.cursors = this.game.input.keyboard.createCursorKeys();
     }
     this.camera.follow(this.hero);
+    this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
@@ -170,15 +171,17 @@ class Game extends Phaser.State {
   }
 
   launchBoomerang() {
-    this.camera.follow(this.boomerang);
-    // after the tween get back to the player
-    const onCompleteCallback = (boomerang, tween) => {
-       boomerang.kill();
-       tween.stop()
-       this.camera.follow(this.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
-    };
-    // the first param is the direction
-    this.boomerang.launch(2, onCompleteCallback);
+    if(this.launchBoomerangKey.isDown) {
+      this.camera.follow(this.boomerang);
+      // after the tween get back to the player
+      const onCompleteCallback = (boomerang, tween) => {
+         boomerang.kill();
+         tween.stop()
+         this.camera.follow(this.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+      };
+      // the first param is the direction
+      this.boomerang.launch(this.hero.directionChoosed(), onCompleteCallback);
+    }
   }
 
   lost() {

@@ -25,3 +25,10 @@ export const BoomerangHeight = 16;
 
 export const MinEnemies = 20;
 export const MaxEnemies = 40;
+
+export const DirectionBoomerang = {
+  left: "LEFT",
+  up: "UP",
+  down: "DOWN",
+  right: "RIGHT"
+};
