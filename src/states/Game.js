@@ -50,7 +50,7 @@ class Game extends Phaser.State {
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
     //this.boomerang = new Boomerang(this.game, this.hero.position.x, this.hero.position.y);
-    ///this.game.add.existing(this.boomerang);
+    //this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
 
@@ -171,10 +171,12 @@ class Game extends Phaser.State {
 
   launchBoomerang() {
     this.camera.follow(this.boomerang);
-    let tween = this.game.add.tween(this.boomerang).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true);
-    tween.onComplete.add((boomerang, tween) => {
-       this.camera.follow(this.hero);
+    const y = this.boomerang.position.y;
+    let tweenA = this.game.add.tween(this.boomerang).to( { y: 200 }, 2000, Phaser.Easing.Linear.None, true,0,0,true);
+    tweenA.onComplete.add((boomerang, tween) => {
        this.boomerang.kill();
+       tweenA.stop()
+       this.camera.follow(this.hero);
     });
   }
 
