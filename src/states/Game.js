@@ -12,7 +12,9 @@ import {
   EnemyHeight,
   Border,
   CharacterWitdh,
-  CharacterHeight
+  CharacterHeight,
+  BoomerangWidth,
+  BoomerangHeight
   } from "Constants";
 
 import Player from "objects/Character";
@@ -49,7 +51,8 @@ class Game extends Phaser.State {
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
-    this.boomerang = new Boomerang(this.game, this.hero.position.x-100, this.hero.position.y);
+    this.boomerang = new Boomerang(this.game, 0, 0);
+    this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
     this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
