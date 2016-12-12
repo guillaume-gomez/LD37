@@ -176,7 +176,7 @@ class Game extends Phaser.State {
     tweenA.onComplete.add((boomerang, tween) => {
        this.boomerang.kill();
        tweenA.stop()
-       this.camera.follow(this.hero);
+       this.camera.follow(this.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
     });
   }
 
