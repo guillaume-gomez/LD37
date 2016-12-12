@@ -1,7 +1,7 @@
 import { BoomerangSprite, SpriteBullet } from "../SpriteConstants";
 import { BoomerangWidth, BoomerangHeight, DirectionBoomerang } from "../Constants";
 
-const Duration = 1000;
+const Duration = 1500;
 const DurationRotation = 250;
 const Strengh = 600;
 
@@ -34,6 +34,7 @@ class Boomerang extends Phaser.Sprite {
     tweenRotation.repeat(100, 1);
     launchTween.onComplete.add(onCompleteFunction);
   }
+
 }
 
 export default Boomerang;
