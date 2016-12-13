@@ -213,7 +213,7 @@ class Game extends Phaser.State {
   }
 
   render() {
-    this.game.debug.spriteInfo(this.hero, 32, 32);
+    //this.game.debug.spriteInfo(this.hero, 32, 32);
     //this.game.debug.text(Bounds, 2, 14, "#ff0000");
     //this.game.debug.spriteInfo(this.hero, 32, 32);
   }
