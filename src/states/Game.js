@@ -1,5 +1,12 @@
 import { getRandomArbitrary } from "utils";
-import { Wall, SpritePlayer, SpriteEnemy, SpriteBullet, BoomerangSprite } from "SpriteConstants";
+import {
+  Wall,
+  SpritePlayer,
+  SpriteEnemy,
+  SpriteBullet,
+  BoomerangSprite,
+  DeathSound
+} from "SpriteConstants";
 import {
   CameraVelocity,
   FlashColor,
@@ -62,6 +69,9 @@ class Game extends Phaser.State {
     }
     this.camera.follow(this.hero);
     this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
+
+    //sounds
+    this.deathFx = this.game.add.audio(DeathSound);
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
@@ -195,6 +205,7 @@ class Game extends Phaser.State {
 
   lost() {
     this.hero.kill();
+    this.deathFx.play();
     setTimeout(() => {
       this.game.goToLose()
     }, 500);
@@ -210,6 +221,7 @@ class Game extends Phaser.State {
     this.game.load.image(SpriteEnemy, "res/enemy.png");
     this.game.load.image(SpriteBullet, "res/bullet.png");
     this.game.load.image(BoomerangSprite, "res/boomerang.png");
+    this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
   }
 
   render() {

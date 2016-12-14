@@ -12,7 +12,7 @@ class LD37 extends Phaser.Game {
     this.state.add('Menu', Menu, false);
     this.state.add('Win', WinState, false);
     this.state.add('Lose', LoseState, false);
-    this.state.start('Menu');
+    this.state.start('Game');
   }
 
   goToGame() {
