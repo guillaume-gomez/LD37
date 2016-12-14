@@ -2,7 +2,9 @@ class WinState extends Phaser.State {
 
   create() {
     this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-    this.game.stage.backgroundColor = 0x00FF00;
+    this.game.add.text(315, 150, "You win ", { font: "bold 40px Arial", fill: "#fff" });
+    this.game.add.text(160, 350, "Press enter to play again ", { font: "bold 40px Arial", fill: "#fff" });
+    this.game.stage.backgroundColor = "#2aaa11";
   }
 
 
