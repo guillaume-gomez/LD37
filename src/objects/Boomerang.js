@@ -10,10 +10,20 @@ class Boomerang extends Phaser.Sprite {
   constructor(game, x, y) {
     super(game, x, y, BoomerangSprite, 0);
     game.physics.arcade.enable(this);
+    this.body.immovable = true;
     this.anchor.setTo(0.5, 0.5);
   }
 
+  startMove() {
+    this.body.immovable = false;
+  }
+
+  isMoving() {
+    return !this.body.immovable;
+  }
+
   launch(direction, onCompleteFunction) {
+    this.startMove();
     let movement = {};
     switch(direction) {
       case DirectionBoomerang.left:

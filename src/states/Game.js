@@ -117,8 +117,10 @@ class Game extends Phaser.State {
     bullet.kill();
   }
 
-  killByBoomerang(_, enemy) {
-    this.enemies.remove(enemy);
+  killByBoomerang(boomerang, enemy) {
+    if(boomerang.isMoving()) {
+      this.enemies.remove(enemy);
+    }
   }
 
   killBoomerang(boomerang) {
