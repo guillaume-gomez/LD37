@@ -17,11 +17,13 @@ export const Border = 256;
 
 export const CharacterWitdh = 57;
 export const CharacterHeight = 57;
+
 export const EnemyWidth = 40;
 export const EnemyHeight = 40;
 
-export const BoomerangWidth = 16;
-export const BoomerangHeight = 16;
+export const BoomerangWidth = 30;
+export const BoomerangHeight = 30;
+export const RatioSize = 1/3;
 
 export const MinEnemies = 20;
 export const MaxEnemies = 40;

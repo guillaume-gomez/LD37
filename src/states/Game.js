@@ -222,7 +222,7 @@ class Game extends Phaser.State {
     this.game.load.image(SpritePlayer, "res/player.png");
     this.game.load.image(SpriteEnemy, "res/enemy.png");
     this.game.load.image(SpriteBullet, "res/bullet.png");
-    this.game.load.image(BoomerangSprite, "res/boomerang.png");
+    this.game.load.image(BoomerangSprite, "res/ufoRed.png");
     this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
   }
 

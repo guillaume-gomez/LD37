@@ -1,9 +1,10 @@
 import { BoomerangSprite, SpriteBullet } from "../SpriteConstants";
-import { BoomerangWidth, BoomerangHeight, DirectionBoomerang } from "../Constants";
+import { BoomerangWidth, BoomerangHeight, DirectionBoomerang, RatioSize } from "../Constants";
 
 const Duration = 1500;
 const DurationRotation = 250;
-const Strengh = 600;
+const Strengh = 600
+
 
 class Boomerang extends Phaser.Sprite {
 
@@ -12,6 +13,7 @@ class Boomerang extends Phaser.Sprite {
     game.physics.arcade.enable(this);
     this.body.immovable = true;
     this.anchor.setTo(0.5, 0.5);
+    this.scale.setTo(RatioSize, RatioSize);
   }
 
   startMove() {
