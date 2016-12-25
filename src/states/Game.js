@@ -218,7 +218,7 @@ class Game extends Phaser.State {
   }
 
   preload() {
-    this.game.load.image(Wall, "res/1.png");
+    this.game.load.image(Wall, "res/block.png");
     this.game.load.image(SpritePlayer, "res/player.png");
     this.game.load.image(SpriteEnemy, "res/enemy.png");
     this.game.load.image(SpriteBullet, "res/bullet.png");
