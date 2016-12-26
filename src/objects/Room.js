@@ -1,5 +1,5 @@
 import { SpriteWidth, SpriteHeight, SpriteRatioX, SpriteRatioY } from "../Constants.js";
-import { Wall } from "../SpriteConstants";
+import { Wall, BoomerangSprite } from "../SpriteConstants";
 import { getRandomArbitrary } from "../utils";
 
 const Divisor = 15;
@@ -70,6 +70,12 @@ class Room extends Phaser.Group {
     sprite.body.immovable = true;
   }
 
+  createBackground(x, y) {
+    //put in another group i think
+    let sprite = this.create(x,y, BoomerangSprite);
+    sprite.body.immovable = true;
+  }
+
   ////
   // (x,y) ####
   //       #  #
@@ -104,6 +110,22 @@ class Room extends Phaser.Group {
     //nbtiles - 2 because corner  was drawn  by vertical line
     this.createLineByTile(x, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX, varY);
     this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX2, varY2);
+  }
+
+  tilemapStuff() {
+    let firstMarker = this.children[0];
+    this.children.forEach(tile => {
+      if(firstMarker.y != tile.y) {
+        firstMarker = tile;
+      }
+      if(firstMarker.y == tile.y  && firstMarker.x != tile.x) {
+        nbTiles = (lastMarker.x - firstMarker.x) / SpriteWidth;
+        for(const i = 0; i < nbtiles; i++) {
+          this.createBackground(firstMarker.x + SpriteWidth + i * SpriteWidth, y);
+        }
+        firstMarker = tile;
+      }
+    });
   }
 }
 
