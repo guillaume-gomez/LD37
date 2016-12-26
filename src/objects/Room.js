@@ -112,20 +112,8 @@ class Room extends Phaser.Group {
     this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX2, varY2);
   }
 
-  tilemapStuff() {
-    let firstMarker = this.children[0];
-    this.children.forEach(tile => {
-      if(firstMarker.y != tile.y) {
-        firstMarker = tile;
-      }
-      if(firstMarker.y == tile.y  && firstMarker.x != tile.x) {
-        nbTiles = (lastMarker.x - firstMarker.x) / SpriteWidth;
-        for(const i = 0; i < nbtiles; i++) {
-          this.createBackground(firstMarker.x + SpriteWidth + i * SpriteWidth, y);
-        }
-        firstMarker = tile;
-      }
-    });
+  getRoomBordered() {
+    return this.children;
   }
 }
 
