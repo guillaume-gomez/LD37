@@ -27,6 +27,7 @@ import {
 import Player from "objects/Character";
 import Boomerang from "objects/Boomerang";
 import Room from "objects/Room";
+import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
 
 
@@ -51,9 +52,10 @@ class Game extends Phaser.State {
     this.game.stage.backgroundColor = 0x000000;
     this.game.world.setBounds(0, 0, Bounds, Bounds);
     this.room = new Room(this.game);
-    this.game.add.existing(this.room);
     this.room.createRandomSquare(Border,Border,SizeMaze, Division);
 
+    //this.test = new BackgroundLayer(this.game, this.room.getRoomBordered());
+    
     this.hero = new Player(this.game, 100, 100);
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
@@ -72,6 +74,7 @@ class Game extends Phaser.State {
 
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
+
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
