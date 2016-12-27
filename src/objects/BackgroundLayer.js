@@ -1,37 +1,39 @@
-import { SpriteWidth } from "../Constants.js";
-import { BoomerangSprite } from "../SpriteConstants";
+import { SpriteWidth, SpriteHeight } from "../Constants.js";
+import { Background, BoomerangSprite } from "../SpriteConstants";
 
 class BackgroundLayer extends Phaser.Group {
 
-  constructor(game, borders, parent, name) {
+  constructor(game, x, y, borders, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
-    this.tilemapStuff(borders);
-    // this.createBackground(500, 500);
-    // this.createBackground(600, 500);
-    // this.createBackground(700, 500);
-  }
+    // console.log(x)
+    // console.log(y)
+    // console.log(borders)
+    const xOnGrid = x - x % SpriteWidth; 
+    const yOnGrid = y - y % SpriteHeight;
+    this.fillBackground(512, 512, borders);
+   }
 
   createBackground(x, y) {
-    let sprite = this.create(x,y, BoomerangSprite);
+    let sprite = this.create(x,y, Background);
     sprite.body.immovable = true;
   }
 
+  fillBackground(x,y, borders) {
+    const hasBorder = () => {
+      const element = borders.find(tile => {return tile.position.x === x && tile.position.y === y; });
+      return element;
+    };
 
-  tilemapStuff(borders) {
-    console.log(borders)
-    let firstMarker = borders[0];
-    borders.forEach(tile => {
-      if(firstMarker.y != tile.y) {
-        firstMarker = tile;
-      }
-      if(firstMarker.y == tile.y  && firstMarker.x != tile.x) {
-        const nbTiles = (tile.x - firstMarker.x) / SpriteWidth;
-        for(let i = 0; i < nbTiles; i++) {
-          this.createBackground(firstMarker.x + SpriteWidth + i * SpriteWidth, firstMarker.y);
-        }
-        firstMarker = tile;
-      }
-    });
+    if(x < 512 || x > 650 || y < 512 || y > 650) {
+      return null;
+    }
+    if(!hasBorder()) {
+      this.createBackground(x,y);
+      //this.fillBackground(x, y - SpriteHeight, borders);
+      this.fillBackground(x, y + SpriteHeight, borders);
+      this.fillBackground(x + SpriteWidth, y, borders);
+      //this.fillBackground(x - SpriteWidth, y, borders);
+    }
   }
 }
 
