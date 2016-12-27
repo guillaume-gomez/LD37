@@ -59,7 +59,7 @@ class Game extends Phaser.State {
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
-    this.test = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
+    //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
     
     this.boomerang = new Boomerang(this.game, 0, 0);
     this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
@@ -101,7 +101,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    //this.enemies.follow(this.hero.body.position);
+    this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
       this.lost();
