@@ -5,4 +5,5 @@ export const SpriteEnemy = "enemy";
 export const SpriteBullet = "bullet";
 export const BoomerangSprite = "boomerang";
 export const DeathSound = "deathSound";
+export const Background = "background";
 
