@@ -6,7 +6,8 @@ import {
   SpriteBullet,
   BoomerangSprite,
   DeathSound,
-  Background
+  Background,
+  LightSprite
 } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -30,6 +31,7 @@ import Boomerang from "objects/Boomerang";
 import Room from "objects/Room";
 import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
+import Chandelier from "objects/Chandelier";
 
 
 const needCamera = false;
@@ -66,6 +68,7 @@ class Game extends Phaser.State {
     this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
+    this.chandelier = new Chandelier(this.game, 500, 500);
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -101,7 +104,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    this.enemies.follow(this.hero.body.position);
+    //this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
       this.lost();
@@ -228,6 +231,7 @@ class Game extends Phaser.State {
     this.game.load.image(SpriteBullet, "res/bullet.png");
     this.game.load.image(BoomerangSprite, "res/ufoRed.png");
     this.game.load.image(Background, "res/boomerang.png");
+    this.game.load.image(LightSprite, "res/boomerang.png");
     this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
   }
 
