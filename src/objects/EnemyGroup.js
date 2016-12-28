@@ -38,7 +38,7 @@ class EnemyGroup extends Phaser.Group {
   enemyBottom(game,nbEnemies) {
     const elapsedX = this.getElapsedX(game, nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
-      const randomY = getRandomArbitrary(game.world.bounds.height - Border, game.world.bounds.height - EnemyHeight);
+      const randomY = getRandomArbitrary(game.world.bounds.height, game.world.bounds.height + Border);
       this.addEnemy(game, Border + elapsedX * i, randomY);
     }
   }
@@ -46,7 +46,7 @@ class EnemyGroup extends Phaser.Group {
   enemyTop(game, nbEnemies) {
     const elapsedX = this.getElapsedX(game, nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
-      const randomY = getRandomArbitrary(0, Border - EnemyHeight);
+      const randomY = getRandomArbitrary(-Border, 0);
       this.addEnemy(game, Border + elapsedX * i, randomY);
     }
   }
@@ -54,7 +54,7 @@ class EnemyGroup extends Phaser.Group {
   enemyLeft(game, nbEnemies) {
     const elapsedY = this.getElapsedY(game, nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
-      const randomX = getRandomArbitrary(0, Border - EnemyWidth);
+      const randomX = getRandomArbitrary(-Border, 0);
       this.addEnemy(game, randomX, Border + elapsedY * i);
     }
   }
@@ -62,7 +62,7 @@ class EnemyGroup extends Phaser.Group {
   enemyRight(game, nbEnemies) {
     const elapsedY = this.getElapsedY(game, nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
-      const randomX = getRandomArbitrary( game.world.bounds.width - Border, game.world.bounds.width - EnemyWidth);
+      const randomX = getRandomArbitrary(game.world.bounds.width , game.world.bounds.width + Border);
       this.addEnemy(game, randomX, Border + elapsedY * i);
     }
   }
