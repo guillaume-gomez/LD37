@@ -31,7 +31,7 @@ import Boomerang from "objects/Boomerang";
 import Room from "objects/Room";
 import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
-import Chandelier from "objects/Chandelier";
+import ChandelierLayer from "objects/ChandelierLayer";
 
 
 const needCamera = false;
@@ -68,7 +68,7 @@ class Game extends Phaser.State {
     this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
-    this.chandelier = new Chandelier(this.game, 500, 500);
+    this.chandelierLayer = new ChandelierLayer(this.game);
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
