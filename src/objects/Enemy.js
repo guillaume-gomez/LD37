@@ -1,4 +1,3 @@
-import { SpriteEnemy } from "../SpriteConstants";
 import { CharacterWitdh, CharacterHeight, EnemyWidth, EnemyHeight } from "../Constants";
 
 const VisionEnemy = 399;
@@ -6,8 +5,8 @@ const TimeLapse = 10;
 
 class Enemy extends Phaser.Sprite {
 
-  constructor(game, x, y, vel) {
-    super(game, x, y, SpriteEnemy, 0);
+  constructor(game, x, y, vel, sprite) {
+    super(game, x, y, sprite, 0);
     //Enable physics on the player
     game.physics.arcade.enable(this);
     this.body.bounce.x = this.body.bounce.y = 0;

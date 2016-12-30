@@ -1,5 +1,6 @@
 import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies } from "../Constants.js";
 import { getRandomArbitrary } from "../utils";
+import { SpriteEnemy, SpriteEnemy2 } from "../SpriteConstants";
 
 import Enemy from "objects/Enemy";
 const VelocityMin = 50;
@@ -68,8 +69,10 @@ class EnemyGroup extends Phaser.Group {
   }
 
   addEnemy(game, x, y) {
+    const spriteIndex = getRandomArbitrary(0, 2);
+    const spriteArray = [SpriteEnemy, SpriteEnemy2];
     const vel = getRandomArbitrary(VelocityMin, VelocityMax);
-    const enemy = new Enemy(game,x, y, vel);
+    const enemy = new Enemy(game,x, y, vel, spriteArray[spriteIndex]);
     this.add(enemy);
   }
 

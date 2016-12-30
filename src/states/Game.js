@@ -3,6 +3,7 @@ import {
   Wall,
   SpritePlayer,
   SpriteEnemy,
+  SpriteEnemy2,
   SpriteBullet,
   BoomerangSprite,
   DeathSound,
@@ -228,6 +229,7 @@ class Game extends Phaser.State {
     this.game.load.image(Wall, "res/block.png");
     this.game.load.spritesheet(SpritePlayer, "res/player.png", CharacterWitdh, CharacterHeight);
     this.game.load.spritesheet(SpriteEnemy, "res/zombie.png", EnemyWidth, EnemyHeight);
+    this.game.load.spritesheet(SpriteEnemy2, "res/zombie2.png", EnemyWidth, EnemyHeight);
     this.game.load.image(SpriteBullet, "res/bullet.png");
     this.game.load.image(BoomerangSprite, "res/ufoRed.png");
     this.game.load.image(Background, "res/boomerang.png");
