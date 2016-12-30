@@ -83,6 +83,11 @@ class EnemyGroup extends Phaser.Group {
     return this.total > 0;
   }
 
+  render(game) {
+    this.children.forEach(enemy => {
+      game.debug.body(enemy);
+    });
+  }
 }
 
 export default EnemyGroup;
