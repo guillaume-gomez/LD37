@@ -30,7 +30,7 @@ class Enemy extends Phaser.Sprite {
     const centerEnemyY  = EnemyHeight / 2;
 
     const targetAngle = this.game.math.angleBetween( this.x, this.y, playerPosition.x, playerPosition.y);
-    this.rotation = targetAngle + Math.PI / 2;
+    this.rotation = targetAngle - Math.PI / 2;
     
     if(playerPosition.x + centerPlayerX > this.body.position.x + centerEnemyX) {
       this.body.velocity.x = this.vel;
