@@ -104,7 +104,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    //this.enemies.follow(this.hero.body.position);
+    this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
       this.lost();
@@ -226,7 +226,7 @@ class Game extends Phaser.State {
 
   preload() {
     this.game.load.image(Wall, "res/block.png");
-    this.game.load.image(SpritePlayer, "res/player.png");
+    this.game.load.spritesheet(SpritePlayer, "res/player.png", CharacterWitdh, CharacterHeight);
     this.game.load.image(SpriteEnemy, "res/enemy.png");
     this.game.load.image(SpriteBullet, "res/bullet.png");
     this.game.load.image(BoomerangSprite, "res/ufoRed.png");

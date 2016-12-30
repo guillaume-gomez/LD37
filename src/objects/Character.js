@@ -4,7 +4,7 @@ import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constant
 const Damage = 10;
 const Velocity = 200;
 const MaxBullet = 5;
-
+const TimeLapse = 10;
 
 class Character extends Phaser.Sprite {
 
@@ -17,6 +17,13 @@ class Character extends Phaser.Sprite {
     this.direction = 1;
     this.anchor.setTo(0.5, 0.5);
     this.life = 1000;
+
+    const walk = [1,2];
+    const fire = [0];
+
+    this.animations.add('walk', walk, TimeLapse, true);
+    this.animations.add('fire', fire, TimeLapse, true);
+
 
     this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
@@ -39,23 +46,28 @@ class Character extends Phaser.Sprite {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = DirectionBoomerang.left;
+        this.animations.play("walk", TimeLapse);
     }
     else if (this.cursor.right.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = DirectionBoomerang.right;
+        this.animations.play("walk", TimeLapse);
     }
 
     if (this.cursor.up.isDown) {
       this.body.velocity.y = -Velocity;
       this.lastDirection = DirectionBoomerang.up;
+      this.animations.play("walk", TimeLapse);
     } else if (this.cursor.down.isDown) {
       this.body.velocity.y = Velocity;
       this.lastDirection = DirectionBoomerang.down;
+      this.animations.play("walk", TimeLapse);
     }
 
     if(this.fireButton.isDown || this.fireClick.isDown) {
       this.weapon.fire();
+      this.animations.play("fire", TimeLapse);
     }
 
   }

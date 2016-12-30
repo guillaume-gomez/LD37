@@ -15,8 +15,8 @@ export const ShakeDuration = 200;
 
 export const Border = 256;
 
-export const CharacterWitdh = 57;
-export const CharacterHeight = 57;
+export const CharacterWitdh = 68;
+export const CharacterHeight = 60;
 
 export const EnemyWidth = 40;
 export const EnemyHeight = 40;
