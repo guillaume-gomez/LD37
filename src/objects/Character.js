@@ -31,7 +31,7 @@ class Character extends Phaser.Sprite {
     this.weapon.bulletSpeed = 400;
     this.weapon.fireRate = 1000;
 
-    this.weapon.trackSprite(this, 0, 0, true);
+    this.weapon.trackSprite(this, 0, 15, true);
     this.cursor = game.input.keyboard.createCursorKeys();
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
