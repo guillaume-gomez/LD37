@@ -20,7 +20,7 @@ class LD37 extends Phaser.Game {
   }
 
   goToLose() {
-    this.state.start('Lose', Phaser.Plugin.StateTransition.Out.SlideLeft, null, true, true);
+    this.state.start('Lose', null, Phaser.Plugin.StateTransition.Out.SlideLeft, null, true);
   }
 
   goToWin() {

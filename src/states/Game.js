@@ -216,9 +216,10 @@ class Game extends Phaser.State {
   lost() {
     this.hero.kill();
     this.deathFx.play();
-    setTimeout(() => {
-      this.game.goToLose()
-    }, 500);
+     setTimeout(() => {
+       this.room.clear();
+       this.game.goToLose();
+     }, 500);
   }
 
   won() {

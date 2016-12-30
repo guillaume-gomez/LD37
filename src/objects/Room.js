@@ -112,6 +112,13 @@ class Room extends Phaser.Group {
     this.createLineByTile(x + (nbTilesBySide-1) * SpriteWidth, y + SpriteHeight, 1, nbTilesBySide - 2, division, varX2, varY2);
   }
 
+
+  clear() {
+    this.children.forEach(tile => {
+      this.remove(tile);
+    });
+  }
+
   getRoomBordered() {
     return this.children;
   }
