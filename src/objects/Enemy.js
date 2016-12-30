@@ -15,7 +15,7 @@ class Enemy extends Phaser.Sprite {
     this.body.mass = 10;
     this.direction = 1;
     this.vel = vel;
-
+    this.anchor.setTo(0.5, 0.5);
     const walk = [0, 1, 2, 3, 4, 5, 6, 7];
     this.animations.add('walk', walk, TimeLapse, true);
   }
@@ -29,6 +29,9 @@ class Enemy extends Phaser.Sprite {
     const centerEnemyX  = EnemyWidth / 2;
     const centerEnemyY  = EnemyHeight / 2;
 
+    const targetAngle = this.game.math.angleBetween( this.x, this.y, playerPosition.x, playerPosition.y);
+    this.rotation = targetAngle + Math.PI / 2;
+    
     if(playerPosition.x + centerPlayerX > this.body.position.x + centerEnemyX) {
       this.body.velocity.x = this.vel;
     } else if (playerPosition.x + centerPlayerX < this.body.position.x + centerEnemyX){
@@ -42,6 +45,7 @@ class Enemy extends Phaser.Sprite {
     }
     this.animations.play("walk", TimeLapse);
   }
+
 }
 
 export default Enemy;
