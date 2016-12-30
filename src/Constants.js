@@ -18,8 +18,8 @@ export const Border = 256;
 export const CharacterWitdh = 68;
 export const CharacterHeight = 60;
 
-export const EnemyWidth = 40;
-export const EnemyHeight = 40;
+export const EnemyWidth = 60;
+export const EnemyHeight = 60;
 
 export const BoomerangWidth = 30;
 export const BoomerangHeight = 30;

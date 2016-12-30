@@ -2,6 +2,7 @@ import { SpriteEnemy } from "../SpriteConstants";
 import { CharacterWitdh, CharacterHeight, EnemyWidth, EnemyHeight } from "../Constants";
 
 const VisionEnemy = 399;
+const TimeLapse = 10;
 
 class Enemy extends Phaser.Sprite {
 
@@ -14,6 +15,9 @@ class Enemy extends Phaser.Sprite {
     this.body.mass = 10;
     this.direction = 1;
     this.vel = vel;
+
+    const walk = [0, 1, 2, 3, 4, 5, 6, 7];
+    this.animations.add('walk', walk, TimeLapse, true);
   }
 
   follow(playerPosition) {
@@ -36,6 +40,7 @@ class Enemy extends Phaser.Sprite {
     } else if (playerPosition.y + centerPLayerY < this.body.position.y + centerEnemyY) {
       this.body.velocity.y = -this.vel;
     }
+    this.animations.play("walk", TimeLapse);
   }
 }
 
