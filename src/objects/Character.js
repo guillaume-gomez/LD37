@@ -42,6 +42,7 @@ class Character extends Phaser.Sprite {
     this.rotation = this.game.physics.arcade.angleToPointer(this);
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
+
     if (this.cursor.left.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
@@ -69,7 +70,6 @@ class Character extends Phaser.Sprite {
       this.weapon.fire();
       this.animations.play("fire", TimeLapse);
     }
-
   }
 
   directionChoosed() {
