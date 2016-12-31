@@ -23,6 +23,12 @@ class ChandelierLayer extends Phaser.Group {
     this.add(chandelier);
   }
 
+  clear() {
+    this.children.forEach(chandelier => {
+      this.remove(chandelier);
+    });
+  }
+
 }
 
 export default ChandelierLayer;

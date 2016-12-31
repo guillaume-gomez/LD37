@@ -219,6 +219,8 @@ class Game extends Phaser.State {
     this.deathFx.play();
      setTimeout(() => {
        this.room.clear();
+       this.chandelierLayer.clear();
+       this.boomerang.kill();
        this.game.goToLose();
      }, 500);
   }
