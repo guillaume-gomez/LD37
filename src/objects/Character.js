@@ -18,16 +18,18 @@ class Character extends Phaser.Sprite {
     this.anchor.setTo(0.5, 0.5);
     this.life = 1000;
 
-    const walk = [1,2];
-    const fire = [0];
+    const fire = [0, 1, 2, 3, 4, 5, 6, 7];
+    const walk = [8, 9, 10, 11, 12, 13, 14, 15];
 
     this.animations.add('walk', walk, TimeLapse, true);
-    this.animations.add('fire', fire, TimeLapse, true);
+    //this.animations.add('fire', fire, 3 * TimeLapse, false);
 
 
     this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
     this.weapon.bulletAngleOffset = 90;
+    this.weapon.addBulletAnimation("fire", fire, 2000, false);
+    this.weapon.bulletAngleVariance = 10;
     this.weapon.bulletSpeed = 400;
     this.weapon.fireRate = 1000;
 
@@ -39,36 +41,45 @@ class Character extends Phaser.Sprite {
   }
 
   update() {
-    this.rotation = this.game.physics.arcade.angleToPointer(this);
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
+    this.rotation = this.game.physics.arcade.angleToPointer(this);
+    let hasMoved = false;
 
     if (this.cursor.left.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = DirectionBoomerang.left;
         this.animations.play("walk", TimeLapse);
+        hasMoved = true;
     }
     else if (this.cursor.right.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = DirectionBoomerang.right;
         this.animations.play("walk", TimeLapse);
+        hasMoved = true;
     }
 
     if (this.cursor.up.isDown) {
       this.body.velocity.y = -Velocity;
       this.lastDirection = DirectionBoomerang.up;
       this.animations.play("walk", TimeLapse);
+      hasMoved = true;
     } else if (this.cursor.down.isDown) {
       this.body.velocity.y = Velocity;
       this.lastDirection = DirectionBoomerang.down;
       this.animations.play("walk", TimeLapse);
+      hasMoved = true;
     }
 
     if(this.fireButton.isDown || this.fireClick.isDown) {
       this.weapon.fire();
-      this.animations.play("fire", TimeLapse);
+      //this.animations.play("fire", TimeLapse);
+    }
+
+    if(!hasMoved) {
+      this.animations.stop("walk");
     }
   }
 
