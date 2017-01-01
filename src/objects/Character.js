@@ -22,18 +22,18 @@ class Character extends Phaser.Sprite {
     const walk = [8, 9, 10, 11, 12, 13, 14, 15];
 
     this.animations.add('walk', walk, TimeLapse, true);
-    this.animations.add('fire', fire, TimeLapse, false);
+    this.animations.add('fire', fire, TimeLapse * 6, false);
 
 
     this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
     this.weapon.bulletAngleOffset = 90;
     //this.weapon.addBulletAnimation("fire", fire, TimeLapse, true);
-    this.weapon.bulletAngleVariance = 10;
+    this.weapon.bulletAngleVariance = 5;
     this.weapon.bulletSpeed = 400;
-    this.weapon.fireRate = 1000;
+    this.weapon.fireRate = 500;
 
-    this.weapon.trackSprite(this, 0, 15, true);
+    this.weapon.trackSprite(this, 0, 20, true);
     this.cursor = game.input.keyboard.createCursorKeys();
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
