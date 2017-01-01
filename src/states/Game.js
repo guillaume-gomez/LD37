@@ -106,7 +106,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    //this.enemies.follow(this.hero.body.position);
+    this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
       this.lost();
