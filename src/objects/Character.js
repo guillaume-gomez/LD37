@@ -45,42 +45,74 @@ class Character extends Phaser.Sprite {
     this.body.velocity.x = 0;
     this.body.velocity.y = 0;
     this.rotation = this.game.physics.arcade.angleToPointer(this);
-    let hasMoved = false;
+    let move = null;
     //console.log(this.angle)
 
     if (this.cursor.left.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = DirectionBoomerang.left;
-        this.animations.play("slide", TimeLapse);
-        hasMoved = true;
+        move = "left";
     }
     else if (this.cursor.right.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = DirectionBoomerang.right;
-        this.animations.play("slide");
-        hasMoved = true;
+        move = "right";
     }
 
     if (this.cursor.up.isDown) {
       this.body.velocity.y = -Velocity;
       this.lastDirection = DirectionBoomerang.up;
-      this.animations.play("walk");
-      hasMoved = true;
+      move = "up";
     } else if (this.cursor.down.isDown) {
       this.body.velocity.y = Velocity;
       this.lastDirection = DirectionBoomerang.down;
-      this.animations.play("walk");
-      hasMoved = true;
+      move = "down";
     }
 
     if(this.fireButton.isDown || this.fireClick.isDown) {
       this.weapon.fire();
       this.animations.play("fire");
     }
+    this.anim(move);
+  }
 
-    if(!hasMoved) {
+  anim(move) {
+    const angle = this.angle;
+    if(move === "left") {
+      if((angle < - 90 + 10 && angle > -90 - 10) || (angle > 90 - 10 && angle < 90 + 10)) {
+        this.animations.play("slide");
+      } else {
+        this.animations.play("walk");
+      }
+    }
+
+    if(move === "right") {
+      if((angle < - 90 + 10 && angle > - 90 - 10) || (angle > 90 - 10 && angle < 90 + 10)) {
+        this.animations.play("slide");
+      } else {
+        this.animations.play("walk");
+      }
+    }
+
+    if(move === "up") {
+      if((angle > - 10 && angle < 10) || (angle > - 180 + 10 && angle > 180 - 10)) {
+        this.animations.play("slide");
+      } else {
+        this.animations.play("walk");
+      }
+    }
+
+    if(move === "down") {
+      if((angle > - 10 && angle < 10) || (angle > - 180 + 10 && angle > 180 - 10)) {
+        this.animations.play("slide");
+      } else {
+        this.animations.play("walk");
+      }
+    }
+
+    if(!move) {
       this.animations.stop("walk");
       this.animations.stop("slide");
     }
