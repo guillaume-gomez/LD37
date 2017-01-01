@@ -18,12 +18,13 @@ class Character extends Phaser.Sprite {
     this.anchor.setTo(0.5, 0.5);
     this.life = 1000;
 
-    const fire = [0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0];
-    const walk = [8, 9, 10, 11, 12, 13, 14, 15];
+    const fire = [8, 9, 10, 11];
+    const walk = [0, 1, 2, 3, 4, 5, 6, 7];
+    const slide = [12, 13, 14, 15, 14, 13, 12];
 
-    this.animations.add('walk', walk, TimeLapse, true);
+    this.animations.add('walk', walk, TimeLapse, false);
+    this.animations.add('slide', slide, TimeLapse, false);
     this.animations.add('fire', fire, TimeLapse * 6, false);
-
 
     this.weapon = game.add.weapon(MaxBullet, SpriteBullet);
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
@@ -33,7 +34,7 @@ class Character extends Phaser.Sprite {
     this.weapon.bulletSpeed = 400;
     this.weapon.fireRate = 500;
 
-    this.weapon.trackSprite(this, 0, 20, true);
+    this.weapon.trackSprite(this, 30, 20, true);
     this.cursor = game.input.keyboard.createCursorKeys();
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
@@ -45,19 +46,20 @@ class Character extends Phaser.Sprite {
     this.body.velocity.y = 0;
     this.rotation = this.game.physics.arcade.angleToPointer(this);
     let hasMoved = false;
+    //console.log(this.angle)
 
     if (this.cursor.left.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = DirectionBoomerang.left;
-        this.animations.play("walk", TimeLapse);
+        this.animations.play("slide", TimeLapse);
         hasMoved = true;
     }
     else if (this.cursor.right.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = DirectionBoomerang.right;
-        this.animations.play("walk");
+        this.animations.play("slide");
         hasMoved = true;
     }
 
@@ -80,6 +82,7 @@ class Character extends Phaser.Sprite {
 
     if(!hasMoved) {
       this.animations.stop("walk");
+      this.animations.stop("slide");
     }
   }
 

@@ -231,7 +231,7 @@ class Game extends Phaser.State {
 
   preload() {
     this.game.load.image(Wall, "res/block.png");
-    this.game.load.spritesheet(SpritePlayer, "res/hero.png", CharacterWitdh, CharacterHeight);
+    this.game.load.spritesheet(SpritePlayer, "res/hero-sprite.png", CharacterWitdh, CharacterHeight);
     this.game.load.spritesheet(SpriteEnemy, "res/zombie.png", EnemyWidth, EnemyHeight);
     this.game.load.spritesheet(SpriteEnemy2, "res/zombie2.png", EnemyWidth, EnemyHeight);
     this.game.load.spritesheet(SpriteEnemy3, "res/zombie1.png", EnemyWidth, EnemyHeight);
