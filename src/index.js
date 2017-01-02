@@ -1,5 +1,6 @@
 import { ScreenWidth, ScreenHeight } from "./Constants.js";
 import Game from 'states/Game';
+import Commands from 'states/Commands';
 import Menu from 'states/Menu';
 import WinState from 'states/WinState';
 import LoseState from 'states/LoseState';
@@ -12,7 +13,12 @@ class LD37 extends Phaser.Game {
     this.state.add('Menu', Menu, false);
     this.state.add('Win', WinState, false);
     this.state.add('Lose', LoseState, false);
-    this.state.start('Game');
+    this.state.add('Commands', Commands, false);
+    this.state.start('Menu');
+  }
+
+  goToCommands() {
+    this.state.start('Commands');
   }
 
   goToGame() {
