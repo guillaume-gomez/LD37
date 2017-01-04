@@ -31,8 +31,8 @@ var BoomerangWidth = exports.BoomerangWidth = 30;
 var BoomerangHeight = exports.BoomerangHeight = 30;
 var RatioSize = exports.RatioSize = 1 / 3;
 
-var MinEnemies = exports.MinEnemies = 20;
-var MaxEnemies = exports.MaxEnemies = 40;
+var MinEnemies = exports.MinEnemies = 40;
+var MaxEnemies = exports.MaxEnemies = 100;
 
 var DirectionBoomerang = exports.DirectionBoomerang = {
   left: "LEFT",
@@ -576,7 +576,7 @@ function _inherits(subClass, superClass) {
 
 var Damage = 10;
 var Velocity = 200;
-var MaxBullet = 5;
+var MaxBullet = 10;
 var TimeLapse = 10;
 
 var Character = function (_Phaser$Sprite) {
@@ -608,8 +608,8 @@ var Character = function (_Phaser$Sprite) {
     _this.weapon.bulletAngleOffset = 90;
     //this.weapon.addBulletAnimation("fire", fire, TimeLapse, true);
     _this.weapon.bulletAngleVariance = 5;
-    _this.weapon.bulletSpeed = 400;
-    _this.weapon.fireRate = 500;
+    _this.weapon.bulletSpeed = 500;
+    _this.weapon.fireRate = 300;
 
     _this.weapon.trackSprite(_this, 30, 20, true);
     _this.cursor = game.input.keyboard.createCursorKeys();
@@ -874,7 +874,7 @@ function _inherits(subClass, superClass) {
 }
 
 var VelocityMin = 50;
-var VelocityMax = 100;
+var VelocityMax = 125;
 
 var EnemyGroup = function (_Phaser$Group) {
   _inherits(EnemyGroup, _Phaser$Group);
@@ -1373,7 +1373,7 @@ var MaxDivision = 5;
 
 var Division = (0, _utils.getRandomArbitrary)(MinDivision, MaxDivision);
 
-var MaxBorder = 60;
+var MaxBorder = 120;
 var MinBorder = 30;
 
 var SizeMaze = (0, _utils.getRandomArbitrary)(MinBorder, MaxBorder);
