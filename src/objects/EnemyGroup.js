@@ -4,7 +4,7 @@ import { SpriteEnemy, SpriteEnemy2, SpriteEnemy3 } from "../SpriteConstants";
 
 import Enemy from "objects/Enemy";
 const VelocityMin = 50;
-const VelocityMax = 100;
+const VelocityMax = 125;
 
 class EnemyGroup extends Phaser.Group {
 

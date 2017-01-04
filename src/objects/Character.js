@@ -3,7 +3,7 @@ import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constant
 
 const Damage = 10;
 const Velocity = 200;
-const MaxBullet = 5;
+const MaxBullet = 10;
 const TimeLapse = 10;
 
 class Character extends Phaser.Sprite {
@@ -31,8 +31,8 @@ class Character extends Phaser.Sprite {
     this.weapon.bulletAngleOffset = 90;
     //this.weapon.addBulletAnimation("fire", fire, TimeLapse, true);
     this.weapon.bulletAngleVariance = 5;
-    this.weapon.bulletSpeed = 400;
-    this.weapon.fireRate = 500;
+    this.weapon.bulletSpeed = 500;
+    this.weapon.fireRate = 300;
 
     this.weapon.trackSprite(this, 30, 20, true);
     this.cursor = game.input.keyboard.createCursorKeys();
