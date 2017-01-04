@@ -43,7 +43,7 @@ const MaxDivision = 5;
 
 const Division = getRandomArbitrary(MinDivision, MaxDivision);
 
-const MaxBorder = 60;
+const MaxBorder = 120;
 const MinBorder = 30;
 
 const SizeMaze = getRandomArbitrary(MinBorder, MaxBorder);
