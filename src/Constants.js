@@ -25,8 +25,8 @@ export const BoomerangWidth = 30;
 export const BoomerangHeight = 30;
 export const RatioSize = 1/3;
 
-export const MinEnemies = 20;
-export const MaxEnemies = 40;
+export const MinEnemies = 40;
+export const MaxEnemies = 100;
 
 export const DirectionBoomerang = {
   left: "LEFT",
