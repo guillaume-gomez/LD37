@@ -1477,7 +1477,6 @@ var Game = function (_Phaser$State) {
     key: "killBoomerang",
     value: function killBoomerang(boomerang) {
       boomerang.kill();
-      this.camera.follow(this.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
     }
   }, {
     key: "damage",
@@ -1534,15 +1533,11 @@ var Game = function (_Phaser$State) {
   }, {
     key: "launchBoomerang",
     value: function launchBoomerang() {
-      var _this2 = this;
-
       if (this.launchBoomerangKey.isDown) {
-        this.camera.follow(this.boomerang);
         // after the tween get back to the player
         var onCompleteCallback = function onCompleteCallback(boomerang, tween) {
           boomerang.kill();
           tween.stop();
-          _this2.camera.follow(_this2.hero, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
         };
         // the first param is the direction
         this.boomerang.launch(this.hero.directionChoosed(), onCompleteCallback);
@@ -1551,15 +1546,15 @@ var Game = function (_Phaser$State) {
   }, {
     key: "lost",
     value: function lost() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.hero.kill();
       this.deathFx.play();
       setTimeout(function () {
-        _this3.room.clear();
-        _this3.chandelierLayer.clear();
-        _this3.boomerang.kill();
-        _this3.game.goToLose();
+        _this2.room.clear();
+        _this2.chandelierLayer.clear();
+        _this2.boomerang.kill();
+        _this2.game.goToLose();
       }, 500);
     }
   }, {
