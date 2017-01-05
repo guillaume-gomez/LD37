@@ -613,8 +613,15 @@ var Character = function (_Phaser$Sprite) {
 
     _this.weapon.trackSprite(_this, 30, 20, true);
     _this.cursor = game.input.keyboard.createCursorKeys();
+
     _this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     _this.fireClick = game.input.activePointer.leftButton;
+
+    _this.up = game.input.keyboard.addKey(Phaser.Keyboard.Z);
+    _this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    _this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    _this.down = game.input.keyboard.addKey(Phaser.Keyboard.S);
+
     _this.lastDirection = null;
     return _this;
   }
@@ -628,23 +635,23 @@ var Character = function (_Phaser$Sprite) {
       var move = null;
       //console.log(this.angle)
 
-      if (this.cursor.left.isDown) {
+      if (this.cursor.left.isDown || this.leftKey.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = _Constants.DirectionBoomerang.left;
         move = "left";
-      } else if (this.cursor.right.isDown) {
+      } else if (this.cursor.right.isDown || this.rightKey.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = _Constants.DirectionBoomerang.right;
         move = "right";
       }
 
-      if (this.cursor.up.isDown) {
+      if (this.cursor.up.isDown || this.up.isDown) {
         this.body.velocity.y = -Velocity;
         this.lastDirection = _Constants.DirectionBoomerang.up;
         move = "up";
-      } else if (this.cursor.down.isDown) {
+      } else if (this.cursor.down.isDown || this.down.isDown) {
         this.body.velocity.y = Velocity;
         this.lastDirection = _Constants.DirectionBoomerang.down;
         move = "down";
@@ -1279,7 +1286,7 @@ var Commands = function (_Phaser$State) {
       this.game.add.text(350, 400, "Left mouse button / Space", { font: "bold 28px Arial", fill: "#fff" });
 
       this.game.add.text(30, 450, "Throw boomerang", { font: "bold 28px Arial", fill: "#fff" });
-      this.game.add.text(350, 450, "B + Arrows keys", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(350, 450, "Space + Arrows keys", { font: "bold 28px Arial", fill: "#fff" });
 
       this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     }
@@ -1414,7 +1421,7 @@ var Game = function (_Phaser$State) {
         this.cursors = this.game.input.keyboard.createCursorKeys();
       }
       this.camera.follow(this.hero);
-      this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
+      this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
       //sounds
       this.deathFx = this.game.add.audio(_SpriteConstants.DeathSound);
