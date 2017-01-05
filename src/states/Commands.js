@@ -13,7 +13,7 @@ class Commands extends Phaser.State {
     this.game.add.text(350, 400, "Left mouse button / Space", { font: "bold 28px Arial", fill: "#fff" });
     
     this.game.add.text(30, 450, "Throw boomerang", { font: "bold 28px Arial", fill: "#fff" });
-    this.game.add.text(350, 450, "B + Arrows keys", { font: "bold 28px Arial", fill: "#fff" });
+    this.game.add.text(350, 450, "Space + Arrows keys", { font: "bold 28px Arial", fill: "#fff" });
    
 
     this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);

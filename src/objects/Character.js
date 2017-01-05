@@ -36,8 +36,15 @@ class Character extends Phaser.Sprite {
 
     this.weapon.trackSprite(this, 30, 20, true);
     this.cursor = game.input.keyboard.createCursorKeys();
+
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
+
+    this.up = game.input.keyboard.addKey(Phaser.Keyboard.Z);
+    this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
+    this.down = game.input.keyboard.addKey(Phaser.Keyboard.S);
+
     this.lastDirection = null;
   }
 
@@ -48,24 +55,24 @@ class Character extends Phaser.Sprite {
     let move = null;
     //console.log(this.angle)
 
-    if (this.cursor.left.isDown) {
+    if (this.cursor.left.isDown || this.leftKey.isDown) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = DirectionBoomerang.left;
         move = "left";
     }
-    else if (this.cursor.right.isDown) {
+    else if (this.cursor.right.isDown || this.rightKey.isDown) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = DirectionBoomerang.right;
         move = "right";
     }
 
-    if (this.cursor.up.isDown) {
+    if (this.cursor.up.isDown || this.up.isDown) {
       this.body.velocity.y = -Velocity;
       this.lastDirection = DirectionBoomerang.up;
       move = "up";
-    } else if (this.cursor.down.isDown) {
+    } else if (this.cursor.down.isDown || this.down.isDown) {
       this.body.velocity.y = Velocity;
       this.lastDirection = DirectionBoomerang.down;
       move = "down";

@@ -76,7 +76,7 @@ class Game extends Phaser.State {
       this.cursors = this.game.input.keyboard.createCursorKeys();
     }
     this.camera.follow(this.hero);
-    this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
+    this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
