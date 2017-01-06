@@ -25,7 +25,10 @@ import {
   CharacterWitdh,
   CharacterHeight,
   BoomerangWidth,
-  BoomerangHeight
+  BoomerangHeight,
+  KillText,
+  KillTextX,
+  KillTextY
   } from "Constants";
 
 import Player from "objects/Character";
@@ -64,7 +67,7 @@ class Game extends Phaser.State {
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
     //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
-    
+
     this.boomerang = new Boomerang(this.game, 0, 0);
     this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
     this.game.add.existing(this.boomerang);
@@ -81,6 +84,8 @@ class Game extends Phaser.State {
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
 
+    this.frag = 0;
+    this.killText = this.game.add.text(400, 400, KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D',strokeThickness: 6 });
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
@@ -115,10 +120,19 @@ class Game extends Phaser.State {
      if(this.hero.isOutSideTheLevel(this.game) || !this.enemies.hasEnemies()) {
         this.won();
      }
+
+     this.updateText();
+  }
+
+  updateText() {
+    this.killText.setText(KillText + this.frag);
+    this.killText.x = this.game.camera.x + KillTextX;
+    this.killText.y = this.game.camera.y + KillTextY;
   }
 
   kill(bullet, enemy) {
     this.enemies.remove(enemy);
+    this.frag = this.frag + 1;
     bullet.kill();
   }
 
@@ -128,6 +142,7 @@ class Game extends Phaser.State {
 
   killByBoomerang(boomerang, enemy) {
     if(boomerang.isMoving()) {
+      this.frag = this.frag + 1;
       this.enemies.remove(enemy);
     }
   }

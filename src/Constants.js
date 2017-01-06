@@ -34,3 +34,7 @@ export const DirectionBoomerang = {
   down: "DOWN",
   right: "RIGHT"
 };
+
+export const KillText = "Kills: ";
+export const KillTextX = 30;
+export const KillTextY = 550;
