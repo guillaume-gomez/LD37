@@ -3,8 +3,15 @@ import { getRandomArbitrary } from "../utils";
 import { SpriteEnemy, SpriteEnemy2, SpriteEnemy3 } from "../SpriteConstants";
 
 import Enemy from "objects/Enemy";
-const VelocityMin = 50;
-const VelocityMax = 125;
+
+
+const VelocityBorders =
+[
+  {velocityMin: 30, velocityMax: 60},
+  {velocityMin: 60, velocityMax: 100},
+  {velocityMin: 100, velocityMax: 130}
+]
+
 
 class EnemyGroup extends Phaser.Group {
 
@@ -71,7 +78,7 @@ class EnemyGroup extends Phaser.Group {
   addEnemy(game, x, y) {
     const spriteArray = [SpriteEnemy, SpriteEnemy2, SpriteEnemy3];
     const spriteIndex = getRandomArbitrary(0, spriteArray.length);
-    const vel = getRandomArbitrary(VelocityMin, VelocityMax);
+    const vel = getRandomArbitrary(VelocityBorders[spriteIndex].velocityMin, VelocityBorders[spriteIndex].velocityMax);
     const enemy = new Enemy(game,x, y, vel, spriteArray[spriteIndex]);
     this.add(enemy);
   }
