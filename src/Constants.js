@@ -25,8 +25,11 @@ export const BoomerangWidth = 30;
 export const BoomerangHeight = 30;
 export const RatioSize = 1/3;
 
-export const MinEnemies = 40;
-export const MaxEnemies = 100;
+export const MinEnemies = 25;
+export const MaxEnemies = 50;
+
+export const OriginalTimer = 15;
+export const MinTimer = 5;
 
 export const DirectionBoomerang = {
   left: "LEFT",
@@ -34,3 +37,7 @@ export const DirectionBoomerang = {
   down: "DOWN",
   right: "RIGHT"
 };
+
+export const KillText = "Kills: ";
+export const KillTextX = 30;
+export const KillTextY = 550;
