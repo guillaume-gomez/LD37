@@ -77,8 +77,9 @@ class Game extends Phaser.State {
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
+    } else {
+      this.camera.follow(this.hero);
     }
-    this.camera.follow(this.hero);
     this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     //sounds
@@ -122,6 +123,10 @@ class Game extends Phaser.State {
      }
 
      this.updateText();
+
+     if(needCamera) {
+      this.moveCamera();
+    }
   }
 
   updateText() {
