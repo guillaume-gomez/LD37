@@ -1,4 +1,4 @@
-import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies } from "../Constants.js";
+import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies, OriginalTimer, MinTimer } from "../Constants.js";
 import { getRandomArbitrary } from "../utils";
 import { SpriteEnemy, SpriteEnemy2, SpriteEnemy3 } from "../SpriteConstants";
 
@@ -17,69 +17,84 @@ class EnemyGroup extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
+    this.nbWave = 0;
+    this.loopWave(OriginalTimer);
+  }
+
+  loopWave(timer) {
+    this.createWave(this.nbWave);
+    this.nbWave++;
+    setTimeout(() => {
+      const newTimer = Math.max(MinTimer, timer - this.nbWave);
+      this.loopWave(newTimer);
+      console.log(newTimer)
+    }, timer * 1000);
+  }
+
+  createWave(waveNumber) {
+    console.log(waveNumber)
     let nbEnemies = getRandomArbitrary(MinEnemies, MaxEnemies);
 
     let nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 30);
-    this.enemyTop(game,nbEnemiesOnSide);
+    this.enemyTop(nbEnemiesOnSide);
 
     nbEnemies -= nbEnemiesOnSide;
     nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 20);
-    this.enemyLeft(game, nbEnemiesOnSide);
+    this.enemyLeft(nbEnemiesOnSide);
 
     nbEnemies -= nbEnemiesOnSide;
     nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 10);
-    this.enemyBottom(game, nbEnemiesOnSide);
+    this.enemyBottom(nbEnemiesOnSide);
 
     nbEnemies -= nbEnemiesOnSide;
-    this.enemyRight(game, nbEnemiesOnSide);
-
+    this.enemyRight(nbEnemiesOnSide);
   }
 
-  getElapsedX(game, nbEnemies) {
-    return (game.world.bounds.width - 2 * Border) / nbEnemies;
+  getElapsedX(nbEnemies) {
+    return (this.game.world.bounds.width - 2 * Border) / nbEnemies;
   }
 
-  getElapsedY(game, nbEnemies) {
-    return (game.world.bounds.height - 2 * Border) / nbEnemies;
+  getElapsedY(nbEnemies) {
+    return (this.game.world.bounds.height - 2 * Border) / nbEnemies;
   }
 
-  enemyBottom(game,nbEnemies) {
-    const elapsedX = this.getElapsedX(game, nbEnemies);
+  enemyBottom(nbEnemies) {
+    const elapsedX = this.getElapsedX(nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
-      const randomY = getRandomArbitrary(game.world.bounds.height, game.world.bounds.height + Border);
-      this.addEnemy(game, Border + elapsedX * i, randomY);
+      const randomY = getRandomArbitrary(this.game.world.bounds.height, this.game.world.bounds.height + Border);
+      this.addEnemy(Border + elapsedX * i, randomY);
     }
   }
 
-  enemyTop(game, nbEnemies) {
-    const elapsedX = this.getElapsedX(game, nbEnemies);
+  enemyTop(nbEnemies) {
+    const elapsedX = this.getElapsedX(nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
       const randomY = getRandomArbitrary(-Border, 0);
-      this.addEnemy(game, Border + elapsedX * i, randomY);
+      this.addEnemy(Border + elapsedX * i, randomY);
     }
   }
 
-  enemyLeft(game, nbEnemies) {
-    const elapsedY = this.getElapsedY(game, nbEnemies);
+  enemyLeft(nbEnemies) {
+    const elapsedY = this.getElapsedY(nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
       const randomX = getRandomArbitrary(-Border, 0);
-      this.addEnemy(game, randomX, Border + elapsedY * i);
+      this.addEnemy(randomX, Border + elapsedY * i);
     }
   }
 
-  enemyRight(game, nbEnemies) {
-    const elapsedY = this.getElapsedY(game, nbEnemies);
+  enemyRight(nbEnemies) {
+    const elapsedY = this.getElapsedY(nbEnemies);
     for(let i = 0; i < nbEnemies; i++) {
-      const randomX = getRandomArbitrary(game.world.bounds.width , game.world.bounds.width + Border);
-      this.addEnemy(game, randomX, Border + elapsedY * i);
+      const randomX = getRandomArbitrary(this.game.world.bounds.width , this.game.world.bounds.width + Border);
+      this.addEnemy(randomX, Border + elapsedY * i);
     }
   }
 
-  addEnemy(game, x, y) {
+  addEnemy(x, y) {
     const spriteArray = [SpriteEnemy, SpriteEnemy2, SpriteEnemy3];
     const spriteIndex = getRandomArbitrary(0, spriteArray.length);
     const vel = getRandomArbitrary(VelocityBorders[spriteIndex].velocityMin, VelocityBorders[spriteIndex].velocityMax);
-    const enemy = new Enemy(game,x, y, vel, spriteArray[spriteIndex]);
+    const enemy = new Enemy(this.game,x, y, vel, spriteArray[spriteIndex]);
     this.add(enemy);
   }
 
