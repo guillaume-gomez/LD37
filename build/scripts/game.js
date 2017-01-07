@@ -31,8 +31,11 @@ var BoomerangWidth = exports.BoomerangWidth = 30;
 var BoomerangHeight = exports.BoomerangHeight = 30;
 var RatioSize = exports.RatioSize = 1 / 3;
 
-var MinEnemies = exports.MinEnemies = 40;
-var MaxEnemies = exports.MaxEnemies = 100;
+var MinEnemies = exports.MinEnemies = 25;
+var MaxEnemies = exports.MaxEnemies = 50;
+
+var OriginalTimer = exports.OriginalTimer = 15;
+var MinTimer = exports.MinTimer = 5;
 
 var DirectionBoomerang = exports.DirectionBoomerang = {
   left: "LEFT",
@@ -40,6 +43,10 @@ var DirectionBoomerang = exports.DirectionBoomerang = {
   down: "DOWN",
   right: "RIGHT"
 };
+
+var KillText = exports.KillText = "Kills: ";
+var KillTextX = exports.KillTextX = 30;
+var KillTextY = exports.KillTextY = 550;
 
 },{}],2:[function(require,module,exports){
 "use strict";
@@ -880,8 +887,7 @@ function _inherits(subClass, superClass) {
   }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
-var VelocityMin = 50;
-var VelocityMax = 125;
+var VelocityBorders = [{ velocityMin: 30, velocityMax: 60 }, { velocityMin: 60, velocityMax: 100 }, { velocityMin: 100, velocityMax: 130 }];
 
 var EnemyGroup = function (_Phaser$Group) {
   _inherits(EnemyGroup, _Phaser$Group);
@@ -891,78 +897,97 @@ var EnemyGroup = function (_Phaser$Group) {
 
     var _this = _possibleConstructorReturn(this, (EnemyGroup.__proto__ || Object.getPrototypeOf(EnemyGroup)).call(this, game, parent, name, false, true, Phaser.Physics.ARCADE));
 
-    var nbEnemies = (0, _utils.getRandomArbitrary)(_Constants.MinEnemies, _Constants.MaxEnemies);
-
-    var nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 30);
-    _this.enemyTop(game, nbEnemiesOnSide);
-
-    nbEnemies -= nbEnemiesOnSide;
-    nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 20);
-    _this.enemyLeft(game, nbEnemiesOnSide);
-
-    nbEnemies -= nbEnemiesOnSide;
-    nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 10);
-    _this.enemyBottom(game, nbEnemiesOnSide);
-
-    nbEnemies -= nbEnemiesOnSide;
-    _this.enemyRight(game, nbEnemiesOnSide);
-
+    _this.nbWave = 0;
+    _this.loopWave(_Constants.OriginalTimer);
     return _this;
   }
 
   _createClass(EnemyGroup, [{
+    key: "loopWave",
+    value: function loopWave(timer) {
+      var _this2 = this;
+
+      this.createWave(this.nbWave);
+      this.nbWave++;
+      setTimeout(function () {
+        var newTimer = Math.max(_Constants.MinTimer, timer - _this2.nbWave);
+        _this2.loopWave(newTimer);
+        console.log(newTimer);
+      }, timer * 1000);
+    }
+  }, {
+    key: "createWave",
+    value: function createWave(waveNumber) {
+      console.log(waveNumber);
+      var nbEnemies = (0, _utils.getRandomArbitrary)(_Constants.MinEnemies, _Constants.MaxEnemies);
+
+      var nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 30);
+      this.enemyTop(nbEnemiesOnSide);
+
+      nbEnemies -= nbEnemiesOnSide;
+      nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 20);
+      this.enemyLeft(nbEnemiesOnSide);
+
+      nbEnemies -= nbEnemiesOnSide;
+      nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 10);
+      this.enemyBottom(nbEnemiesOnSide);
+
+      nbEnemies -= nbEnemiesOnSide;
+      this.enemyRight(nbEnemiesOnSide);
+    }
+  }, {
     key: "getElapsedX",
-    value: function getElapsedX(game, nbEnemies) {
-      return (game.world.bounds.width - 2 * _Constants.Border) / nbEnemies;
+    value: function getElapsedX(nbEnemies) {
+      return (this.game.world.bounds.width - 2 * _Constants.Border) / nbEnemies;
     }
   }, {
     key: "getElapsedY",
-    value: function getElapsedY(game, nbEnemies) {
-      return (game.world.bounds.height - 2 * _Constants.Border) / nbEnemies;
+    value: function getElapsedY(nbEnemies) {
+      return (this.game.world.bounds.height - 2 * _Constants.Border) / nbEnemies;
     }
   }, {
     key: "enemyBottom",
-    value: function enemyBottom(game, nbEnemies) {
-      var elapsedX = this.getElapsedX(game, nbEnemies);
+    value: function enemyBottom(nbEnemies) {
+      var elapsedX = this.getElapsedX(nbEnemies);
       for (var i = 0; i < nbEnemies; i++) {
-        var randomY = (0, _utils.getRandomArbitrary)(game.world.bounds.height, game.world.bounds.height + _Constants.Border);
-        this.addEnemy(game, _Constants.Border + elapsedX * i, randomY);
+        var randomY = (0, _utils.getRandomArbitrary)(this.game.world.bounds.height, this.game.world.bounds.height + _Constants.Border);
+        this.addEnemy(_Constants.Border + elapsedX * i, randomY);
       }
     }
   }, {
     key: "enemyTop",
-    value: function enemyTop(game, nbEnemies) {
-      var elapsedX = this.getElapsedX(game, nbEnemies);
+    value: function enemyTop(nbEnemies) {
+      var elapsedX = this.getElapsedX(nbEnemies);
       for (var i = 0; i < nbEnemies; i++) {
         var randomY = (0, _utils.getRandomArbitrary)(-_Constants.Border, 0);
-        this.addEnemy(game, _Constants.Border + elapsedX * i, randomY);
+        this.addEnemy(_Constants.Border + elapsedX * i, randomY);
       }
     }
   }, {
     key: "enemyLeft",
-    value: function enemyLeft(game, nbEnemies) {
-      var elapsedY = this.getElapsedY(game, nbEnemies);
+    value: function enemyLeft(nbEnemies) {
+      var elapsedY = this.getElapsedY(nbEnemies);
       for (var i = 0; i < nbEnemies; i++) {
         var randomX = (0, _utils.getRandomArbitrary)(-_Constants.Border, 0);
-        this.addEnemy(game, randomX, _Constants.Border + elapsedY * i);
+        this.addEnemy(randomX, _Constants.Border + elapsedY * i);
       }
     }
   }, {
     key: "enemyRight",
-    value: function enemyRight(game, nbEnemies) {
-      var elapsedY = this.getElapsedY(game, nbEnemies);
+    value: function enemyRight(nbEnemies) {
+      var elapsedY = this.getElapsedY(nbEnemies);
       for (var i = 0; i < nbEnemies; i++) {
-        var randomX = (0, _utils.getRandomArbitrary)(game.world.bounds.width, game.world.bounds.width + _Constants.Border);
-        this.addEnemy(game, randomX, _Constants.Border + elapsedY * i);
+        var randomX = (0, _utils.getRandomArbitrary)(this.game.world.bounds.width, this.game.world.bounds.width + _Constants.Border);
+        this.addEnemy(randomX, _Constants.Border + elapsedY * i);
       }
     }
   }, {
     key: "addEnemy",
-    value: function addEnemy(game, x, y) {
+    value: function addEnemy(x, y) {
       var spriteArray = [_SpriteConstants.SpriteEnemy, _SpriteConstants.SpriteEnemy2, _SpriteConstants.SpriteEnemy3];
       var spriteIndex = (0, _utils.getRandomArbitrary)(0, spriteArray.length);
-      var vel = (0, _utils.getRandomArbitrary)(VelocityMin, VelocityMax);
-      var enemy = new _Enemy2.default(game, x, y, vel, spriteArray[spriteIndex]);
+      var vel = (0, _utils.getRandomArbitrary)(VelocityBorders[spriteIndex].velocityMin, VelocityBorders[spriteIndex].velocityMax);
+      var enemy = new _Enemy2.default(this.game, x, y, vel, spriteArray[spriteIndex]);
       this.add(enemy);
     }
   }, {
@@ -1419,12 +1444,16 @@ var Game = function (_Phaser$State) {
 
       if (needCamera) {
         this.cursors = this.game.input.keyboard.createCursorKeys();
+      } else {
+        this.camera.follow(this.hero);
       }
-      this.camera.follow(this.hero);
       this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
       //sounds
       this.deathFx = this.game.add.audio(_SpriteConstants.DeathSound);
+
+      this.frag = 0;
+      this.killText = this.game.add.text(400, 400, _Constants.KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D', strokeThickness: 6 });
     }
   }, {
     key: "getInitialPosition",
@@ -1461,11 +1490,25 @@ var Game = function (_Phaser$State) {
       if (this.hero.isOutSideTheLevel(this.game) || !this.enemies.hasEnemies()) {
         this.won();
       }
+
+      this.updateText();
+
+      if (needCamera) {
+        this.moveCamera();
+      }
+    }
+  }, {
+    key: "updateText",
+    value: function updateText() {
+      this.killText.setText(_Constants.KillText + this.frag);
+      this.killText.x = this.game.camera.x + _Constants.KillTextX;
+      this.killText.y = this.game.camera.y + _Constants.KillTextY;
     }
   }, {
     key: "kill",
     value: function kill(bullet, enemy) {
       this.enemies.remove(enemy);
+      this.frag = this.frag + 1;
       bullet.kill();
     }
   }, {
@@ -1477,6 +1520,7 @@ var Game = function (_Phaser$State) {
     key: "killByBoomerang",
     value: function killByBoomerang(boomerang, enemy) {
       if (boomerang.isMoving()) {
+        this.frag = this.frag + 1;
         this.enemies.remove(enemy);
       }
     }
