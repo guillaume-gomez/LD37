@@ -35,6 +35,8 @@ class Character extends Phaser.Sprite {
     this.weapon.fireRate = 300;
 
     this.weapon.trackSprite(this, 30, 20, true);
+
+    this.pad = this.game.input.gamepad.pad1;
     this.cursor = game.input.keyboard.createCursorKeys();
 
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
@@ -55,30 +57,30 @@ class Character extends Phaser.Sprite {
     let move = null;
     //console.log(this.angle)
 
-    if (this.cursor.left.isDown || this.leftKey.isDown) {
+    if (this.cursor.left.isDown || this.leftKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
         this.body.velocity.x = -Velocity;
         this.direction = -1;
         this.lastDirection = DirectionBoomerang.left;
         move = "left";
     }
-    else if (this.cursor.right.isDown || this.rightKey.isDown) {
+    else if (this.cursor.right.isDown || this.rightKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
         this.body.velocity.x = Velocity;
         this.direction = 1;
         this.lastDirection = DirectionBoomerang.right;
         move = "right";
     }
 
-    if (this.cursor.up.isDown || this.up.isDown) {
+    if (this.cursor.up.isDown || this.up.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
       this.body.velocity.y = -Velocity;
       this.lastDirection = DirectionBoomerang.up;
       move = "up";
-    } else if (this.cursor.down.isDown || this.down.isDown) {
+    } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
       this.body.velocity.y = Velocity;
       this.lastDirection = DirectionBoomerang.down;
       move = "down";
     }
 
-    if(this.fireButton.isDown || this.fireClick.isDown) {
+    if(this.fireButton.isDown || this.fireClick.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
       this.weapon.fire();
       this.animations.play("fire");
     }
