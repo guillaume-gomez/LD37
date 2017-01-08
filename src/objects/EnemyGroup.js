@@ -4,6 +4,8 @@ import { SpriteEnemy, SpriteEnemy2, SpriteEnemy3 } from "../SpriteConstants";
 
 import Enemy from "objects/Enemy";
 
+const offsetEnemies = 2;
+
 
 const VelocityBorders =
 [
@@ -17,6 +19,7 @@ class EnemyGroup extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
+    this.game = game;
     this.nbWave = 0;
     this.loopWave(OriginalTimer);
   }
@@ -36,8 +39,7 @@ class EnemyGroup extends Phaser.Group {
   }
 
   createWave(waveNumber) {
-    console.log(waveNumber)
-    let nbEnemies = getRandomArbitrary(MinEnemies, MaxEnemies);
+    let nbEnemies = getRandomArbitrary(MinEnemies + (waveNumber * offsetEnemies), MaxEnemies + (waveNumber * offsetEnemies));
 
     let nbEnemiesOnSide = getRandomArbitrary(10, nbEnemies - 30);
     this.enemyTop(nbEnemiesOnSide);
