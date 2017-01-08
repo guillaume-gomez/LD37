@@ -1,4 +1,4 @@
-import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies, OriginalTimer, MinTimer } from "../Constants.js";
+import { EnemyWidth, EnemyHeight, Border, MinEnemies, MaxEnemies, OriginalTimer, MinTimer, MaxWave } from "../Constants.js";
 import { getRandomArbitrary } from "../utils";
 import { SpriteEnemy, SpriteEnemy2, SpriteEnemy3 } from "../SpriteConstants";
 
@@ -24,6 +24,10 @@ class EnemyGroup extends Phaser.Group {
   loopWave(timer) {
     this.createWave(this.nbWave);
     this.nbWave++;
+    if(this.nbWave > MaxWave) {
+      return;
+    }
+
     setTimeout(() => {
       const newTimer = Math.max(MinTimer, timer - this.nbWave);
       this.loopWave(newTimer);
