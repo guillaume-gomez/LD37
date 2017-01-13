@@ -31,12 +31,15 @@ import {
   KillTextY
   } from "Constants";
 
+import { HeathBarConfig, HeathBarX, HeathBarY } from "HealthBarConstants";
+
 import Player from "objects/Character";
 import Boomerang from "objects/Boomerang";
 import Room from "objects/Room";
 import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
 import ChandelierLayer from "objects/ChandelierLayer";
+import HealthBar from "objects/HealthBar";
 
 
 const needCamera = false;
@@ -87,6 +90,7 @@ class Game extends Phaser.State {
 
     this.frag = 0;
     this.killText = this.game.add.text(400, 400, KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D',strokeThickness: 6 });
+    this.HealthBar = new HealthBar(this.game, HeathBarConfig);
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
@@ -122,17 +126,19 @@ class Game extends Phaser.State {
         this.won();
      }
 
-     this.updateText();
+     this.updateGui();
 
      if(needCamera) {
       this.moveCamera();
     }
   }
 
-  updateText() {
+  updateGui() {
     this.killText.setText(KillText + this.frag);
     this.killText.x = this.game.camera.x + KillTextX;
     this.killText.y = this.game.camera.y + KillTextY;
+
+    this.HealthBar.setPosition(this.game.camera.x + HeathBarX, this.game.camera.y + HeathBarY);
   }
 
   kill(bullet, enemy) {
