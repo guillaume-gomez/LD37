@@ -10,3 +10,4 @@
 ## Resources
 - sprites (http://www.kenney.nl/)
 - characters (http://www.2dgameartguru.com/)
+- heathBar inspired by (https://github.com/bmarwane/phaser.healthbar)
