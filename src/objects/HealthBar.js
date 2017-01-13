@@ -30,7 +30,7 @@ class HealthBar {
     bmd.ctx.beginPath();
     bmd.ctx.rect(0, 0, this.config.width, this.config.height);
     bmd.ctx.fill();
-   
+
     this.bgSprite = this.game.add.sprite(this.x, this.y, bmd);
     this.bgSprite.anchor.set(0.5);
   }
@@ -41,7 +41,7 @@ class HealthBar {
     bmd.ctx.beginPath();
     bmd.ctx.rect(0, 0, this.config.width, this.config.height);
     bmd.ctx.fill();
-   
+
     this.barSprite = this.game.add.sprite(this.x - this.bgSprite.width/2, this.y, bmd);
     this.barSprite.anchor.y = 0.5;
   }
@@ -49,11 +49,11 @@ class HealthBar {
   setPosition(x, y) {
     this.x = x;
     this.y = y;
-   
+
     if(this.bgSprite !== undefined && this.barSprite !== undefined){
       this.bgSprite.position.x = x;
       this.bgSprite.position.y = y;
-   
+
       this.barSprite.position.x = x - this.config.width/2;
       this.barSprite.position.y = y;
     }
@@ -61,15 +61,15 @@ class HealthBar {
 
   setPercent(newValue){
     if(newValue < 0) {
-      newValue = 0; 
+      newValue = 0;
     }
-    if(newValue > 100) { 
-      newValue = 100; 
+    if(newValue > 100) {
+      newValue = 100;
     }
     const newWidth = (newValue * this.config.width) / 100;
     this.setWidth(newWidth);
   }
- 
+
   setWidth(newWidth){
     this.barSprite.width = newWidth;
   }

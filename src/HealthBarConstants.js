@@ -1,7 +1,9 @@
-export const HeathBarX = 500;
-export const HeathBarY = 500;
+export const HeathBarX = 650;
+export const HeathBarY = 565;
 
 export const HeathBarConfig = {
   x: HeathBarX,
-  y: HeathBarY
+  y: HeathBarY,
+  bar: { color: "#43d637" },
+  bg: { color: "#8A0707" }
 };
