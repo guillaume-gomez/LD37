@@ -5,6 +5,7 @@ const Damage = 10;
 const Velocity = 200;
 const MaxBullet = 10;
 const TimeLapse = 10;
+const MaxLife = 1000;
 
 class Character extends Phaser.Sprite {
 
@@ -16,7 +17,7 @@ class Character extends Phaser.Sprite {
     this.body.mass = 1;
     this.direction = 1;
     this.anchor.setTo(0.5, 0.5);
-    this.life = 1000;
+    this.life = MaxLife;
 
     const fire = [8, 9, 10, 11];
     const walk = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -133,6 +134,10 @@ class Character extends Phaser.Sprite {
 
   damage() {
     this.life = this.life - Damage;
+  }
+
+  lifeInPercent() {
+    return this.life / MaxLife;
   }
 
   isDeath() {

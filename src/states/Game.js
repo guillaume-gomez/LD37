@@ -90,7 +90,7 @@ class Game extends Phaser.State {
 
     this.frag = 0;
     this.killText = this.game.add.text(400, 400, KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D',strokeThickness: 6 });
-    this.HealthBar = new HealthBar(this.game, HeathBarConfig);
+    this.healthBar = new HealthBar(this.game, HeathBarConfig);
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
@@ -138,7 +138,7 @@ class Game extends Phaser.State {
     this.killText.x = this.game.camera.x + KillTextX;
     this.killText.y = this.game.camera.y + KillTextY;
 
-    this.HealthBar.setPosition(this.game.camera.x + HeathBarX, this.game.camera.y + HeathBarY);
+    this.healthBar.setPosition(this.game.camera.x + HeathBarX, this.game.camera.y + HeathBarY);
   }
 
   kill(bullet, enemy) {
@@ -164,6 +164,7 @@ class Game extends Phaser.State {
 
   damage() {
     this.hero.damage();
+    this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
     this.camera.flash(FlashColor, FlashDuration);
   }
 
