@@ -9,7 +9,8 @@ import {
   BoomerangSprite,
   DeathSound,
   Background,
-  LightSprite
+  LightSprite,
+  Serynge
 } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -40,6 +41,7 @@ import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
 import ChandelierLayer from "objects/ChandelierLayer";
 import HealthBar from "objects/HealthBar";
+import SeryngeGroup from "objects/SeryngeGroup";
 
 
 const needCamera = false;
@@ -65,15 +67,17 @@ class Game extends Phaser.State {
     this.room = new Room(this.game);
     this.room.createRandomSquare(Border,Border,SizeMaze, Division);
 
+    this.seryngeGroup = new SeryngeGroup(this.game);
+
+    this.boomerang = new Boomerang(this.game, 0, 0);
+    this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
+    this.game.add.existing(this.boomerang);
+
     this.hero = new Player(this.game, 100, 100);
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
     //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
-
-    this.boomerang = new Boomerang(this.game, 0, 0);
-    this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
-    this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
     this.chandelierLayer = new ChandelierLayer(this.game);
@@ -116,6 +120,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.seryngeGroup , this.cureHero, null, this);
     this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
@@ -166,6 +171,14 @@ class Game extends Phaser.State {
     this.hero.damage();
     this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
     this.camera.flash(FlashColor, FlashDuration);
+  }
+
+  cureHero(hero, serynge) {
+    if(this.hero.lifeInPercent() !== 1) {
+      serynge.kill();
+      this.hero.cure();
+      this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
+    }
   }
 
   pushBlock(enemy, block) {
@@ -263,6 +276,7 @@ class Game extends Phaser.State {
     this.game.load.image(BoomerangSprite, "res/ufoRed.png");
     this.game.load.image(Background, "res/boomerang.png");
     this.game.load.image(LightSprite, "res/light.png");
+    this.game.load.image(Serynge, "res/boomerang.png");
     this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
   }
 

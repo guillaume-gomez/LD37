@@ -9,4 +9,5 @@ export const BoomerangSprite = "boomerang";
 export const DeathSound = "deathSound";
 export const Background = "background";
 export const LightSprite = "lightSprite";
+export const Serynge = "serynge";
 

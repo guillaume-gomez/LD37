@@ -136,6 +136,10 @@ class Character extends Phaser.Sprite {
     this.life = this.life - Damage;
   }
 
+  cure() {
+    this.life = this.life + Damage;
+  }
+
   lifeInPercent() {
     return this.life / MaxLife;
   }
