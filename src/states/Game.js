@@ -10,7 +10,8 @@ import {
   DeathSound,
   Background,
   LightSprite,
-  Serynge
+  Serynge,
+  ShootSound
 } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -280,6 +281,7 @@ class Game extends Phaser.State {
     this.game.load.image(LightSprite, "res/light.png");
     this.game.load.image(Serynge, "res/boomerang.png");
     this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
+    this.game.load.audio(ShootSound, 'res/shoot.mp3');
   }
 
   render() {

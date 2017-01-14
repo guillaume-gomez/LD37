@@ -10,4 +10,4 @@ export const DeathSound = "deathSound";
 export const Background = "background";
 export const LightSprite = "lightSprite";
 export const Serynge = "serynge";
-
+export const ShootSound = "shootSound";
