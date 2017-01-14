@@ -56,44 +56,46 @@ class Character extends Phaser.Sprite {
   }
 
   update() {
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
-    this.rotation = this.game.physics.arcade.angleToPointer(this);
-    let move = null;
-    //console.log(this.angle)
+    if(!this.isDeath()) {
+      this.body.velocity.x = 0;
+      this.body.velocity.y = 0;
+      this.rotation = this.game.physics.arcade.angleToPointer(this);
+      let move = null;
+      //console.log(this.angle)
 
-    if (this.cursor.left.isDown || this.leftKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
-        this.body.velocity.x = -Velocity;
-        this.direction = -1;
-        this.lastDirection = DirectionBoomerang.left;
-        move = "left";
-    }
-    else if (this.cursor.right.isDown || this.rightKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
-        this.body.velocity.x = Velocity;
-        this.direction = 1;
-        this.lastDirection = DirectionBoomerang.right;
-        move = "right";
-    }
-
-    if (this.cursor.up.isDown || this.up.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
-      this.body.velocity.y = -Velocity;
-      this.lastDirection = DirectionBoomerang.up;
-      move = "up";
-    } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
-      this.body.velocity.y = Velocity;
-      this.lastDirection = DirectionBoomerang.down;
-      move = "down";
-    }
-
-    if(this.fireButton.isDown || this.fireClick.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
-      this.weapon.fire();
-      if(!this.shootFx.isPlaying) {
-        console.log("jkjk")
-        this.shootFx.play("shootMarker");
+      if (this.cursor.left.isDown || this.leftKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
+          this.body.velocity.x = -Velocity;
+          this.direction = -1;
+          this.lastDirection = DirectionBoomerang.left;
+          move = "left";
       }
-      this.animations.play("fire");
+      else if (this.cursor.right.isDown || this.rightKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+          this.body.velocity.x = Velocity;
+          this.direction = 1;
+          this.lastDirection = DirectionBoomerang.right;
+          move = "right";
+      }
+
+      if (this.cursor.up.isDown || this.up.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+        this.body.velocity.y = -Velocity;
+        this.lastDirection = DirectionBoomerang.up;
+        move = "up";
+      } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+        this.body.velocity.y = Velocity;
+        this.lastDirection = DirectionBoomerang.down;
+        move = "down";
+      }
+
+      if(this.fireButton.isDown || this.fireClick.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
+        this.weapon.fire();
+        if(!this.shootFx.isPlaying) {
+          console.log("jkjk")
+          this.shootFx.play("shootMarker");
+        }
+        this.animations.play("fire");
+      }
+      this.anim(move);
     }
-    this.anim(move);
   }
 
   anim(move) {
