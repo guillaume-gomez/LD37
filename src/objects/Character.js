@@ -1,4 +1,4 @@
-import { SpritePlayer, SpriteBullet } from "../SpriteConstants";
+import { SpritePlayer, SpriteBullet, ShootSound } from "../SpriteConstants";
 import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constants";
 
 const Damage = 10;
@@ -36,6 +36,10 @@ class Character extends Phaser.Sprite {
     this.weapon.fireRate = 300;
 
     this.weapon.trackSprite(this, 30, 20, true);
+    this.shootFx = game.add.audio(ShootSound);
+    this.shootFx.allowMultiple = true;
+
+     this.shootFx.addMarker('shootMarker', 0, 0.3);
 
     this.pad = this.game.input.gamepad.pad1;
     this.cursor = game.input.keyboard.createCursorKeys();
@@ -83,6 +87,10 @@ class Character extends Phaser.Sprite {
 
     if(this.fireButton.isDown || this.fireClick.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
       this.weapon.fire();
+      if(!this.shootFx.isPlaying) {
+        console.log("jkjk")
+        this.shootFx.play("shootMarker");
+      }
       this.animations.play("fire");
     }
     this.anim(move);
