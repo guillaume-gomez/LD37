@@ -4,7 +4,7 @@ import { Serynge } from "../SpriteConstants";
 
 const MaxSerynge = 2;
 
-class SeryngeGroup extends Phaser.Group {
+class medikitGroup extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
@@ -23,4 +23,4 @@ class SeryngeGroup extends Phaser.Group {
 
 }
 
-export default SeryngeGroup;
+export default medikitGroup;

@@ -43,7 +43,7 @@ import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
 import ChandelierLayer from "objects/ChandelierLayer";
 import HealthBar from "objects/HealthBar";
-import SeryngeGroup from "objects/SeryngeGroup";
+import MedikitGroup from "objects/MedikitGroup";
 
 
 const needCamera = false;
@@ -69,7 +69,7 @@ class Game extends Phaser.State {
     this.room = new Room(this.game);
     this.room.createRandomSquare(Border,Border,SizeMaze, Division);
 
-    this.seryngeGroup = new SeryngeGroup(this.game);
+    this.medikitGroup = new MedikitGroup(this.game);
 
     this.boomerang = new Boomerang(this.game, 0, 0);
     this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
@@ -126,7 +126,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
-    this.game.physics.arcade.overlap(this.hero, this.seryngeGroup , this.cureHero, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.medikitGroup , this.cureHero, null, this);
     this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
