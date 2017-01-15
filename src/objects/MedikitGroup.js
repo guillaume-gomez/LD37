@@ -12,12 +12,13 @@ class medikitGroup extends Phaser.Group {
     for(let i = 0; i < nbSerynge; i++) {
       const x = getRandomArbitrary(2 * Border, game.world.bounds.width - SpriteWidth - 2 * Border);
       const y = getRandomArbitrary(2 * Border, game.world.bounds.height - SpriteHeight - 2 * Border);
-      this.addSerynge(x,y);
+      this.addMedikit(x,y);
     }
   }
 
-  addSerynge(x, y) {
-    this.create(x, y, Serynge);
+  addMedikit(x, y) {
+    let medikit = this.create(x, y, Serynge);
+    medikit.scale.setTo(0.4, 0.4);
   }
 
 
