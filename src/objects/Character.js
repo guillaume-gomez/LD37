@@ -89,7 +89,6 @@ class Character extends Phaser.Sprite {
       if(this.fireButton.isDown || this.fireClick.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
         this.weapon.fire();
         if(!this.shootFx.isPlaying) {
-          console.log("jkjk")
           this.shootFx.play("shootMarker");
         }
         this.animations.play("fire");
