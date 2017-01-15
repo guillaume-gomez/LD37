@@ -11,7 +11,8 @@ import {
   Background,
   LightSprite,
   Serynge,
-  ShootSound
+  ShootSound,
+  HurtSound
 } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -92,6 +93,10 @@ class Game extends Phaser.State {
 
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
+    this.hurtFx = this.game.add.audio(HurtSound);
+    this.hurtFx.allowMultiple = true;
+    this.hurtFx.addMarker('hurtMarker', 0, 0.5);
+
 
     this.frag = 0;
     this.killText = this.game.add.text(400, 400, KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D',strokeThickness: 6 });
@@ -170,6 +175,9 @@ class Game extends Phaser.State {
 
   damage() {
     this.hero.damage();
+    if(!this.hurtFx.isPlaying) {
+      this.hurtFx.play('hurtMarker');
+    }
     this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
     this.camera.flash(FlashColor, FlashDuration);
   }
@@ -280,8 +288,9 @@ class Game extends Phaser.State {
     this.game.load.image(Background, "res/boomerang.png");
     this.game.load.image(LightSprite, "res/light.png");
     this.game.load.image(Serynge, "res/boomerang.png");
-    this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
+    this.game.load.audio(DeathSound, 'res/death.mp3');
     this.game.load.audio(ShootSound, 'res/shoot.mp3');
+    this.game.load.audio(HurtSound, 'res/pain.mp3');
   }
 
   render() {

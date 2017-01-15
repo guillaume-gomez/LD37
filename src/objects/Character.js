@@ -38,8 +38,7 @@ class Character extends Phaser.Sprite {
     this.weapon.trackSprite(this, 30, 20, true);
     this.shootFx = game.add.audio(ShootSound);
     this.shootFx.allowMultiple = true;
-
-     this.shootFx.addMarker('shootMarker', 0, 0.3);
+    this.shootFx.addMarker('shootMarker', 0, 0.3);
 
     this.pad = this.game.input.gamepad.pad1;
     this.cursor = game.input.keyboard.createCursorKeys();
