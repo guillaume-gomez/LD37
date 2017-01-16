@@ -40,7 +40,8 @@ class Character extends Phaser.Sprite {
     this.shootFx.allowMultiple = true;
     this.shootFx.addMarker('shootMarker', 0, 0.3);
 
-    this.pad = this.game.input.gamepad.pad1;
+    game.input.gamepad.start();
+    this.pad = game.input.gamepad.pad1;
     this.cursor = game.input.keyboard.createCursorKeys();
 
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
