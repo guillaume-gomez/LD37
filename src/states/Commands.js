@@ -24,12 +24,14 @@ class Commands extends Phaser.State {
     this.game.add.text(330, 450, boomerangText, { font: "bold 28px Arial", fill: "#fff" });
 
     this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    this.game.input.gamepad.start();
   }
 
   update() {
     if(this.enterButton.isDown) {
       this.game.goToGame();
     }
+    this.hasGamepad();
   }
 
 }
