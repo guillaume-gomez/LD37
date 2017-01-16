@@ -1,5 +1,6 @@
 import { SpritePlayer, SpriteBullet, ShootSound } from "../SpriteConstants";
 import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constants";
+import { hasGamepad } from "../utils";
 
 const Damage = 10;
 const Velocity = 200;
@@ -59,9 +60,16 @@ class Character extends Phaser.Sprite {
     if(!this.isDeath()) {
       this.body.velocity.x = 0;
       this.body.velocity.y = 0;
-      this.rotation = this.game.physics.arcade.angleToPointer(this);
+      if (hasGamepad(this.game)) {
+        const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+        const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+        if(X || Y) {
+          this.rotation = Math.atan2(Y, X);
+        }
+      } else { // mouse
+        this.rotation = this.game.physics.arcade.angleToPointer(this);
+      }
       let move = null;
-      //console.log(this.angle)
 
       if (this.cursor.left.isDown || this.leftKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
           this.body.velocity.x = -Velocity;

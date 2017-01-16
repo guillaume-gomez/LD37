@@ -1,3 +1,5 @@
+import { hasGamepad } from "../utils";
+
 class Commands extends Phaser.State {
 
   hasGamepad() {
@@ -5,9 +7,9 @@ class Commands extends Phaser.State {
   }
 
   create() {
-    const moveText = this.hasGamepad() ? "Arrows keys" : "Arrows keys/ Left Pad";
-    const shootText = this.hasGamepad() ? "Left mouse button / Space / A" : "Left mouse button / Space";
-    const boomerangText = this.hasGamepad() ? "Space / A + Arrows keys / Left Pad" : "Space + Arrows keys";
+    const moveText = this.hasGamepad(this.game) ? "Arrows keys" : "Arrows keys/ Left Pad";
+    const shootText = this.hasGamepad(this.game) ? "Left mouse button / Space / A" : "Left mouse button / Space";
+    const boomerangText = this.hasGamepad(this.game) ? "Space / A + Arrows keys / Left Pad" : "Space + Arrows keys";
 
     this.game.add.text(300, 100, "Instructions", { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D',strokeThickness: 6 });
     this.game.add.text(150, 180, "Kill all the zombies or leave the room", { font: "bold 28px Arial", fill: "#fff", stroke: '#4D4D4D',strokeThickness: 3 });
@@ -31,7 +33,7 @@ class Commands extends Phaser.State {
     if(this.enterButton.isDown) {
       this.game.goToGame();
     }
-    this.hasGamepad();
+    this.hasGamepad(this.game);
   }
 
 }
