@@ -54,13 +54,37 @@ class Character extends Phaser.Sprite {
     this.down = game.input.keyboard.addKey(Phaser.Keyboard.S);
 
     this.lastDirection = null;
+    this.useGamePad = false;
   }
+
+  downActions() {
+    this.body.velocity.y = Velocity;
+    this.lastDirection = DirectionBoomerang.down;
+  }
+
+  leftActions() {
+    this.body.velocity.x = -Velocity;
+    this.direction = -1;
+    this.lastDirection = DirectionBoomerang.left;
+  }
+
+  rightActions() {
+    this.body.velocity.x = Velocity;
+    this.direction = 1;
+    this.lastDirection = DirectionBoomerang.right;
+  }
+
+  upActions() {
+    this.body.velocity.y = -Velocity;
+    this.lastDirection = DirectionBoomerang.up;
+  }
+
 
   update() {
     if(!this.isDeath()) {
       this.body.velocity.x = 0;
       this.body.velocity.y = 0;
-      if (hasGamepad(this.game)) {
+      if (hasGamepad(this.game) && this.useGamePad) {
         const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
         const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
         if(X || Y) {
@@ -72,25 +96,19 @@ class Character extends Phaser.Sprite {
       let move = null;
 
       if (this.cursor.left.isDown || this.leftKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
-          this.body.velocity.x = -Velocity;
-          this.direction = -1;
-          this.lastDirection = DirectionBoomerang.left;
+          this.leftActions();
           move = "left";
       }
       else if (this.cursor.right.isDown || this.rightKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
-          this.body.velocity.x = Velocity;
-          this.direction = 1;
-          this.lastDirection = DirectionBoomerang.right;
+          this.rightActions();
           move = "right";
       }
 
       if (this.cursor.up.isDown || this.up.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
-        this.body.velocity.y = -Velocity;
-        this.lastDirection = DirectionBoomerang.up;
+        this.upActions();
         move = "up";
       } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
-        this.body.velocity.y = Velocity;
-        this.lastDirection = DirectionBoomerang.down;
+        this.downActions();
         move = "down";
       }
 
