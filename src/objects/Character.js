@@ -48,8 +48,8 @@ class Character extends Phaser.Sprite {
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
 
-    this.up = game.input.keyboard.addKey(Phaser.Keyboard.Z);
-    this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    this.up = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.down = game.input.keyboard.addKey(Phaser.Keyboard.S);
 
