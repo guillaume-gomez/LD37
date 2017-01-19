@@ -57,7 +57,81 @@ class Character extends Phaser.Sprite {
     this.useGamePad = false;
   }
 
-  downActions() {
+  update() {
+    if(!this.isDeath()) {
+      this.body.velocity.x = 0;
+      this.body.velocity.y = 0;
+      if (hasGamepad(this.game) && this.useGamePad) {
+        this.gamepadControls();
+      } else { 
+        this.keywordAndMouseControls();
+      }
+    }
+  }
+
+  keywordAndMouseControls() {
+    this.rotation = this.game.physics.arcade.angleToPointer(this);
+    let move = null;
+    if (this.cursor.left.isDown || this.leftKey.isDown ) {
+      this.leftActions();
+      move = "left";
+    }
+    else if (this.cursor.right.isDown || this.rightKey.isDown) {
+      this.rightActions();
+      move = "right";
+    }
+
+    if (this.cursor.up.isDown || this.up.isDown) {
+      this.upActions();
+      move = "up";
+    } else if (this.cursor.down.isDown || this.down.isDown) {
+      this.downActions();
+      move = "down";
+    }
+
+    if(this.fireButton.isDown || this.fireClick.isDown) {
+      this.shootActions();
+    }
+    this.anim(move);
+  }
+
+  gamepadControls() {
+    this.useGamePad = false;
+    const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+    const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+    if(X || Y) {
+      this.rotation = Math.atan2(Y, X);
+    }
+   let move = null;
+    if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
+      this.leftActions();
+      this.useGamePad = true;
+      move = "left";
+    }
+    else if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+      this.rightActions();
+      this.useGamePad = true;
+      move = "right";
+    }
+
+    if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+      this.upActions();
+      this.useGamePad = true;
+      move = "up";
+    } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+      this.downActions();
+      this.useGamePad = true;
+      move = "down";
+    }
+
+    if(this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
+      this.shootActions();
+      this.useGamePad = true;
+    }
+    this.anim(move); 
+  }
+
+   downActions() {
     this.body.velocity.y = Velocity;
     this.lastDirection = DirectionBoomerang.down;
   }
@@ -80,47 +154,12 @@ class Character extends Phaser.Sprite {
   }
 
 
-  update() {
-    if(!this.isDeath()) {
-      this.body.velocity.x = 0;
-      this.body.velocity.y = 0;
-      if (hasGamepad(this.game) && this.useGamePad) {
-        const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-        const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-        if(X || Y) {
-          this.rotation = Math.atan2(Y, X);
-        }
-      } else { // mouse
-        this.rotation = this.game.physics.arcade.angleToPointer(this);
-      }
-      let move = null;
-
-      if (this.cursor.left.isDown || this.leftKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
-          this.leftActions();
-          move = "left";
-      }
-      else if (this.cursor.right.isDown || this.rightKey.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
-          this.rightActions();
-          move = "right";
-      }
-
-      if (this.cursor.up.isDown || this.up.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
-        this.upActions();
-        move = "up";
-      } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
-        this.downActions();
-        move = "down";
-      }
-
-      if(this.fireButton.isDown || this.fireClick.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
-        this.weapon.fire();
-        if(!this.shootFx.isPlaying) {
-          this.shootFx.play("shootMarker");
-        }
-        this.animations.play("fire");
-      }
-      this.anim(move);
+  shootActions() {
+    this.weapon.fire();
+    if(!this.shootFx.isPlaying) {
+      this.shootFx.play("shootMarker");
     }
+    this.animations.play("fire");
   }
 
   anim(move) {
