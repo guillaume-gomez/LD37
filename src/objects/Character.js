@@ -3,6 +3,7 @@ import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constant
 import { hasGamepad } from "../utils";
 
 const Damage = 10;
+const Cure = 250;
 const Velocity = 200;
 const MaxBullet = 10;
 const TimeLapse = 10;
@@ -211,7 +212,7 @@ class Character extends Phaser.Sprite {
   }
 
   cure() {
-    this.life = this.life + Damage;
+    this.life = Math.min(this.life + Cure, MaxLife);
   }
 
   lifeInPercent() {
