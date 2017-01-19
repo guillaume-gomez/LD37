@@ -1,7 +1,9 @@
+import { initAndInstallGamepad1 } from "../utils";
 
 class Menu extends Phaser.State {
 
   create() {
+    this.pad = initAndInstallGamepad1(this.game);
     this.game.add.sprite(175,100, "LD");
     this.game.add.text(230, 230, "Press enter to start", { font: "bold 34px Arial", fill: "#fff" });
     this.game.add.text(280, 350, "Thanks for playing ! :)", { font: "bold 19px Arial", fill: "#fff" })
@@ -14,7 +16,7 @@ class Menu extends Phaser.State {
   }
 
   update() {
-    if(this.enterButton.isDown) {
+    if(this.enterButton.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
       this.game.goToCommands();
     }
   }

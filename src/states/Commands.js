@@ -1,4 +1,4 @@
-import { hasGamepad } from "../utils";
+import { hasGamepad, initAndInstallGamepad1 } from "../utils";
 
 class Commands extends Phaser.State {
 
@@ -7,6 +7,7 @@ class Commands extends Phaser.State {
   }
 
   create() {
+    this.pad = initAndInstallGamepad1(this.game);
     const moveText = this.hasGamepad(this.game) ? "Arrows keys" : "Arrows keys/ Left Pad";
     const shootText = this.hasGamepad(this.game) ? "Left mouse button / Space / A" : "Left mouse button / Space";
     const boomerangText = this.hasGamepad(this.game) ? "Space / A + Arrows keys / Left Pad" : "Space + Arrows keys";
@@ -30,7 +31,7 @@ class Commands extends Phaser.State {
   }
 
   update() {
-    if(this.enterButton.isDown) {
+    if(this.enterButton.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
       this.game.goToGame();
     }
     this.hasGamepad(this.game);
