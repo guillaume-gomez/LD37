@@ -62,46 +62,54 @@ class Character extends Phaser.Sprite {
     if(!this.isDeath()) {
       this.body.velocity.x = 0;
       this.body.velocity.y = 0;
-      if (hasGamepad(this.game) && this.useGamePad) {
+      if (hasGamepad(this.game)) {
         this.gamepadControls();
-      } else { 
-        this.keywordAndMouseControls();
       }
+      this.keywordAndMouseControls();
     }
   }
 
   keywordAndMouseControls() {
-    this.rotation = this.game.physics.arcade.angleToPointer(this);
+    console.log(this.useGamePad)
+    if(!this.useGamePad) {
+      this.rotation = this.game.physics.arcade.angleToPointer(this);
+    }
     let move = null;
     if (this.cursor.left.isDown || this.leftKey.isDown ) {
       this.leftActions();
+      this.useGamePad = false;
       move = "left";
     }
     else if (this.cursor.right.isDown || this.rightKey.isDown) {
       this.rightActions();
+    this.useGamePad = false;
       move = "right";
     }
 
     if (this.cursor.up.isDown || this.up.isDown) {
       this.upActions();
+      this.useGamePad = false;
       move = "up";
     } else if (this.cursor.down.isDown || this.down.isDown) {
       this.downActions();
+      this.useGamePad = false;
       move = "down";
     }
 
     if(this.fireButton.isDown || this.fireClick.isDown) {
       this.shootActions();
+      this.useGamePad = false;
     }
     this.anim(move);
   }
 
   gamepadControls() {
-    this.useGamePad = false;
-    const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
-    const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
-    if(X || Y) {
-      this.rotation = Math.atan2(Y, X);
+    if(this.useGamePad) {
+      const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+      const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+      if(X || Y) {
+        this.rotation = Math.atan2(Y, X);
+      }
     }
    let move = null;
     if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
@@ -119,7 +127,7 @@ class Character extends Phaser.Sprite {
       this.upActions();
       this.useGamePad = true;
       move = "up";
-    } else if (this.cursor.down.isDown || this.down.isDown || this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+    } else if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
       this.downActions();
       this.useGamePad = true;
       move = "down";
@@ -129,7 +137,7 @@ class Character extends Phaser.Sprite {
       this.shootActions();
       this.useGamePad = true;
     }
-    this.anim(move); 
+    this.anim(move);
   }
 
    downActions() {
