@@ -14,4 +14,4 @@
 - shoot sound (http://soundbible.com/1382-9mm-Glock-17.html)
 - hurt (http://soundbible.com/462-Male-Grunt.html)
 - death (http://soundbible.com/774-Gag.html)
-- win game sound (http://soundbible.com/681-Goodbye.html)
+- win game sound (http://soundbible.com/1003-Ta-Da.html)
