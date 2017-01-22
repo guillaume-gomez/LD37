@@ -1,15 +1,15 @@
 import { SpriteWidth, SpriteHeight, Border } from "../Constants.js";
 import { getRandomArbitrary } from "../utils";
-import { Serynge } from "../SpriteConstants";
+import { Medikit } from "../SpriteConstants";
 
-const MaxSerynge = 2;
+const MaxMedikit = 2;
 
 class medikitGroup extends Phaser.Group {
 
   constructor(game, parent, name) {
     super(game, parent, name, false, true, Phaser.Physics.ARCADE);
-    let nbSerynge = getRandomArbitrary(0, MaxSerynge);
-    for(let i = 0; i < nbSerynge; i++) {
+    let nbMedikit = getRandomArbitrary(0, MaxMedikit);
+    for(let i = 0; i < nbMedikit; i++) {
       const x = getRandomArbitrary(2 * Border, game.world.bounds.width - SpriteWidth - 2 * Border);
       const y = getRandomArbitrary(2 * Border, game.world.bounds.height - SpriteHeight - 2 * Border);
       this.addMedikit(x,y);
@@ -17,7 +17,7 @@ class medikitGroup extends Phaser.Group {
   }
 
   addMedikit(x, y) {
-    let medikit = this.create(x, y, Serynge);
+    let medikit = this.create(x, y, Medikit);
     medikit.scale.setTo(0.4, 0.4);
   }
 
