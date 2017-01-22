@@ -1,4 +1,4 @@
-import { GoodByeSound } from "SpriteConstants";
+import { TadaSound } from "SpriteConstants";
 import { initAndInstallGamepad1 } from "../utils";
 
 class WinState extends Phaser.State {
@@ -10,13 +10,13 @@ class WinState extends Phaser.State {
     this.game.add.text(160, 350, "Press enter to play again ", { font: "bold 40px Arial", fill: "#fff" });
     this.game.stage.backgroundColor = "#2aaa11";
 
-    this.goodByeFx = this.game.add.audio(GoodByeSound);
+    this.goodByeFx = this.game.add.audio(TadaSound);
     this.goodByeFx.play();
 
   }
 
   preload() {
-    this.game.load.audio(GoodByeSound, 'res/goodBye.mp3');
+    this.game.load.audio(TadaSound, 'res/tada.mp3');
   }
 
 

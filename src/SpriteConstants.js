@@ -11,5 +11,5 @@ export const Background = "background";
 export const LightSprite = "lightSprite";
 export const Medikit = "medikit";
 export const ShootSound = "shootSound";
-export const GoodByeSound = "goodByeSound";
+export const TadaSound = "TadaSound";
 export const HurtSound = "hurSound";
