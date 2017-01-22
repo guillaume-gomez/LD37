@@ -140,6 +140,10 @@ class Character extends Phaser.Sprite {
     this.anim(move);
   }
 
+  hasPressedA() {
+    return this.pad.justPressed(Phaser.Gamepad.XBOX360_A);
+  }
+
    downActions() {
     this.body.velocity.y = Velocity;
     this.lastDirection = DirectionBoomerang.down;

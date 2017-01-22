@@ -249,7 +249,7 @@ class Game extends Phaser.State {
   }
 
   launchBoomerang() {
-    if(this.launchBoomerangKey.isDown) {
+    if(this.launchBoomerangKey.isDown || this.hero.hasPressedA()) {
       // after the tween get back to the player
       const onCompleteCallback = (boomerang, tween) => {
          boomerang.kill();
