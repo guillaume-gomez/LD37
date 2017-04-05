@@ -37,6 +37,8 @@ var MaxEnemies = exports.MaxEnemies = 50;
 var OriginalTimer = exports.OriginalTimer = 15;
 var MinTimer = exports.MinTimer = 5;
 
+var MaxWave = exports.MaxWave = 10;
+
 var DirectionBoomerang = exports.DirectionBoomerang = {
   left: "LEFT",
   up: "UP",
@@ -54,6 +56,23 @@ var KillTextY = exports.KillTextY = 550;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var HeathBarX = exports.HeathBarX = 650;
+var HeathBarY = exports.HeathBarY = 565;
+
+var HeathBarConfig = exports.HeathBarConfig = {
+  x: HeathBarX,
+  y: HeathBarY,
+  bar: { color: "#43d637" },
+  bg: { color: "#8A0707" },
+  animationDuration: 50
+};
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var LD = exports.LD = "ld";
 var Wall = exports.Wall = "wall"; //http://bevouliin.com/
 var SpritePlayer = exports.SpritePlayer = "player";
@@ -65,8 +84,12 @@ var BoomerangSprite = exports.BoomerangSprite = "boomerang";
 var DeathSound = exports.DeathSound = "deathSound";
 var Background = exports.Background = "background";
 var LightSprite = exports.LightSprite = "lightSprite";
+var Medikit = exports.Medikit = "medikit";
+var ShootSound = exports.ShootSound = "shootSound";
+var TadaSound = exports.TadaSound = "TadaSound";
+var HurtSound = exports.HurtSound = "hurSound";
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () {
@@ -167,7 +190,7 @@ var LD37 = function (_Phaser$Game) {
 
 new LD37();
 
-},{"./Constants.js":1,"states/Commands":12,"states/Game":13,"states/LoseState":14,"states/Menu":15,"states/WinState":16}],4:[function(require,module,exports){
+},{"./Constants.js":1,"states/Commands":15,"states/Game":16,"states/LoseState":17,"states/Menu":18,"states/WinState":19}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -287,7 +310,7 @@ var BackgroundLayer = function (_Phaser$Group) {
 
 exports.default = BackgroundLayer;
 
-},{"../Constants.js":1,"../SpriteConstants":2}],5:[function(require,module,exports){
+},{"../Constants.js":1,"../SpriteConstants":3}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -386,7 +409,7 @@ var Boomerang = function (_Phaser$Sprite) {
 
 exports.default = Boomerang;
 
-},{"../Constants":1,"../SpriteConstants":2}],6:[function(require,module,exports){
+},{"../Constants":1,"../SpriteConstants":3}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -454,7 +477,7 @@ var Chandelier = function (_Phaser$Group) {
 
 exports.default = Chandelier;
 
-},{"../SpriteConstants":2}],7:[function(require,module,exports){
+},{"../SpriteConstants":3}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -542,7 +565,7 @@ var ChandelierLayer = function (_Phaser$Group) {
 
 exports.default = ChandelierLayer;
 
-},{"Constants":1,"objects/Chandelier":6,"utils":17}],8:[function(require,module,exports){
+},{"Constants":1,"objects/Chandelier":7,"utils":20}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -563,6 +586,8 @@ var _SpriteConstants = require("../SpriteConstants");
 
 var _Constants = require("../Constants");
 
+var _utils = require("../utils");
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -582,9 +607,11 @@ function _inherits(subClass, superClass) {
 }
 
 var Damage = 10;
+var Cure = 250;
 var Velocity = 200;
 var MaxBullet = 10;
 var TimeLapse = 10;
+var MaxLife = 1000;
 
 var Character = function (_Phaser$Sprite) {
   _inherits(Character, _Phaser$Sprite);
@@ -600,7 +627,7 @@ var Character = function (_Phaser$Sprite) {
     _this.body.mass = 1;
     _this.direction = 1;
     _this.anchor.setTo(0.5, 0.5);
-    _this.life = 1000;
+    _this.life = MaxLife;
 
     var fire = [8, 9, 10, 11];
     var walk = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -619,56 +646,149 @@ var Character = function (_Phaser$Sprite) {
     _this.weapon.fireRate = 300;
 
     _this.weapon.trackSprite(_this, 30, 20, true);
+    _this.shootFx = game.add.audio(_SpriteConstants.ShootSound);
+    _this.shootFx.allowMultiple = true;
+    _this.shootFx.addMarker('shootMarker', 0, 0.3);
+
+    game.input.gamepad.start();
+    _this.pad = game.input.gamepad.pad1;
     _this.cursor = game.input.keyboard.createCursorKeys();
 
     _this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     _this.fireClick = game.input.activePointer.leftButton;
 
-    _this.up = game.input.keyboard.addKey(Phaser.Keyboard.Z);
-    _this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    _this.up = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    _this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     _this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     _this.down = game.input.keyboard.addKey(Phaser.Keyboard.S);
 
     _this.lastDirection = null;
+    _this.useGamePad = false;
     return _this;
   }
 
   _createClass(Character, [{
     key: "update",
     value: function update() {
-      this.body.velocity.x = 0;
-      this.body.velocity.y = 0;
-      this.rotation = this.game.physics.arcade.angleToPointer(this);
+      if (!this.isDeath()) {
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+        if ((0, _utils.hasGamepad)(this.game)) {
+          this.gamepadControls();
+        }
+        this.keywordAndMouseControls();
+      }
+    }
+  }, {
+    key: "keywordAndMouseControls",
+    value: function keywordAndMouseControls() {
+      console.log(this.useGamePad);
+      if (!this.useGamePad) {
+        this.rotation = this.game.physics.arcade.angleToPointer(this);
+      }
       var move = null;
-      //console.log(this.angle)
-
       if (this.cursor.left.isDown || this.leftKey.isDown) {
-        this.body.velocity.x = -Velocity;
-        this.direction = -1;
-        this.lastDirection = _Constants.DirectionBoomerang.left;
+        this.leftActions();
+        this.useGamePad = false;
         move = "left";
       } else if (this.cursor.right.isDown || this.rightKey.isDown) {
-        this.body.velocity.x = Velocity;
-        this.direction = 1;
-        this.lastDirection = _Constants.DirectionBoomerang.right;
+        this.rightActions();
+        this.useGamePad = false;
         move = "right";
       }
 
       if (this.cursor.up.isDown || this.up.isDown) {
-        this.body.velocity.y = -Velocity;
-        this.lastDirection = _Constants.DirectionBoomerang.up;
+        this.upActions();
+        this.useGamePad = false;
         move = "up";
       } else if (this.cursor.down.isDown || this.down.isDown) {
-        this.body.velocity.y = Velocity;
-        this.lastDirection = _Constants.DirectionBoomerang.down;
+        this.downActions();
+        this.useGamePad = false;
         move = "down";
       }
 
       if (this.fireButton.isDown || this.fireClick.isDown) {
-        this.weapon.fire();
-        this.animations.play("fire");
+        this.shootActions();
+        this.useGamePad = false;
       }
       this.anim(move);
+    }
+  }, {
+    key: "gamepadControls",
+    value: function gamepadControls() {
+      if (this.useGamePad) {
+        var Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+        var X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+        if (X || Y) {
+          this.rotation = Math.atan2(Y, X);
+        }
+      }
+      var move = null;
+      if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
+        this.leftActions();
+        this.useGamePad = true;
+        move = "left";
+      } else if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+        this.rightActions();
+        this.useGamePad = true;
+        move = "right";
+      }
+
+      if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+        this.upActions();
+        this.useGamePad = true;
+        move = "up";
+      } else if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+        this.downActions();
+        this.useGamePad = true;
+        move = "down";
+      }
+
+      if (this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
+        this.shootActions();
+        this.useGamePad = true;
+      }
+      this.anim(move);
+    }
+  }, {
+    key: "hasPressedA",
+    value: function hasPressedA() {
+      return this.pad.justPressed(Phaser.Gamepad.XBOX360_A);
+    }
+  }, {
+    key: "downActions",
+    value: function downActions() {
+      this.body.velocity.y = Velocity;
+      this.lastDirection = _Constants.DirectionBoomerang.down;
+    }
+  }, {
+    key: "leftActions",
+    value: function leftActions() {
+      this.body.velocity.x = -Velocity;
+      this.direction = -1;
+      this.lastDirection = _Constants.DirectionBoomerang.left;
+    }
+  }, {
+    key: "rightActions",
+    value: function rightActions() {
+      this.body.velocity.x = Velocity;
+      this.direction = 1;
+      this.lastDirection = _Constants.DirectionBoomerang.right;
+    }
+  }, {
+    key: "upActions",
+    value: function upActions() {
+      this.body.velocity.y = -Velocity;
+      this.lastDirection = _Constants.DirectionBoomerang.up;
+    }
+  }, {
+    key: "shootActions",
+    value: function shootActions() {
+      this.weapon.fire();
+      if (!this.shootFx.isPlaying) {
+        this.shootFx.play("shootMarker");
+      }
+      this.animations.play("fire");
     }
   }, {
     key: "anim",
@@ -722,6 +842,16 @@ var Character = function (_Phaser$Sprite) {
       this.life = this.life - Damage;
     }
   }, {
+    key: "cure",
+    value: function cure() {
+      this.life = Math.min(this.life + Cure, MaxLife);
+    }
+  }, {
+    key: "lifeInPercent",
+    value: function lifeInPercent() {
+      return this.life / MaxLife;
+    }
+  }, {
     key: "isDeath",
     value: function isDeath() {
       return this.life < 0;
@@ -743,7 +873,7 @@ var Character = function (_Phaser$Sprite) {
 
 exports.default = Character;
 
-},{"../Constants":1,"../SpriteConstants":2}],9:[function(require,module,exports){
+},{"../Constants":1,"../SpriteConstants":3,"../utils":20}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -838,7 +968,7 @@ var Enemy = function (_Phaser$Sprite) {
 
 exports.default = Enemy;
 
-},{"../Constants":1}],10:[function(require,module,exports){
+},{"../Constants":1}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -887,6 +1017,8 @@ function _inherits(subClass, superClass) {
   }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
+var offsetEnemies = 2;
+
 var VelocityBorders = [{ velocityMin: 30, velocityMax: 60 }, { velocityMin: 60, velocityMax: 100 }, { velocityMin: 100, velocityMax: 130 }];
 
 var EnemyGroup = function (_Phaser$Group) {
@@ -897,6 +1029,7 @@ var EnemyGroup = function (_Phaser$Group) {
 
     var _this = _possibleConstructorReturn(this, (EnemyGroup.__proto__ || Object.getPrototypeOf(EnemyGroup)).call(this, game, parent, name, false, true, Phaser.Physics.ARCADE));
 
+    _this.game = game;
     _this.nbWave = 0;
     _this.loopWave(_Constants.OriginalTimer);
     return _this;
@@ -909,6 +1042,10 @@ var EnemyGroup = function (_Phaser$Group) {
 
       this.createWave(this.nbWave);
       this.nbWave++;
+      if (this.nbWave > _Constants.MaxWave) {
+        return;
+      }
+
       setTimeout(function () {
         var newTimer = Math.max(_Constants.MinTimer, timer - _this2.nbWave);
         _this2.loopWave(newTimer);
@@ -918,8 +1055,7 @@ var EnemyGroup = function (_Phaser$Group) {
   }, {
     key: "createWave",
     value: function createWave(waveNumber) {
-      console.log(waveNumber);
-      var nbEnemies = (0, _utils.getRandomArbitrary)(_Constants.MinEnemies, _Constants.MaxEnemies);
+      var nbEnemies = (0, _utils.getRandomArbitrary)(_Constants.MinEnemies + waveNumber * offsetEnemies, _Constants.MaxEnemies + waveNumber * offsetEnemies);
 
       var nbEnemiesOnSide = (0, _utils.getRandomArbitrary)(10, nbEnemies - 30);
       this.enemyTop(nbEnemiesOnSide);
@@ -1016,7 +1152,198 @@ var EnemyGroup = function (_Phaser$Group) {
 
 exports.default = EnemyGroup;
 
-},{"../Constants.js":1,"../SpriteConstants":2,"../utils":17,"objects/Enemy":9}],11:[function(require,module,exports){
+},{"../Constants.js":1,"../SpriteConstants":3,"../utils":20,"objects/Enemy":10}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+var HealthBar = function () {
+  function HealthBar(game, providedConfig) {
+    _classCallCheck(this, HealthBar);
+
+    this.game = game;
+    this.config = this.mergeWithDefaultConfiguration(providedConfig);
+    this.setPosition(this.config.x, this.config.y);
+    this.drawBackground();
+    this.drawHealthBar();
+  }
+
+  _createClass(HealthBar, [{
+    key: 'mergeWithDefaultConfiguration',
+    value: function mergeWithDefaultConfiguration(newConfig) {
+      var defaultConfig = {
+        width: 250,
+        height: 40,
+        x: 0,
+        y: 0,
+        bg: {
+          color: '#651828'
+        },
+        bar: {
+          color: '#FEFF03'
+        }
+      };
+      return Object.assign({}, defaultConfig, newConfig);
+    }
+  }, {
+    key: 'drawBackground',
+    value: function drawBackground() {
+      var bmd = this.game.add.bitmapData(this.config.width, this.config.height);
+      bmd.ctx.fillStyle = this.config.bg.color;
+      bmd.ctx.beginPath();
+      bmd.ctx.rect(0, 0, this.config.width, this.config.height);
+      bmd.ctx.fill();
+
+      this.bgSprite = this.game.add.sprite(this.x, this.y, bmd);
+      this.bgSprite.anchor.set(0.5);
+    }
+  }, {
+    key: 'drawHealthBar',
+    value: function drawHealthBar() {
+      var bmd = this.game.add.bitmapData(this.config.width, this.config.height);
+      bmd.ctx.fillStyle = this.config.bar.color;
+      bmd.ctx.beginPath();
+      bmd.ctx.rect(0, 0, this.config.width, this.config.height);
+      bmd.ctx.fill();
+
+      this.barSprite = this.game.add.sprite(this.x - this.bgSprite.width / 2, this.y, bmd);
+      this.barSprite.anchor.y = 0.5;
+    }
+  }, {
+    key: 'setPosition',
+    value: function setPosition(x, y) {
+      this.x = x;
+      this.y = y;
+
+      if (this.bgSprite !== undefined && this.barSprite !== undefined) {
+        this.bgSprite.position.x = x;
+        this.bgSprite.position.y = y;
+
+        this.barSprite.position.x = x - this.config.width / 2;
+        this.barSprite.position.y = y;
+      }
+    }
+  }, {
+    key: 'setPercent',
+    value: function setPercent(newValue) {
+      if (newValue < 0) {
+        newValue = 0;
+      }
+      if (newValue > 100) {
+        newValue = 100;
+      }
+      var newWidth = newValue * this.config.width / 100;
+      this.setWidth(newWidth);
+    }
+  }, {
+    key: 'setWidth',
+    value: function setWidth(newWidth) {
+      this.barSprite.width = newWidth;
+    }
+  }, {
+    key: 'setWidth',
+    value: function setWidth(newWidth) {
+      this.game.add.tween(this.barSprite).to({ width: newWidth }, this.config.animationDuration, Phaser.Easing.Linear.None, true);
+    }
+  }]);
+
+  return HealthBar;
+}();
+
+exports.default = HealthBar;
+
+},{}],13:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+  };
+}();
+
+var _Constants = require("../Constants.js");
+
+var _utils = require("../utils");
+
+var _SpriteConstants = require("../SpriteConstants");
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var MaxMedikit = 2;
+
+var medikitGroup = function (_Phaser$Group) {
+  _inherits(medikitGroup, _Phaser$Group);
+
+  function medikitGroup(game, parent, name) {
+    _classCallCheck(this, medikitGroup);
+
+    var _this = _possibleConstructorReturn(this, (medikitGroup.__proto__ || Object.getPrototypeOf(medikitGroup)).call(this, game, parent, name, false, true, Phaser.Physics.ARCADE));
+
+    var nbMedikit = (0, _utils.getRandomArbitrary)(0, MaxMedikit);
+    for (var i = 0; i < nbMedikit; i++) {
+      var x = (0, _utils.getRandomArbitrary)(2 * _Constants.Border, game.world.bounds.width - _Constants.SpriteWidth - 2 * _Constants.Border);
+      var y = (0, _utils.getRandomArbitrary)(2 * _Constants.Border, game.world.bounds.height - _Constants.SpriteHeight - 2 * _Constants.Border);
+      _this.addMedikit(x, y);
+    }
+    return _this;
+  }
+
+  _createClass(medikitGroup, [{
+    key: "addMedikit",
+    value: function addMedikit(x, y) {
+      var medikit = this.create(x, y, _SpriteConstants.Medikit);
+      medikit.scale.setTo(0.4, 0.4);
+    }
+  }]);
+
+  return medikitGroup;
+}(Phaser.Group);
+
+exports.default = medikitGroup;
+
+},{"../Constants.js":1,"../SpriteConstants":3,"../utils":20}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1252,7 +1579,7 @@ var Room = function (_Phaser$Group) {
 
 exports.default = Room;
 
-},{"../Constants.js":1,"../SpriteConstants":2,"../utils":17}],12:[function(require,module,exports){
+},{"../Constants.js":1,"../SpriteConstants":3,"../utils":20}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1268,6 +1595,8 @@ var _createClass = function () {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
   };
 }();
+
+var _utils = require("../utils");
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -1297,30 +1626,49 @@ var Commands = function (_Phaser$State) {
   }
 
   _createClass(Commands, [{
+    key: "hasGamepad",
+    value: function hasGamepad() {
+      return this.game.input.gamepad.supported && this.game.input.gamepad.active && this.game.input.gamepad.pad1.connected;
+    }
+  }, {
     key: "create",
     value: function create() {
-      this.game.add.text(300, 100, "Instructions", { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D', strokeThickness: 6 });
-      this.game.add.text(150, 180, "Kill all the zombies or leave the room", { font: "bold 28px Arial", fill: "#fff", stroke: '#4D4D4D', strokeThickness: 3 });
+      this.pad = (0, _utils.initAndInstallGamepad1)(this.game);
+      var moveText = this.hasGamepad(this.game) ? "Arrows keys" : "Arrows keys/ Left Pad";
+      var shootText = this.hasGamepad(this.game) ? "Left mouse button / Space / A" : "Left mouse button / Space";
+      var boomerangText = this.hasGamepad(this.game) ? "Space / A + Arrows keys / Left Pad" : "Space + Arrows keys";
+      var aimText = this.hasGamepad(this.game) ? "Mouse / Right Pad " : "Mouse";
 
-      this.game.add.text(300, 300, "Commands", { font: "bold 28px Arial", fill: "#FF3333", stroke: '#4D4D4D', strokeThickness: 3 });
+      this.game.add.text(300, 75, "Instructions", { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D', strokeThickness: 6 });
+      this.game.add.text(150, 150, "Kill all the zombies or leave the room", { font: "bold 28px Arial", fill: "#fff", stroke: '#4D4D4D', strokeThickness: 3 });
 
-      this.game.add.text(30, 350, "Move", { font: "bold 28px Arial", fill: "#fff" });
-      this.game.add.text(350, 350, "Arrows keys", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(300, 250, "Commands", { font: "bold 28px Arial", fill: "#FF3333", stroke: '#4D4D4D', strokeThickness: 3 });
 
-      this.game.add.text(30, 400, "Shoot", { font: "bold 28px Arial", fill: "#fff" });
-      this.game.add.text(350, 400, "Left mouse button / Space", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(30, 300, "Move", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(330, 300, moveText, { font: "bold 28px Arial", fill: "#fff" });
+
+      this.game.add.text(30, 350, "Shoot", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(330, 350, shootText, { font: "bold 28px Arial", fill: "#fff" });
+
+      this.game.add.text(30, 400, "Aim", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(330, 400, aimText, { font: "bold 28px Arial", fill: "#fff" });
 
       this.game.add.text(30, 450, "Throw boomerang", { font: "bold 28px Arial", fill: "#fff" });
-      this.game.add.text(350, 450, "Space + Arrows keys", { font: "bold 28px Arial", fill: "#fff" });
+      this.game.add.text(330, 450, boomerangText, { font: "bold 28px Arial", fill: "#fff" });
 
+      if (this.hasGamepad(this.game)) {
+        this.game.add.text(30, 540, "If you use gamepad, play on chrome(firefox has a different key binding)", { font: "bold 22px Arial", fill: "#fff" });
+      }
       this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+      this.game.input.gamepad.start();
     }
   }, {
     key: "update",
     value: function update() {
-      if (this.enterButton.isDown) {
+      if (this.enterButton.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
         this.game.goToGame();
       }
+      this.hasGamepad(this.game);
     }
   }]);
 
@@ -1329,7 +1677,7 @@ var Commands = function (_Phaser$State) {
 
 exports.default = Commands;
 
-},{}],13:[function(require,module,exports){
+},{"../utils":20}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1351,6 +1699,8 @@ var _utils = require("utils");
 var _SpriteConstants = require("SpriteConstants");
 
 var _Constants = require("Constants");
+
+var _HealthBarConstants = require("HealthBarConstants");
 
 var _Character = require("objects/Character");
 
@@ -1375,6 +1725,14 @@ var _EnemyGroup2 = _interopRequireDefault(_EnemyGroup);
 var _ChandelierLayer = require("objects/ChandelierLayer");
 
 var _ChandelierLayer2 = _interopRequireDefault(_ChandelierLayer);
+
+var _HealthBar = require("objects/HealthBar");
+
+var _HealthBar2 = _interopRequireDefault(_HealthBar);
+
+var _MedikitGroup = require("objects/MedikitGroup");
+
+var _MedikitGroup2 = _interopRequireDefault(_MedikitGroup);
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
@@ -1429,15 +1787,17 @@ var Game = function (_Phaser$State) {
       this.room = new _Room2.default(this.game);
       this.room.createRandomSquare(_Constants.Border, _Constants.Border, SizeMaze, Division);
 
+      this.medikitGroup = new _MedikitGroup2.default(this.game);
+
+      this.boomerang = new _Boomerang2.default(this.game, 0, 0);
+      this.getInitialPosition(this.boomerang, _Constants.BoomerangWidth, _Constants.BoomerangHeight);
+      this.game.add.existing(this.boomerang);
+
       this.hero = new _Character2.default(this.game, 100, 100);
       this.game.add.existing(this.hero);
       this.getInitialPosition(this.hero, _Constants.CharacterWitdh, _Constants.CharacterHeight);
 
       //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
-
-      this.boomerang = new _Boomerang2.default(this.game, 0, 0);
-      this.getInitialPosition(this.boomerang, _Constants.BoomerangWidth, _Constants.BoomerangHeight);
-      this.game.add.existing(this.boomerang);
 
       this.enemies = new _EnemyGroup2.default(this.game);
       this.chandelierLayer = new _ChandelierLayer2.default(this.game);
@@ -1451,9 +1811,13 @@ var Game = function (_Phaser$State) {
 
       //sounds
       this.deathFx = this.game.add.audio(_SpriteConstants.DeathSound);
+      this.hurtFx = this.game.add.audio(_SpriteConstants.HurtSound);
+      this.hurtFx.allowMultiple = true;
+      this.hurtFx.addMarker('hurtMarker', 0, 0.5);
 
       this.frag = 0;
       this.killText = this.game.add.text(400, 400, _Constants.KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D', strokeThickness: 6 });
+      this.healthBar = new _HealthBar2.default(this.game, _HealthBarConstants.HeathBarConfig);
     }
   }, {
     key: "getInitialPosition",
@@ -1481,6 +1845,7 @@ var Game = function (_Phaser$State) {
       this.game.physics.arcade.collide(this.hero, this.room);
       this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
       this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
+      this.game.physics.arcade.overlap(this.hero, this.medikitGroup, this.cureHero, null, this);
       this.enemies.follow(this.hero.body.position);
 
       if (this.hero.isDeath()) {
@@ -1491,18 +1856,20 @@ var Game = function (_Phaser$State) {
         this.won();
       }
 
-      this.updateText();
+      this.updateGui();
 
       if (needCamera) {
         this.moveCamera();
       }
     }
   }, {
-    key: "updateText",
-    value: function updateText() {
+    key: "updateGui",
+    value: function updateGui() {
       this.killText.setText(_Constants.KillText + this.frag);
       this.killText.x = this.game.camera.x + _Constants.KillTextX;
       this.killText.y = this.game.camera.y + _Constants.KillTextY;
+
+      this.healthBar.setPosition(this.game.camera.x + _HealthBarConstants.HeathBarX, this.game.camera.y + _HealthBarConstants.HeathBarY);
     }
   }, {
     key: "kill",
@@ -1533,7 +1900,20 @@ var Game = function (_Phaser$State) {
     key: "damage",
     value: function damage() {
       this.hero.damage();
+      if (!this.hurtFx.isPlaying) {
+        this.hurtFx.play('hurtMarker');
+      }
+      this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
       this.camera.flash(_Constants.FlashColor, _Constants.FlashDuration);
+    }
+  }, {
+    key: "cureHero",
+    value: function cureHero(hero, medikit) {
+      if (this.hero.lifeInPercent() !== 1) {
+        medikit.kill();
+        this.hero.cure();
+        this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
+      }
     }
   }, {
     key: "pushBlock",
@@ -1584,7 +1964,7 @@ var Game = function (_Phaser$State) {
   }, {
     key: "launchBoomerang",
     value: function launchBoomerang() {
-      if (this.launchBoomerangKey.isDown) {
+      if (this.launchBoomerangKey.isDown || this.hero.hasPressedA()) {
         // after the tween get back to the player
         var onCompleteCallback = function onCompleteCallback(boomerang, tween) {
           boomerang.kill();
@@ -1600,7 +1980,9 @@ var Game = function (_Phaser$State) {
       var _this2 = this;
 
       this.hero.kill();
-      this.deathFx.play();
+      if (!this.deathFx.isPlaying) {
+        this.deathFx.play();
+      }
       setTimeout(function () {
         _this2.room.clear();
         _this2.chandelierLayer.clear();
@@ -1625,7 +2007,10 @@ var Game = function (_Phaser$State) {
       this.game.load.image(_SpriteConstants.BoomerangSprite, "res/ufoRed.png");
       this.game.load.image(_SpriteConstants.Background, "res/boomerang.png");
       this.game.load.image(_SpriteConstants.LightSprite, "res/light.png");
-      this.game.load.audio(_SpriteConstants.DeathSound, 'res/painSoundBible.com.mp3');
+      this.game.load.image(_SpriteConstants.Medikit, "res/medikit.png");
+      this.game.load.audio(_SpriteConstants.DeathSound, 'res/death.mp3');
+      this.game.load.audio(_SpriteConstants.ShootSound, 'res/shoot.mp3');
+      this.game.load.audio(_SpriteConstants.HurtSound, 'res/pain.mp3');
     }
   }, {
     key: "render",
@@ -1659,7 +2044,7 @@ var Game = function (_Phaser$State) {
 
 exports.default = Game;
 
-},{"Constants":1,"SpriteConstants":2,"objects/BackgroundLayer":4,"objects/Boomerang":5,"objects/ChandelierLayer":7,"objects/Character":8,"objects/EnemyGroup":10,"objects/Room":11,"utils":17}],14:[function(require,module,exports){
+},{"Constants":1,"HealthBarConstants":2,"SpriteConstants":3,"objects/BackgroundLayer":5,"objects/Boomerang":6,"objects/ChandelierLayer":8,"objects/Character":9,"objects/EnemyGroup":11,"objects/HealthBar":12,"objects/MedikitGroup":13,"objects/Room":14,"utils":20}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1675,6 +2060,8 @@ var _createClass = function () {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
   };
 }();
+
+var _utils = require("../utils");
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -1706,6 +2093,7 @@ var LoseState = function (_Phaser$State) {
   _createClass(LoseState, [{
     key: "create",
     value: function create() {
+      this.pad = (0, _utils.initAndInstallGamepad1)(this.game);
       this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
       this.game.add.text(325, 150, "You lose ", { font: "bold 40px Arial", fill: "#fff" });
       this.game.add.text(160, 350, "Press enter to play again ", { font: "bold 40px Arial", fill: "#fff" });
@@ -1714,7 +2102,7 @@ var LoseState = function (_Phaser$State) {
   }, {
     key: "update",
     value: function update() {
-      if (this.enterButton.isDown) {
+      if (this.enterButton.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
         this.game.goToGame();
       }
     }
@@ -1725,7 +2113,7 @@ var LoseState = function (_Phaser$State) {
 
 exports.default = LoseState;
 
-},{}],15:[function(require,module,exports){
+},{"../utils":20}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1741,6 +2129,8 @@ var _createClass = function () {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
   };
 }();
+
+var _utils = require("../utils");
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -1772,6 +2162,7 @@ var Menu = function (_Phaser$State) {
   _createClass(Menu, [{
     key: "create",
     value: function create() {
+      this.pad = (0, _utils.initAndInstallGamepad1)(this.game);
       this.game.add.sprite(175, 100, "LD");
       this.game.add.text(230, 230, "Press enter to start", { font: "bold 34px Arial", fill: "#fff" });
       this.game.add.text(280, 350, "Thanks for playing ! :)", { font: "bold 19px Arial", fill: "#fff" });
@@ -1786,7 +2177,7 @@ var Menu = function (_Phaser$State) {
   }, {
     key: "update",
     value: function update() {
-      if (this.enterButton.isDown) {
+      if (this.enterButton.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
         this.game.goToCommands();
       }
     }
@@ -1797,7 +2188,7 @@ var Menu = function (_Phaser$State) {
 
 exports.default = Menu;
 
-},{}],16:[function(require,module,exports){
+},{"../utils":20}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1813,6 +2204,10 @@ var _createClass = function () {
     if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
   };
 }();
+
+var _SpriteConstants = require("SpriteConstants");
+
+var _utils = require("../utils");
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -1844,15 +2239,24 @@ var WinState = function (_Phaser$State) {
   _createClass(WinState, [{
     key: "create",
     value: function create() {
+      this.pad = (0, _utils.initAndInstallGamepad1)(this.game);
       this.enterButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
       this.game.add.text(315, 150, "You win ", { font: "bold 40px Arial", fill: "#fff" });
       this.game.add.text(160, 350, "Press enter to play again ", { font: "bold 40px Arial", fill: "#fff" });
       this.game.stage.backgroundColor = "#2aaa11";
+
+      this.goodByeFx = this.game.add.audio(_SpriteConstants.TadaSound);
+      this.goodByeFx.play();
+    }
+  }, {
+    key: "preload",
+    value: function preload() {
+      this.game.load.audio(_SpriteConstants.TadaSound, 'res/tada.mp3');
     }
   }, {
     key: "update",
     value: function update() {
-      if (this.enterButton.isDown) {
+      if (this.enterButton.isDown || this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
         this.game.goToGame();
       }
     }
@@ -1863,16 +2267,27 @@ var WinState = function (_Phaser$State) {
 
 exports.default = WinState;
 
-},{}],17:[function(require,module,exports){
+},{"../utils":20,"SpriteConstants":3}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.getRandomArbitrary = getRandomArbitrary;
+exports.hasGamepad = hasGamepad;
+exports.initAndInstallGamepad1 = initAndInstallGamepad1;
 function getRandomArbitrary(min, max) {
-    return Math.trunc(Math.random() * (max - min) + min);
+  return Math.trunc(Math.random() * (max - min) + min);
 }
 
-},{}]},{},[3])
+function hasGamepad(game) {
+  return game.input.gamepad.supported && game.input.gamepad.active && game.input.gamepad.pad1.connected;
+}
+
+function initAndInstallGamepad1(game) {
+  game.input.gamepad.start();
+  return game.input.gamepad.pad1;
+}
+
+},{}]},{},[4])
 //# sourceMappingURL=game.js.map
