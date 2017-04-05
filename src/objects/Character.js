@@ -1,10 +1,13 @@
-import { SpritePlayer, SpriteBullet } from "../SpriteConstants";
+import { SpritePlayer, SpriteBullet, ShootSound } from "../SpriteConstants";
 import { CharacterWitdh, CharacterHeight, DirectionBoomerang } from "../Constants";
+import { hasGamepad } from "../utils";
 
 const Damage = 10;
+const Cure = 250;
 const Velocity = 200;
 const MaxBullet = 10;
 const TimeLapse = 10;
+const MaxLife = 1000;
 
 class Character extends Phaser.Sprite {
 
@@ -16,7 +19,7 @@ class Character extends Phaser.Sprite {
     this.body.mass = 1;
     this.direction = 1;
     this.anchor.setTo(0.5, 0.5);
-    this.life = 1000;
+    this.life = MaxLife;
 
     const fire = [8, 9, 10, 11];
     const walk = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -35,54 +38,141 @@ class Character extends Phaser.Sprite {
     this.weapon.fireRate = 300;
 
     this.weapon.trackSprite(this, 30, 20, true);
+    this.shootFx = game.add.audio(ShootSound);
+    this.shootFx.allowMultiple = true;
+    this.shootFx.addMarker('shootMarker', 0, 0.3);
+
+    game.input.gamepad.start();
+    this.pad = game.input.gamepad.pad1;
     this.cursor = game.input.keyboard.createCursorKeys();
 
     this.fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
     this.fireClick = game.input.activePointer.leftButton;
 
-    this.up = game.input.keyboard.addKey(Phaser.Keyboard.Z);
-    this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+    this.up = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.rightKey = game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.down = game.input.keyboard.addKey(Phaser.Keyboard.S);
 
     this.lastDirection = null;
+    this.useGamePad = false;
   }
 
   update() {
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
-    this.rotation = this.game.physics.arcade.angleToPointer(this);
-    let move = null;
-    //console.log(this.angle)
+    if(!this.isDeath()) {
+      this.body.velocity.x = 0;
+      this.body.velocity.y = 0;
+      if (hasGamepad(this.game)) {
+        this.gamepadControls();
+      }
+      this.keywordAndMouseControls();
+    }
+  }
 
-    if (this.cursor.left.isDown || this.leftKey.isDown) {
-        this.body.velocity.x = -Velocity;
-        this.direction = -1;
-        this.lastDirection = DirectionBoomerang.left;
-        move = "left";
+  keywordAndMouseControls() {
+    console.log(this.useGamePad)
+    if(!this.useGamePad) {
+      this.rotation = this.game.physics.arcade.angleToPointer(this);
+    }
+    let move = null;
+    if (this.cursor.left.isDown || this.leftKey.isDown ) {
+      this.leftActions();
+      this.useGamePad = false;
+      move = "left";
     }
     else if (this.cursor.right.isDown || this.rightKey.isDown) {
-        this.body.velocity.x = Velocity;
-        this.direction = 1;
-        this.lastDirection = DirectionBoomerang.right;
-        move = "right";
+      this.rightActions();
+    this.useGamePad = false;
+      move = "right";
     }
 
     if (this.cursor.up.isDown || this.up.isDown) {
-      this.body.velocity.y = -Velocity;
-      this.lastDirection = DirectionBoomerang.up;
+      this.upActions();
+      this.useGamePad = false;
       move = "up";
     } else if (this.cursor.down.isDown || this.down.isDown) {
-      this.body.velocity.y = Velocity;
-      this.lastDirection = DirectionBoomerang.down;
+      this.downActions();
+      this.useGamePad = false;
       move = "down";
     }
 
     if(this.fireButton.isDown || this.fireClick.isDown) {
-      this.weapon.fire();
-      this.animations.play("fire");
+      this.shootActions();
+      this.useGamePad = false;
     }
     this.anim(move);
+  }
+
+  gamepadControls() {
+    if(this.useGamePad) {
+      const Y = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_Y);
+      const X = this.pad.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X);
+      if(X || Y) {
+        this.rotation = Math.atan2(Y, X);
+      }
+    }
+   let move = null;
+    if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1 ) {
+      this.leftActions();
+      this.useGamePad = true;
+      move = "left";
+    }
+    else if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+      this.rightActions();
+      this.useGamePad = true;
+      move = "right";
+    }
+
+    if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+      this.upActions();
+      this.useGamePad = true;
+      move = "up";
+    } else if (this.pad.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+      this.downActions();
+      this.useGamePad = true;
+      move = "down";
+    }
+
+    if(this.pad.justPressed(Phaser.Gamepad.XBOX360_A)) {
+      this.shootActions();
+      this.useGamePad = true;
+    }
+    this.anim(move);
+  }
+
+  hasPressedA() {
+    return this.pad.justPressed(Phaser.Gamepad.XBOX360_A);
+  }
+
+   downActions() {
+    this.body.velocity.y = Velocity;
+    this.lastDirection = DirectionBoomerang.down;
+  }
+
+  leftActions() {
+    this.body.velocity.x = -Velocity;
+    this.direction = -1;
+    this.lastDirection = DirectionBoomerang.left;
+  }
+
+  rightActions() {
+    this.body.velocity.x = Velocity;
+    this.direction = 1;
+    this.lastDirection = DirectionBoomerang.right;
+  }
+
+  upActions() {
+    this.body.velocity.y = -Velocity;
+    this.lastDirection = DirectionBoomerang.up;
+  }
+
+
+  shootActions() {
+    this.weapon.fire();
+    if(!this.shootFx.isPlaying) {
+      this.shootFx.play("shootMarker");
+    }
+    this.animations.play("fire");
   }
 
   anim(move) {
@@ -131,6 +221,14 @@ class Character extends Phaser.Sprite {
 
   damage() {
     this.life = this.life - Damage;
+  }
+
+  cure() {
+    this.life = Math.min(this.life + Cure, MaxLife);
+  }
+
+  lifeInPercent() {
+    return this.life / MaxLife;
   }
 
   isDeath() {

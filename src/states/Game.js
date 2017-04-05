@@ -9,7 +9,10 @@ import {
   BoomerangSprite,
   DeathSound,
   Background,
-  LightSprite
+  LightSprite,
+  Medikit,
+  ShootSound,
+  HurtSound
 } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -31,12 +34,16 @@ import {
   KillTextY
   } from "Constants";
 
+import { HeathBarConfig, HeathBarX, HeathBarY } from "HealthBarConstants";
+
 import Player from "objects/Character";
 import Boomerang from "objects/Boomerang";
 import Room from "objects/Room";
 import BackgroundLayer from "objects/BackgroundLayer";
 import EnemyGroup from "objects/EnemyGroup";
 import ChandelierLayer from "objects/ChandelierLayer";
+import HealthBar from "objects/HealthBar";
+import MedikitGroup from "objects/MedikitGroup";
 
 
 const needCamera = false;
@@ -62,15 +69,17 @@ class Game extends Phaser.State {
     this.room = new Room(this.game);
     this.room.createRandomSquare(Border,Border,SizeMaze, Division);
 
+    this.medikitGroup = new MedikitGroup(this.game);
+
+    this.boomerang = new Boomerang(this.game, 0, 0);
+    this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
+    this.game.add.existing(this.boomerang);
+
     this.hero = new Player(this.game, 100, 100);
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
     //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
-
-    this.boomerang = new Boomerang(this.game, 0, 0);
-    this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
-    this.game.add.existing(this.boomerang);
 
     this.enemies = new EnemyGroup(this.game);
     this.chandelierLayer = new ChandelierLayer(this.game);
@@ -84,9 +93,14 @@ class Game extends Phaser.State {
 
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
+    this.hurtFx = this.game.add.audio(HurtSound);
+    this.hurtFx.allowMultiple = true;
+    this.hurtFx.addMarker('hurtMarker', 0, 0.5);
+
 
     this.frag = 0;
     this.killText = this.game.add.text(400, 400, KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D',strokeThickness: 6 });
+    this.healthBar = new HealthBar(this.game, HeathBarConfig);
   }
 
   getInitialPosition(sprite, spriteWidth, spriteHeight) {
@@ -112,6 +126,7 @@ class Game extends Phaser.State {
     this.game.physics.arcade.collide(this.hero, this.room);
     this.game.physics.arcade.collide(this.boomerang, this.room, this.killBoomerang, null, this);
     this.game.physics.arcade.overlap(this.hero, this.boomerang, this.launchBoomerang, null, this);
+    this.game.physics.arcade.overlap(this.hero, this.medikitGroup , this.cureHero, null, this);
     this.enemies.follow(this.hero.body.position);
 
     if(this.hero.isDeath()) {
@@ -122,17 +137,19 @@ class Game extends Phaser.State {
         this.won();
      }
 
-     this.updateText();
+     this.updateGui();
 
      if(needCamera) {
       this.moveCamera();
     }
   }
 
-  updateText() {
+  updateGui() {
     this.killText.setText(KillText + this.frag);
     this.killText.x = this.game.camera.x + KillTextX;
     this.killText.y = this.game.camera.y + KillTextY;
+
+    this.healthBar.setPosition(this.game.camera.x + HeathBarX, this.game.camera.y + HeathBarY);
   }
 
   kill(bullet, enemy) {
@@ -158,7 +175,19 @@ class Game extends Phaser.State {
 
   damage() {
     this.hero.damage();
+    if(!this.hurtFx.isPlaying) {
+      this.hurtFx.play('hurtMarker');
+    }
+    this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
     this.camera.flash(FlashColor, FlashDuration);
+  }
+
+  cureHero(hero, medikit) {
+    if(this.hero.lifeInPercent() !== 1) {
+      medikit.kill();
+      this.hero.cure();
+      this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
+    }
   }
 
   pushBlock(enemy, block) {
@@ -220,7 +249,7 @@ class Game extends Phaser.State {
   }
 
   launchBoomerang() {
-    if(this.launchBoomerangKey.isDown) {
+    if(this.launchBoomerangKey.isDown || this.hero.hasPressedA()) {
       // after the tween get back to the player
       const onCompleteCallback = (boomerang, tween) => {
          boomerang.kill();
@@ -233,7 +262,9 @@ class Game extends Phaser.State {
 
   lost() {
     this.hero.kill();
-    this.deathFx.play();
+    if(!this.deathFx.isPlaying) {
+      this.deathFx.play();
+    }
      setTimeout(() => {
        this.room.clear();
        this.chandelierLayer.clear();
@@ -256,7 +287,10 @@ class Game extends Phaser.State {
     this.game.load.image(BoomerangSprite, "res/ufoRed.png");
     this.game.load.image(Background, "res/boomerang.png");
     this.game.load.image(LightSprite, "res/light.png");
-    this.game.load.audio(DeathSound, 'res/painSoundBible.com.mp3');
+    this.game.load.image(Medikit, "res/medikit.png");
+    this.game.load.audio(DeathSound, 'res/death.mp3');
+    this.game.load.audio(ShootSound, 'res/shoot.mp3');
+    this.game.load.audio(HurtSound, 'res/pain.mp3');
   }
 
   render() {

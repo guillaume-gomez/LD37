@@ -31,6 +31,8 @@ export const MaxEnemies = 50;
 export const OriginalTimer = 15;
 export const MinTimer = 5;
 
+export const MaxWave = 10;
+
 export const DirectionBoomerang = {
   left: "LEFT",
   up: "UP",

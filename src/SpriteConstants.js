@@ -9,4 +9,7 @@ export const BoomerangSprite = "boomerang";
 export const DeathSound = "deathSound";
 export const Background = "background";
 export const LightSprite = "lightSprite";
-
+export const Medikit = "medikit";
+export const ShootSound = "shootSound";
+export const TadaSound = "TadaSound";
+export const HurtSound = "hurSound";
