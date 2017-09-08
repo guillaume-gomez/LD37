@@ -34,7 +34,6 @@ class EnemyGroup extends Phaser.Group {
     setTimeout(() => {
       const newTimer = Math.max(MinTimer, timer - this.nbWave);
       this.loopWave(newTimer);
-      console.log(newTimer)
     }, timer * 1000);
   }
 

@@ -94,6 +94,8 @@ class Game extends Phaser.State {
 
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
+    this.deathFx.volume = 0.5;
+
     this.hurtFx = this.game.add.audio(HurtSound);
     this.hurtFx.allowMultiple = true;
     this.hurtFx.addMarker('hurtMarker', 0, 0.5);
@@ -180,7 +182,7 @@ class Game extends Phaser.State {
   damage() {
     this.hero.damage();
     if(!this.hurtFx.isPlaying) {
-      this.hurtFx.play('hurtMarker');
+      this.hurtFx.play('hurtMarker', 0, 0.5);
     }
     this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
     this.camera.flash(FlashColor, FlashDuration);
