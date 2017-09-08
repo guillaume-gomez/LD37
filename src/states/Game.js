@@ -12,7 +12,8 @@ import {
   LightSprite,
   Medikit,
   ShootSound,
-  HurtSound
+  HurtSound,
+  BackgroundSound
 } from "SpriteConstants";
 import {
   CameraVelocity,
@@ -96,6 +97,9 @@ class Game extends Phaser.State {
     this.hurtFx = this.game.add.audio(HurtSound);
     this.hurtFx.allowMultiple = true;
     this.hurtFx.addMarker('hurtMarker', 0, 0.5);
+
+    this.music = this.game.add.audio(BackgroundSound);
+    this.music.play();
 
 
     this.frag = 0;
@@ -291,6 +295,7 @@ class Game extends Phaser.State {
     this.game.load.audio(DeathSound, 'res/death.mp3');
     this.game.load.audio(ShootSound, 'res/shoot.mp3');
     this.game.load.audio(HurtSound, 'res/pain.mp3');
+    this.game.load.audio(BackgroundSound, 'res/music.mp3');
   }
 
   render() {
