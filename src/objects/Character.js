@@ -41,7 +41,7 @@ class Character extends Phaser.Sprite {
     this.shootFx = game.add.audio(ShootSound);
     this.shootFx.allowMultiple = true;
     this.shootFx.addMarker('shootMarker', 0, 0.3);
-
+    
     game.input.gamepad.start();
     this.pad = game.input.gamepad.pad1;
     this.cursor = game.input.keyboard.createCursorKeys();
@@ -70,7 +70,6 @@ class Character extends Phaser.Sprite {
   }
 
   keywordAndMouseControls() {
-    console.log(this.useGamePad)
     if(!this.useGamePad) {
       this.rotation = this.game.physics.arcade.angleToPointer(this);
     }
@@ -170,7 +169,7 @@ class Character extends Phaser.Sprite {
   shootActions() {
     this.weapon.fire();
     if(!this.shootFx.isPlaying) {
-      this.shootFx.play("shootMarker");
+      this.shootFx.play("shootMarker", 0, 0.4);
     }
     this.animations.play("fire");
   }

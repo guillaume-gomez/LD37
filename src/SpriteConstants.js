@@ -13,3 +13,4 @@ export const Medikit = "medikit";
 export const ShootSound = "shootSound";
 export const TadaSound = "TadaSound";
 export const HurtSound = "hurSound";
+export const BackgroundSound = "backgroundSound";
