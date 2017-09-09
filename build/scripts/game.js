@@ -88,6 +88,7 @@ var Medikit = exports.Medikit = "medikit";
 var ShootSound = exports.ShootSound = "shootSound";
 var TadaSound = exports.TadaSound = "TadaSound";
 var HurtSound = exports.HurtSound = "hurSound";
+var BackgroundSound = exports.BackgroundSound = "backgroundSound";
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -682,7 +683,6 @@ var Character = function (_Phaser$Sprite) {
   }, {
     key: "keywordAndMouseControls",
     value: function keywordAndMouseControls() {
-      console.log(this.useGamePad);
       if (!this.useGamePad) {
         this.rotation = this.game.physics.arcade.angleToPointer(this);
       }
@@ -786,7 +786,7 @@ var Character = function (_Phaser$Sprite) {
     value: function shootActions() {
       this.weapon.fire();
       if (!this.shootFx.isPlaying) {
-        this.shootFx.play("shootMarker");
+        this.shootFx.play("shootMarker", 0, 0.4);
       }
       this.animations.play("fire");
     }
@@ -1049,7 +1049,6 @@ var EnemyGroup = function (_Phaser$Group) {
       setTimeout(function () {
         var newTimer = Math.max(_Constants.MinTimer, timer - _this2.nbWave);
         _this2.loopWave(newTimer);
-        console.log(newTimer);
       }, timer * 1000);
     }
   }, {
@@ -1811,9 +1810,14 @@ var Game = function (_Phaser$State) {
 
       //sounds
       this.deathFx = this.game.add.audio(_SpriteConstants.DeathSound);
+      this.deathFx.volume = 0.5;
+
       this.hurtFx = this.game.add.audio(_SpriteConstants.HurtSound);
       this.hurtFx.allowMultiple = true;
       this.hurtFx.addMarker('hurtMarker', 0, 0.5);
+
+      this.music = this.game.add.audio(_SpriteConstants.BackgroundSound);
+      this.music.play();
 
       this.frag = 0;
       this.killText = this.game.add.text(400, 400, _Constants.KillText, { font: "bold 33px Arial", fill: '#43d637', stroke: '#4D4D4D', strokeThickness: 6 });
@@ -1901,7 +1905,7 @@ var Game = function (_Phaser$State) {
     value: function damage() {
       this.hero.damage();
       if (!this.hurtFx.isPlaying) {
-        this.hurtFx.play('hurtMarker');
+        this.hurtFx.play('hurtMarker', 0, 0.5);
       }
       this.healthBar.setPercent(this.hero.lifeInPercent() * 100);
       this.camera.flash(_Constants.FlashColor, _Constants.FlashDuration);
@@ -2011,6 +2015,7 @@ var Game = function (_Phaser$State) {
       this.game.load.audio(_SpriteConstants.DeathSound, 'res/death.mp3');
       this.game.load.audio(_SpriteConstants.ShootSound, 'res/shoot.mp3');
       this.game.load.audio(_SpriteConstants.HurtSound, 'res/pain.mp3');
+      this.game.load.audio(_SpriteConstants.BackgroundSound, 'res/music.mp3');
     }
   }, {
     key: "render",
