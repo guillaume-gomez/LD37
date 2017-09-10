@@ -45,6 +45,7 @@ import EnemyGroup from "objects/EnemyGroup";
 import ChandelierLayer from "objects/ChandelierLayer";
 import HealthBar from "objects/HealthBar";
 import MedikitGroup from "objects/MedikitGroup";
+import BackgroundShader from "objects/BackgroundShader";
 
 
 const needCamera = false;
@@ -66,7 +67,9 @@ class Game extends Phaser.State {
 
   create() {
     this.game.stage.backgroundColor = 0x000000;
+    this.bg = new BackgroundShader(this.game);
     this.game.world.setBounds(0, 0, Bounds, Bounds);
+    this.game.add.existing(this.bg);
     this.room = new Room(this.game);
     this.room.createRandomSquare(Border,Border,SizeMaze, Division);
 
