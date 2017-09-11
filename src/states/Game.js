@@ -95,6 +95,7 @@ class Game extends Phaser.State {
     }
     this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
+    this.soundButton = game.add.button(500, 40, Medikit, toggleSound);
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
     this.deathFx.volume = 0.5;
@@ -332,6 +333,10 @@ class Game extends Phaser.State {
         this.game.camera.x += CameraVelocity;
       }
     }
+  }
+
+  toggleSound() {
+    this.game.sound.mute = !!this.game.sound.mute; 
   }
 
 
