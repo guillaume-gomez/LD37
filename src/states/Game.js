@@ -46,6 +46,8 @@ import ChandelierLayer from "objects/ChandelierLayer";
 import HealthBar from "objects/HealthBar";
 import MedikitGroup from "objects/MedikitGroup";
 import BackgroundShader from "objects/BackgroundShader";
+import CrtFilter from "objects/CrtFilter";
+import DistortionFilter from "objects/DistortionFilter";
 
 
 const needCamera = false;
@@ -83,10 +85,10 @@ class Game extends Phaser.State {
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
-    //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
-
     this.enemies = new EnemyGroup(this.game);
     this.chandelierLayer = new ChandelierLayer(this.game);
+    //shaders
+    this.game.stage.filters = [new DistortionFilter(this.game), new CrtFilter(this.game)];
 
     if(needCamera) {
       this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -272,7 +274,7 @@ class Game extends Phaser.State {
   lost() {
     this.hero.kill();
     if(!this.deathFx.isPlaying) {
-      this.deathFx.play();
+      //this.deathFx.play();
     }
      setTimeout(() => {
        this.bg.kill();
