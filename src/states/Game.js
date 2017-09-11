@@ -270,12 +270,12 @@ class Game extends Phaser.State {
   }
 
   lost() {
-    this.bg.kill();
     this.hero.kill();
     if(!this.deathFx.isPlaying) {
       this.deathFx.play();
     }
      setTimeout(() => {
+       this.bg.kill();
        this.room.clear();
        this.chandelierLayer.clear();
        this.boomerang.kill();
