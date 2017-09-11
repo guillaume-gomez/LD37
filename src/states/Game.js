@@ -270,6 +270,7 @@ class Game extends Phaser.State {
   }
 
   lost() {
+    this.bg.kill();
     this.hero.kill();
     if(!this.deathFx.isPlaying) {
       this.deathFx.play();
@@ -283,6 +284,7 @@ class Game extends Phaser.State {
   }
 
   won() {
+    this.bg.kill();
     this.game.goToWin();
   }
 
