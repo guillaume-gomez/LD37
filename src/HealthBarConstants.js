@@ -1,5 +1,5 @@
 export const HeathBarX = 650;
-export const HeathBarY = 565;
+export const HeathBarY = 540;
 
 export const HeathBarConfig = {
   x: HeathBarX,
