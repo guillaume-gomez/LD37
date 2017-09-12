@@ -5,6 +5,7 @@ export const SpriteEnemy = "enemy";
 export const SpriteEnemy2 = "enemy2";
 export const SpriteEnemy3 = "enemy3";
 export const SpriteBullet = "bullet";
+export const ButtonSoundSprite = "buttonSoundSprite";
 export const BoomerangSprite = "boomerang";
 export const DeathSound = "deathSound";
 export const Background = "background";
