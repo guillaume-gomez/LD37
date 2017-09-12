@@ -12,7 +12,7 @@ class DistortionFilter extends Phaser.Filter {
         "void main()",
         "{",
         "  vec2 pos = vTextureCoord;",
-        "  float distortion = 0.07;",
+        "  float distortion = 0.08;",
         "  pos -= vec2(0.5, 0.5);",
         "  pos *= vec2(pow(length(pos), distortion));",
         "  pos += vec2(0.5, 0.5);",
