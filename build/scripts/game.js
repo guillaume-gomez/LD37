@@ -1966,7 +1966,7 @@ var Game = function (_Phaser$State) {
       this.getInitialPosition(this.boomerang, _Constants.BoomerangWidth, _Constants.BoomerangHeight);
       this.game.add.existing(this.boomerang);
 
-      this.hero = new _Character2.default(this.game, 100, 100);
+      this.hero = new _Character2.default(this.game, this.game.world.centerX, this.game.world.centerX);
       this.game.add.existing(this.hero);
       this.getInitialPosition(this.hero, _Constants.CharacterWitdh, _Constants.CharacterHeight);
 
