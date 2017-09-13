@@ -81,7 +81,7 @@ class Game extends Phaser.State {
     this.getInitialPosition(this.boomerang, BoomerangWidth, BoomerangHeight);
     this.game.add.existing(this.boomerang);
 
-    this.hero = new Player(this.game, 100, 100);
+    this.hero = new Player(this.game, this.game.world.centerX, this.game.world.centerX);
     this.game.add.existing(this.hero);
     this.getInitialPosition(this.hero, CharacterWitdh, CharacterHeight);
 
