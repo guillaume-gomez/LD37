@@ -48,7 +48,7 @@ var DirectionBoomerang = exports.DirectionBoomerang = {
 
 var KillText = exports.KillText = "Kills: ";
 var KillTextX = exports.KillTextX = 30;
-var KillTextY = exports.KillTextY = 550;
+var KillTextY = exports.KillTextY = 530;
 
 },{}],2:[function(require,module,exports){
 "use strict";
@@ -57,7 +57,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var HeathBarX = exports.HeathBarX = 650;
-var HeathBarY = exports.HeathBarY = 565;
+var HeathBarY = exports.HeathBarY = 540;
 
 var HeathBarConfig = exports.HeathBarConfig = {
   x: HeathBarX,
@@ -191,7 +191,7 @@ var LD37 = function (_Phaser$Game) {
 
 new LD37();
 
-},{"./Constants.js":1,"states/Commands":15,"states/Game":16,"states/LoseState":17,"states/Menu":18,"states/WinState":19}],5:[function(require,module,exports){
+},{"./Constants.js":1,"states/Commands":18,"states/Game":19,"states/LoseState":20,"states/Menu":21,"states/WinState":22}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -315,6 +315,74 @@ exports.default = BackgroundLayer;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _Constants = require("../Constants");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var BackgroundShader = function (_Phaser$Sprite) {
+    _inherits(BackgroundShader, _Phaser$Sprite);
+
+    function BackgroundShader(game) {
+        _classCallCheck(this, BackgroundShader);
+
+        var fragmentSrc = ["precision mediump float;", "uniform float     time;", "uniform vec2     resolution;", "void main() {", "vec3 h_color_top = vec3(1.5, 0.5, 10.0) * clamp(sin(time), 0.5, 1.0);", "vec3 h_color_bottom = vec3(0, 0, 1) * clamp(sin(time), 0.5, 1.0);", "gl_FragColor = vec4(h_color_top * (gl_FragCoord.y / resolution.y), 1) + vec4(h_color_bottom * (1.4 - (gl_FragCoord.y / resolution.y)), 1);", "}"];
+
+        var _this = _possibleConstructorReturn(this, (BackgroundShader.__proto__ || Object.getPrototypeOf(BackgroundShader)).call(this, game, 0, 0));
+
+        _this.filter = new Phaser.Filter(game, null, fragmentSrc);
+        _this.filter.setResolution(_Constants.ScreenWidth, _Constants.ScreenHeight);
+
+        _this.width = _Constants.ScreenWidth;
+        _this.height = _Constants.ScreenHeight;
+        _this.filters = [_this.filter];
+        return _this;
+    }
+
+    _createClass(BackgroundShader, [{
+        key: "update",
+        value: function update() {
+            this.filter.update();
+        }
+    }]);
+
+    return BackgroundShader;
+}(Phaser.Sprite);
+
+exports.default = BackgroundShader;
+
+},{"../Constants":1}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
@@ -410,7 +478,7 @@ var Boomerang = function (_Phaser$Sprite) {
 
 exports.default = Boomerang;
 
-},{"../Constants":1,"../SpriteConstants":3}],7:[function(require,module,exports){
+},{"../Constants":1,"../SpriteConstants":3}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -478,7 +546,7 @@ var Chandelier = function (_Phaser$Group) {
 
 exports.default = Chandelier;
 
-},{"../SpriteConstants":3}],8:[function(require,module,exports){
+},{"../SpriteConstants":3}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -566,7 +634,7 @@ var ChandelierLayer = function (_Phaser$Group) {
 
 exports.default = ChandelierLayer;
 
-},{"Constants":1,"objects/Chandelier":7,"utils":20}],9:[function(require,module,exports){
+},{"Constants":1,"objects/Chandelier":8,"utils":23}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -873,7 +941,99 @@ var Character = function (_Phaser$Sprite) {
 
 exports.default = Character;
 
-},{"../Constants":1,"../SpriteConstants":3,"../utils":20}],10:[function(require,module,exports){
+},{"../Constants":1,"../SpriteConstants":3,"../utils":23}],11:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _Constants = require("../Constants");
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var CrtFilter = function (_Phaser$Filter) {
+    _inherits(CrtFilter, _Phaser$Filter);
+
+    function CrtFilter(game) {
+        _classCallCheck(this, CrtFilter);
+
+        var fragmentSrc = ["precision mediump float;", "varying vec2 vTextureCoord;", "uniform sampler2D uSampler;", "uniform float time;", "void main(void) {", "vec4 color = texture2D(uSampler, vTextureCoord).rgba;", "color -= abs(sin(vTextureCoord.y * 100.0 + time * 5.0)) * 0.08; // (1)", "color -= abs(sin(vTextureCoord.y * 300.0 - time * 10.0)) * 0.05; // (2)", "gl_FragColor = color;", "}"];
+
+        var _this = _possibleConstructorReturn(this, (CrtFilter.__proto__ || Object.getPrototypeOf(CrtFilter)).call(this, game, null, fragmentSrc));
+
+        _this.setResolution(_Constants.ScreenWidth, _Constants.ScreenHeight);
+        return _this;
+    }
+
+    return CrtFilter;
+}(Phaser.Filter);
+
+exports.default = CrtFilter;
+
+},{"../Constants":1}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Constants = require("../Constants");
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var DistortionFilter = function (_Phaser$Filter) {
+  _inherits(DistortionFilter, _Phaser$Filter);
+
+  function DistortionFilter(game) {
+    _classCallCheck(this, DistortionFilter);
+
+    var fragmentSrc = ["precision mediump float;", "uniform sampler2D Texture0;", "uniform sampler2D Texture1;", "varying vec2 vTextureCoord;", "void main()", "{", "  vec2 pos = vTextureCoord;", "  float distortion = 0.08;", "  pos -= vec2(0.5, 0.5);", "  pos *= vec2(pow(length(pos), distortion));", "  pos += vec2(0.5, 0.5);", "  gl_FragColor = texture2D(Texture0, pos);", "}"];
+
+    var _this = _possibleConstructorReturn(this, (DistortionFilter.__proto__ || Object.getPrototypeOf(DistortionFilter)).call(this, game, null, fragmentSrc));
+
+    _this.setResolution(_Constants.ScreenWidth, _Constants.ScreenHeight);
+    return _this;
+  }
+
+  return DistortionFilter;
+}(Phaser.Filter);
+
+exports.default = DistortionFilter;
+
+},{"../Constants":1}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -968,7 +1128,7 @@ var Enemy = function (_Phaser$Sprite) {
 
 exports.default = Enemy;
 
-},{"../Constants":1}],11:[function(require,module,exports){
+},{"../Constants":1}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1151,7 +1311,7 @@ var EnemyGroup = function (_Phaser$Group) {
 
 exports.default = EnemyGroup;
 
-},{"../Constants.js":1,"../SpriteConstants":3,"../utils":20,"objects/Enemy":10}],12:[function(require,module,exports){
+},{"../Constants.js":1,"../SpriteConstants":3,"../utils":23,"objects/Enemy":13}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1269,7 +1429,7 @@ var HealthBar = function () {
 
 exports.default = HealthBar;
 
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1342,7 +1502,7 @@ var medikitGroup = function (_Phaser$Group) {
 
 exports.default = medikitGroup;
 
-},{"../Constants.js":1,"../SpriteConstants":3,"../utils":20}],14:[function(require,module,exports){
+},{"../Constants.js":1,"../SpriteConstants":3,"../utils":23}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1578,7 +1738,7 @@ var Room = function (_Phaser$Group) {
 
 exports.default = Room;
 
-},{"../Constants.js":1,"../SpriteConstants":3,"../utils":20}],15:[function(require,module,exports){
+},{"../Constants.js":1,"../SpriteConstants":3,"../utils":23}],18:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1676,7 +1836,7 @@ var Commands = function (_Phaser$State) {
 
 exports.default = Commands;
 
-},{"../utils":20}],16:[function(require,module,exports){
+},{"../utils":23}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1733,6 +1893,18 @@ var _MedikitGroup = require("objects/MedikitGroup");
 
 var _MedikitGroup2 = _interopRequireDefault(_MedikitGroup);
 
+var _BackgroundShader = require("objects/BackgroundShader");
+
+var _BackgroundShader2 = _interopRequireDefault(_BackgroundShader);
+
+var _CrtFilter = require("objects/CrtFilter");
+
+var _CrtFilter2 = _interopRequireDefault(_CrtFilter);
+
+var _DistortionFilter = require("objects/DistortionFilter");
+
+var _DistortionFilter2 = _interopRequireDefault(_DistortionFilter);
+
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -1782,7 +1954,9 @@ var Game = function (_Phaser$State) {
     key: "create",
     value: function create() {
       this.game.stage.backgroundColor = 0x000000;
+      this.bg = new _BackgroundShader2.default(this.game);
       this.game.world.setBounds(0, 0, Bounds, Bounds);
+      this.game.add.existing(this.bg);
       this.room = new _Room2.default(this.game);
       this.room.createRandomSquare(_Constants.Border, _Constants.Border, SizeMaze, Division);
 
@@ -1796,10 +1970,10 @@ var Game = function (_Phaser$State) {
       this.game.add.existing(this.hero);
       this.getInitialPosition(this.hero, _Constants.CharacterWitdh, _Constants.CharacterHeight);
 
-      //this.bgLayer = new BackgroundLayer(this.game, this.hero.x, this.hero.y, this.room.getRoomBordered());
-
       this.enemies = new _EnemyGroup2.default(this.game);
       this.chandelierLayer = new _ChandelierLayer2.default(this.game);
+      //shaders
+      this.game.stage.filters = [new _DistortionFilter2.default(this.game), new _CrtFilter2.default(this.game)];
 
       if (needCamera) {
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -1985,9 +2159,10 @@ var Game = function (_Phaser$State) {
 
       this.hero.kill();
       if (!this.deathFx.isPlaying) {
-        this.deathFx.play();
+        //this.deathFx.play();
       }
       setTimeout(function () {
+        _this2.bg.kill();
         _this2.room.clear();
         _this2.chandelierLayer.clear();
         _this2.boomerang.kill();
@@ -1997,6 +2172,7 @@ var Game = function (_Phaser$State) {
   }, {
     key: "won",
     value: function won() {
+      this.bg.kill();
       this.game.goToWin();
     }
   }, {
@@ -2049,7 +2225,7 @@ var Game = function (_Phaser$State) {
 
 exports.default = Game;
 
-},{"Constants":1,"HealthBarConstants":2,"SpriteConstants":3,"objects/BackgroundLayer":5,"objects/Boomerang":6,"objects/ChandelierLayer":8,"objects/Character":9,"objects/EnemyGroup":11,"objects/HealthBar":12,"objects/MedikitGroup":13,"objects/Room":14,"utils":20}],17:[function(require,module,exports){
+},{"Constants":1,"HealthBarConstants":2,"SpriteConstants":3,"objects/BackgroundLayer":5,"objects/BackgroundShader":6,"objects/Boomerang":7,"objects/ChandelierLayer":9,"objects/Character":10,"objects/CrtFilter":11,"objects/DistortionFilter":12,"objects/EnemyGroup":14,"objects/HealthBar":15,"objects/MedikitGroup":16,"objects/Room":17,"utils":23}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2118,7 +2294,7 @@ var LoseState = function (_Phaser$State) {
 
 exports.default = LoseState;
 
-},{"../utils":20}],18:[function(require,module,exports){
+},{"../utils":23}],21:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2193,7 +2369,7 @@ var Menu = function (_Phaser$State) {
 
 exports.default = Menu;
 
-},{"../utils":20}],19:[function(require,module,exports){
+},{"../utils":23}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2272,7 +2448,7 @@ var WinState = function (_Phaser$State) {
 
 exports.default = WinState;
 
-},{"../utils":20,"SpriteConstants":3}],20:[function(require,module,exports){
+},{"../utils":23,"SpriteConstants":3}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
