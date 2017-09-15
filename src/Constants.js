@@ -33,6 +33,9 @@ export const MinTimer = 5;
 
 export const MaxWave = 10;
 
+export const WidthSoundButton = 50;
+export const HeightSoundButton = 50;
+
 export const DirectionBoomerang = {
   left: "LEFT",
   up: "UP",
@@ -43,3 +46,6 @@ export const DirectionBoomerang = {
 export const KillText = "Kills: ";
 export const KillTextX = 30;
 export const KillTextY = 530;
+
+export const SoundButtonX = 730;
+export const SoundButtonY = 20;
