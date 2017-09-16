@@ -39,6 +39,9 @@ var MinTimer = exports.MinTimer = 5;
 
 var MaxWave = exports.MaxWave = 10;
 
+var WidthSoundButton = exports.WidthSoundButton = 50;
+var HeightSoundButton = exports.HeightSoundButton = 50;
+
 var DirectionBoomerang = exports.DirectionBoomerang = {
   left: "LEFT",
   up: "UP",
@@ -49,6 +52,9 @@ var DirectionBoomerang = exports.DirectionBoomerang = {
 var KillText = exports.KillText = "Kills: ";
 var KillTextX = exports.KillTextX = 30;
 var KillTextY = exports.KillTextY = 530;
+
+var SoundButtonX = exports.SoundButtonX = 730;
+var SoundButtonY = exports.SoundButtonY = 20;
 
 },{}],2:[function(require,module,exports){
 "use strict";
@@ -80,6 +86,7 @@ var SpriteEnemy = exports.SpriteEnemy = "enemy";
 var SpriteEnemy2 = exports.SpriteEnemy2 = "enemy2";
 var SpriteEnemy3 = exports.SpriteEnemy3 = "enemy3";
 var SpriteBullet = exports.SpriteBullet = "bullet";
+var ButtonSoundSprite = exports.ButtonSoundSprite = "buttonSoundSprite";
 var BoomerangSprite = exports.BoomerangSprite = "boomerang";
 var DeathSound = exports.DeathSound = "deathSound";
 var Background = exports.Background = "background";
@@ -1982,6 +1989,7 @@ var Game = function (_Phaser$State) {
       }
       this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
+      this.soundButton = this.game.add.button(_Constants.SoundButtonX, _Constants.SoundButtonY, _SpriteConstants.ButtonSoundSprite, this.toggleSound, this, 0, 0, 0);
       //sounds
       this.deathFx = this.game.add.audio(_SpriteConstants.DeathSound);
       this.deathFx.volume = 0.5;
@@ -2048,6 +2056,9 @@ var Game = function (_Phaser$State) {
       this.killText.y = this.game.camera.y + _Constants.KillTextY;
 
       this.healthBar.setPosition(this.game.camera.x + _HealthBarConstants.HeathBarX, this.game.camera.y + _HealthBarConstants.HeathBarY);
+
+      this.soundButton.x = this.game.camera.x + _Constants.SoundButtonX;
+      this.soundButton.y = this.game.camera.y + _Constants.SoundButtonY;
     }
   }, {
     key: "kill",
@@ -2183,6 +2194,7 @@ var Game = function (_Phaser$State) {
       this.game.load.spritesheet(_SpriteConstants.SpriteEnemy, "res/zombie.png", _Constants.EnemyWidth, _Constants.EnemyHeight);
       this.game.load.spritesheet(_SpriteConstants.SpriteEnemy2, "res/zombie2.png", _Constants.EnemyWidth, _Constants.EnemyHeight);
       this.game.load.spritesheet(_SpriteConstants.SpriteEnemy3, "res/zombie1.png", _Constants.EnemyWidth, _Constants.EnemyHeight);
+      this.game.load.spritesheet(_SpriteConstants.ButtonSoundSprite, 'res/sound_button.png', _Constants.WidthSoundButton, _Constants.HeightSoundButton);
       this.game.load.image(_SpriteConstants.SpriteBullet, "res/bullet.png");
       this.game.load.image(_SpriteConstants.BoomerangSprite, "res/ufoRed.png");
       this.game.load.image(_SpriteConstants.Background, "res/boomerang.png");
@@ -2217,6 +2229,13 @@ var Game = function (_Phaser$State) {
           this.game.camera.x += _Constants.CameraVelocity;
         }
       }
+    }
+  }, {
+    key: "toggleSound",
+    value: function toggleSound() {
+      this.game.sound.mute = !this.game.sound.mute;
+      var frame = this.game.sound.mute === true ? 1 : 0;
+      this.soundButton.setFrames(frame);
     }
   }]);
 
