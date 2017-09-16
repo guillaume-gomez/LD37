@@ -7,6 +7,7 @@ import {
   SpriteEnemy3,
   SpriteBullet,
   BoomerangSprite,
+  ButtonSoundSprite,
   DeathSound,
   Background,
   LightSprite,
@@ -32,7 +33,11 @@ import {
   BoomerangHeight,
   KillText,
   KillTextX,
-  KillTextY
+  KillTextY,
+  SoundButtonX,
+  SoundButtonY,
+  WidthSoundButton,
+  HeightSoundButton,
   } from "Constants";
 
 import { HeathBarConfig, HeathBarX, HeathBarY } from "HealthBarConstants";
@@ -97,6 +102,7 @@ class Game extends Phaser.State {
     }
     this.launchBoomerangKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
+    this.soundButton = this.game.add.button(SoundButtonX, SoundButtonY, ButtonSoundSprite, this.toggleSound, this, 0, 0, 0);
     //sounds
     this.deathFx = this.game.add.audio(DeathSound);
     this.deathFx.volume = 0.5;
@@ -161,6 +167,9 @@ class Game extends Phaser.State {
     this.killText.y = this.game.camera.y + KillTextY;
 
     this.healthBar.setPosition(this.game.camera.x + HeathBarX, this.game.camera.y + HeathBarY);
+
+    this.soundButton.x = this.game.camera.x + SoundButtonX;
+    this.soundButton.y = this.game.camera.y + SoundButtonY;
   }
 
   kill(bullet, enemy) {
@@ -296,6 +305,7 @@ class Game extends Phaser.State {
     this.game.load.spritesheet(SpriteEnemy, "res/zombie.png", EnemyWidth, EnemyHeight);
     this.game.load.spritesheet(SpriteEnemy2, "res/zombie2.png", EnemyWidth, EnemyHeight);
     this.game.load.spritesheet(SpriteEnemy3, "res/zombie1.png", EnemyWidth, EnemyHeight);
+    this.game.load.spritesheet(ButtonSoundSprite, 'res/sound_button.png', WidthSoundButton, HeightSoundButton);
     this.game.load.image(SpriteBullet, "res/bullet.png");
     this.game.load.image(BoomerangSprite, "res/ufoRed.png");
     this.game.load.image(Background, "res/boomerang.png");
@@ -334,6 +344,12 @@ class Game extends Phaser.State {
         this.game.camera.x += CameraVelocity;
       }
     }
+  }
+
+  toggleSound() {
+    this.game.sound.mute = !this.game.sound.mute;
+    const frame = this.game.sound.mute === true ? 1 : 0;
+    this.soundButton.setFrames(frame);
   }
 
 
